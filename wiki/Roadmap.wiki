@@ -1,13 +1,10 @@
 #summary Roadmap for FireEngine Open Source 3D Graphics Engine
 
-= Introduction =
+= Summary =
 
-Add your content here.
+This page contains a roadmap for the development of FireEngine. It contains a list of features that will be eventually implemented.
 
+= Desired features =
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+  * DirectX 9, 10 and 11 Renderer implementing the `IRenderer` class.
+  * Quake 3 .bsp map loader.
