@@ -38,10 +38,14 @@ public:
 	static const Color<Real> GREY;
 
 public:
-	Color(Real red = static_cast<Real>(0), Real green = static_cast<Real>(0),
-		Real blue = static_cast<Real>(0), Real alpha = static_cast<Real>(0))
+	Color()
 	{
-		this->set(red, green, blue, alpha);
+		this->set(0, 0, 0, 0);
+	}
+
+	Color(Real red, Real green, Real blue, Real alpha)
+	{
+		set(red, green, blue, alpha);
 	}
 
 	Color(const Real * components)
@@ -49,44 +53,44 @@ public:
 		this->set(components);
 	}
 
-	inline Real red()   const
+	inline Real red() const
 	{
-		return m_Color[0];
+		return mRed;
 	}
 
 	inline Real green() const
 	{
-		return m_Color[1];
+		return mGreen;
 	}
 
 	inline Real blue()  const
 	{
-		return m_Color[2];
+		return mBlue;
 	}
 
 	inline Real alpha() const
 	{
-		return m_Color[3];
+		return mAlpha;
 	}
 
 	inline void setRed(Real red)
 	{
-		m_Color[0] = red;
+		mRed = red;
 	}
 
 	inline void setGreen(Real green)
 	{
-		m_Color[1] = green;
+		mGreen = green;
 	}
 
 	inline void setBlue(Real blue)
 	{
-		m_Color[2] = blue;
+		mBlue = blue;
 	}
 
 	inline void setAlpha(Real alpha)
 	{
-		m_Color[3] = alpha;
+		mAlpha = alpha;
 	}
 
 	inline const Real * v() const
@@ -101,16 +105,16 @@ public:
 
 	inline void set(Real red, Real green, Real blue, Real alpha)
 	{
-		m_Color[0] = red;
-		m_Color[1] = green;
-		m_Color[2] = blue;
-		m_Color[3] = alpha;
+		mRed = red;
+		mGreen = green;
+		mBlue = blue;
+		mAlpha = alpha;
 	}
 
-	Color<Real>  operator*(f32 val) const
+	Color<Real> operator*(f32 val) const
 	{
-		return Color<Real>(static_cast<Real>(m_Color[0]*val), static_cast<Real>(m_Color[1]*val),
-			static_cast<Real>(m_Color[2]*val), static_cast<Real>(m_Color[3]*val));
+		return Color<Real>((Real)(m_Color[0]*val), (Real)(m_Color[1]*val), 
+			(Real)(m_Color[2]*val), (Real)(m_Color[3]*val));
 	}
 
 	Color<Real>& operator*=(f32 val)
@@ -164,7 +168,17 @@ public:
 		return static_cast<u32>(key.red()+key.green()+key.blue()+key.alpha());
 	}
 private:
-	Real m_Color[4];
+	union
+	{
+		Real m_Color[4];
+		struct
+		{
+			Real mRed;
+			Real mGreen;
+			Real mBlue;
+			Real mAlpha;
+		};
+	};
 };
 
 /** Some useful typedefs. */
