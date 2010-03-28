@@ -7,6 +7,8 @@
 #include "AABoundingBox.h"
 #include "IMesh.h"
 #include "IMeshBuffer.h"
+#include "Vertex3.h"
+#include "Array.h"
 
 namespace fire_engine
 {
@@ -15,90 +17,275 @@ template <class T>
 class _FIRE_ENGINE_API_ Octree : public virtual Object
 {
 public:
-	Octree(IMesh * mesh) : mMesh(mesh)
+	/** Construct an Octree from some Mesh. The mesh should not be animated.
+	 \param mesh The mesh to construct the Octree from. */
+	Octree(IMesh * mesh) 
+		: Octree(mesh, 256)
 	{
-		if (mMesh != nullptr)
+	}
+
+	/** Construct an Octree from some Mesh. The mesh should not be animated.
+	 \param mesh The mesh to construct the Octree from. 
+	 \param maxPolyCount The maximum number of polygons per child Octant. */
+	Octree(IMesh * mesh, int maxPolyCount)
+		: Mesh(mesh), MaxPolyCount(maxPolyCount)
+	{
+		if (Mesh != nullptr)
 		{
-			mMesh->grab();
+			Mesh->grab();
 		}
 	}
 
+	virtual ~Octree()
+	{
+		if (Mesh != nullptr)
+		{
+			Mesh->drop();
+		}
+		if (TreeRoot != nullptr)
+		{
+			delete TreeRoot;
+		}
+	}
+
+	/** Sets the Mesh to use when constructing the Octree.
+	 \param mesh The mesh to use when constructing the Octree. */
 	void setMesh(IMesh * mesh)
 	{
-		if (mMesh != nullptr)
+		if (Mesh != nullptr)
 		{
-			mMesh->drop();
+			Mesh->drop();
 		}
-		mMesh = mesh;
-		if (mMesh != nullptr)
+		Mesh = mesh;
+		if (Mesh != nullptr)
 		{
-			mMesh->grab();
+			Mesh->grab();
 		}
 	}
 
 private:
-
-    OctreeNode * mTreeRoot = nullptr;
-	IMesh * mMesh = nullptr;
-
-
 	void buildTree()
 	{
-		for (int i = 0; i < mMesh->getMeshBufferCount; i++)
-		{
-			IMeshBuffer * mb = mMesh->getMeshBuffer(i);
-			const Vertex3 * verts = mb->getVertices();
-
-
-		}
+		TreeRoot = new OctreeNode(Mesh, 0, MaxPolyCount);
 	}
 
+	class _FIRE_ENGINE_API_ OctreeMeshBufferChunk : public IMeshBuffer
+	{
+	public:
+		OctreeMeshBufferChunk(Vertex3 * vertices, s32 vertexCount, Array<u32> * indices, EPOLYGON_TYPE polygonType)
+			: Vertices(vertices), Indices(indices), PolygonType(polygonType), VertexCount(vertexCount)
+		{
+		}
+
+		virtual ~OctreeMeshBufferChunk()
+		{
+			if (Indices != nullptr)
+			{
+				delete Indices;
+			}
+		}
+
+		virtual EPOLYGON_TYPE getPolygonType()
+		{
+			return PolygonType;
+		}
+
+		virtual Vertex3 * _getOriginalVertices()
+		{
+			return Vertices;
+		}
+
+		virtual s32 _getOriginalVertexCount()
+		{
+			return VertexCount;
+		}
+
+		virtual const Vertex3 * getVertices() const
+		{
+			return Vertices;
+		}
+
+		virtual s32 getVertexCount() const
+		{
+			return VertexCount;
+		}
+
+		virtual const Array<u32> * getIndices() const
+		{
+			return Indices;
+		}
+
+		virtual const ITexture * getTexture() const
+		{
+			return Texture;
+		}
+
+		virtual void setTexture(ITexture * texture)
+		{
+			if (Texture != nullptr)
+			{
+				Texture->drop();
+			}
+			Texture = texture;
+			if (Texture != nullptr)
+			{
+				Texture->grab();
+			}
+		}
+
+		virtual Material getMaterial() const
+		{
+			return Material();
+		}
+
+		virtual s32 render(IRenderer * rd)
+		{
+			return 0;
+		}
+
+		virtual const AABoundingBoxf& getBoundingBox() const
+		{
+
+		}
+
+	private:
+		Vertex3 * Vertices;
+		Array<u32> * Indices;
+		EPOLYGON_TYPE PolygonType;
+		ITexture * Texture;
+		s32 VertexCount;
+	};
 
     class _FIRE_ENGINE_API_ OctreeNode
     {
     public:
-        OctreeNode(Vertex3<T> * vertices, int numVertices,
-                   int * indices, EPOLYGON_TYPE primitiveType,
-                   int numPrimitives, int maxPrimitives)
+        OctreeNode(IMesh * mesh, int depth, int maxPolyCount)
         {
-            for (int i = 0; i < numVertices; i++)
-            {
-                mBox.addInternalPoint(vertices[i].getPosition);
-            }
+			int polyCount = 0;
+			for (int i = 0; i < mesh->getMeshBufferCount; i++)
+			{
+				IMeshBuffer * mb = mesh->getMeshBuffer(i);
+				const Vertex3 * verts = mb->getVertices();
+				for (int j = 0; j < mb->getVertexCount(); j++)
+				{
+					Box.addInternalPoint(verts[j].getPosition());
+				}
 
-            if (numPrimitives > maxPrimitives)
-            {
-                mChildren = new OctreeNode<T>[8];
-                vector3<T> * boxCorners = new vector3<T>[8];
-                mBox.getCorners(boxCorners);
-            }
+				polyCount += mb->getPolygonCount();
+			}
+
+			if (polyCount > maxPolyCount)
+			{
+				vector3<T> minp = Box.getMinPoint();
+				vector3<T> maxp = Box.getMaxPoint();
+				vector3<T> center = Box.getCenter();
+				AABoundingBox<T> childBox[8];
+
+				childBox[0] = AABoundingBox<T>(minp, center);
+				childBox[1] = AABoundingBox<T>(vector3<T>(center.getX(), minp.getY(), minp.getZ()), 
+												vector3<T>(maxp.getX(), center.getY(), center.getZ()));
+				childBox[2] = AABoundingBox<T>(vector3<T>(minp.getX(), center.getY(), minp.getZ()), 
+												vector3<T>(center.getX(), maxp.getY(), center.getZ()));
+				childBox[3] = AABoundingBox<T>(vector3<T>(center.getX(),center.getY(), minp.getZ()), 
+												vector3<T>(maxp.getX(), maxp.getY(), center.getZ()));
+				childBox[4] = AABoundingBox<T>(vector3<T>(minp.getX(), minp.getY(), center.getZ()),
+												vector3<T>(center.getX(), center.getY(), maxp.getZ()));
+				childBox[5] = AABoundingBox<T>(vector3<T>(center.getX(), minp.getY(), center.getZ()),
+												vector3<T>(maxp.getX(), center.getY(), maxp.getZ()));
+				childBox[6] = AABoundingBox<T>(vector3<T>(minp.getX(), center.getY(), center.getZ()),
+												vector3<T>(center.getX(), maxp.getY(), maxp.getZ()));
+				childBox[7] = AABoundingBox<T>(center, maxp);
+
+
+				for (int i = 0; i < mesh->getMeshBufferCount(); i++)
+				{
+					IMeshBuffer * mb = mesh->getMeshBuffer(i);
+					const Vertex3 * meshVertices = mb->getVertices();
+					const Array<u32> * meshIndices =  mb->getIndices();
+					for (int j = 0; j < 8; j++)
+					{
+						IMeshBuffer * chunk = nullptr;
+						Array<s32> indices;
+						switch (mb->getPolygonType())
+						{
+						case EPT_POINTS:
+							break;
+						case EPT_LINES:
+							break;
+						case EPT_TRIANGLES:
+							for (int k = 0; k < meshIndices->size(); k+=3)
+							{
+								if (childBox[j].contains(meshVertices[k].getPosition()) ||
+									childBox[j].contains(meshVertices[k+1].getPosition()) ||
+									childBox[j].contains(meshVertices[k+2].getPosition()))
+								{
+									indices.push_back(k);
+									indices.push_back(k+1);
+									indices.push_back(k+2);
+								}
+							}
+							break;
+						case EPT_QUADS:
+							for (int k = 0; k < meshIndices->size(); k+=4)
+							{
+								if (childBox[j].contains(meshVertices[k].getPosition()) ||
+									childBox[j].contains(meshVertices[k+1].getPosition()) ||
+									childBox[j].contains(meshVertices[k+2].getPosition()) ||
+									childBox[j].contains(meshVertices[k+3].getPosition()))
+								{
+									indices.push_back(k);
+									indices.push_back(k+1);
+									indices.push_back(k+2);
+									indices.push_back(k+3);
+								}
+							}
+							break;
+						case EPT_TRIANGLE_STRIP:
+							break;
+						case EPT_TRIANGLE_FAN:
+							break;
+						}
+
+						if (indices.size() > 0)
+						{
+							//chunk = new OctreeMeshBufferChunk();
+
+						}
+					}
+				}
+			}
         }
 
         virtual ~OctreeNode()
         {
-            if (mVertices != nullptr)
+            if (Vertices != nullptr)
             {
-                delete [] mVertices;
+                delete [] Vertices;
             }
 
-            if (mChildren != nullptr)
+            if (Children != nullptr)
             {
-                delete [] mChildren;
+                delete [] Children;
             }
         }
 
         inline bool isLeaf() const
         {
-            return mChildren == nullptr;
+            return Children == nullptr;
         }
 
     private:
-        OctreeNode* mChildren = nullptr;
-        Vertex<T> * mVertices = nullptr;
-        AABoundingBox<T> mBox;
+		OctreeMeshBufferChunk * Chunks;
+        OctreeNode * Children;
+        Vertex3 * Vertices;
+        AABoundingBox<T> Box;
 
-    }
-}
+    };
+
+	OctreeNode * TreeRoot;
+	IMesh * Mesh;
+	int MaxPolyCount;
+};
 
 }
 

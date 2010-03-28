@@ -62,6 +62,9 @@ public:
 	 can be used when rendering the vertices */
 	virtual EPOLYGON_TYPE getPolygonType() const = 0;
 
+	/** This will count the number of actual polygons in the MeshBuffer. */
+	s32 getPolygonCount() const;
+
 	/** Returns a pointer to the original vertices. This should be used only if
 	 the vertices are to be modified, for example like a MeshModifier would do. */
 	virtual Vertex3 * _getOriginalVertices() = 0;

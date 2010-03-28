@@ -153,6 +153,26 @@ public:
 		}
 	}
 
+	/** Returns the center point of the bounding box. */
+	vector3<Real> getCenter() const
+	{
+		return (mMinPoint+mMaxPoint)/2;
+	}
+
+	/** Check whether a given point is inside the bounding box.
+	 \param point The point to look at.
+	 \return Whether the point is inside the bounding box. */
+	bool contains(const vector3<Real>& point)
+	{
+		if ((point.getX() >= mMinPoint.getX() && point.getX() <= mMaxPoint.getX()) &&
+			(point.getY() >= mMinPoint.getY() && point.getY() <= mMaxPoint.getY()) &&
+			(point.getZ() >= mMinPoint.getZ() && point.getZ() <= mMaxPoint.getZ()))
+		{
+			return true;
+		}
+		return false;
+	}
+
 private:
 	vector3<Real> mMinPoint;
 	vector3<Real> mMaxPoint;
