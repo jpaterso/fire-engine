@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FireEngine", "fire_engine.vcproj", "{382A9950-0640-4443-98D6-7217331BA8E3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FireEngine_Test", "FireEngine_Test.vcproj", "{479A317E-8488-47F6-96E0-7DD5F9EBEE4B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{382A9950-0640-4443-98D6-7217331BA8E3} = {382A9950-0640-4443-98D6-7217331BA8E3}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{382A9950-0640-4443-98D6-7217331BA8E3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{382A9950-0640-4443-98D6-7217331BA8E3}.Debug|Win32.Build.0 = Debug|Win32
+		{382A9950-0640-4443-98D6-7217331BA8E3}.Release|Win32.ActiveCfg = Release|Win32
+		{382A9950-0640-4443-98D6-7217331BA8E3}.Release|Win32.Build.0 = Release|Win32
+		{479A317E-8488-47F6-96E0-7DD5F9EBEE4B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{479A317E-8488-47F6-96E0-7DD5F9EBEE4B}.Debug|Win32.Build.0 = Debug|Win32
+		{479A317E-8488-47F6-96E0-7DD5F9EBEE4B}.Release|Win32.ActiveCfg = Release|Win32
+		{479A317E-8488-47F6-96E0-7DD5F9EBEE4B}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

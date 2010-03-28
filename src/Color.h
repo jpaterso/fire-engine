@@ -38,19 +38,18 @@ public:
 	static const Color<Real> GREY;
 
 public:
-	Color()
+	Color() : mRed(0), mGreen(0), mBlue(0), mAlpha(0)
 	{
-		this->set(0, 0, 0, 0);
 	}
 
 	Color(Real red, Real green, Real blue, Real alpha)
+		 : mRed(red), mGreen(green), mBlue(blue), mAlpha(alpha)
 	{
-		set(red, green, blue, alpha);
 	}
 
 	Color(const Real * components)
 	{
-		this->set(components);
+		set(components);
 	}
 
 	inline Real red() const
@@ -95,12 +94,12 @@ public:
 
 	inline const Real * v() const
 	{
-		return m_Color;
+		return mColor;
 	}
 
 	inline void set(const Real * components)
 	{
-		memcpy(m_Color, components, 4*sizeof(components));
+		memcpy(mColor, components, 4*sizeof(components));
 	}
 
 	inline void set(Real red, Real green, Real blue, Real alpha)
@@ -113,54 +112,54 @@ public:
 
 	Color<Real> operator*(f32 val) const
 	{
-		return Color<Real>((Real)(m_Color[0]*val), (Real)(m_Color[1]*val), 
-			(Real)(m_Color[2]*val), (Real)(m_Color[3]*val));
+		return Color<Real>((Real)(mRed*val), (Real)(mGreen*val), 
+			(Real)(mBlue*val), (Real)(mAlpha*val));
 	}
 
 	Color<Real>& operator*=(f32 val)
 	{
-		m_Color[0] *= val;
-		m_Color[1] *= val;
-		m_Color[2] *= val;
-		m_Color[3] *= val;
+		mRed *= val;
+		mGreen *= val;
+		mBlue *= val;
+		mAlpha *= val;
 		return *this;
 	}
 
 	Color<Real>  operator+(const Color<Real>& other) const
 	{
-		return Color<Real>(m_Color[0]+other.red(), m_Color[1]+other.green(),
-			m_Color[2]+other.blue(), m_Color[3]+other.alpha());
+		return Color<Real>(mRed+other.red(), mGreen+other.green(),
+			mBlue+other.blue(), mAlpha+other.alpha());
 	}
 
 	Color<Real>& operator+=(const Color<Real>& other)
 	{
-		m_Color[0] += other.red();
-		m_Color[1] += other.green();
-		m_Color[2] += other.blue();
-		m_Color[3] += other.alpha();
+		mRed += other.red();
+		mGreen += other.green();
+		mBlue += other.blue();
+		mAlpha += other.alpha();
 		return *this;
 	}
 
 	inline bool operator==(const Color<Real>& rhs) const
 	{
-		return memcmp(m_Color, rhs.v(), 4*sizeof(Real)) == 0;
+		return memcmp(mColor, rhs.v(), 4*sizeof(Real)) == 0;
 	}
 
 	inline bool operator!=(const Color<Real>& rhs) const
 	{
-		return memcmp(m_Color, rhs.v(), 4*sizeof(Real)) != 0;
+		return memcmp(mColor, rhs.v(), 4*sizeof(Real)) != 0;
 	}
 
 	const Color<Real>& operator=(const Color<Real>& other)
 	{
-		memcpy(m_Color, other.v(), 4*sizeof(Real));
+		memcpy(mColor, other.v(), 4*sizeof(Real));
 		return *this;
 	}
 
 	string toString() const
 	{
-		return string("Color[ ") + m_Color[0] + ", " + m_Color[1] + ", " + m_Color[2]
-		+ ", " + m_Color[3] + " ]";
+		return string("Color[ ") + mRed + ", " + mGreen + ", " + mBlue
+		+ ", " + mAlpha + " ]";
 	}
 
 	static u32 hash(const Color<Real>& key)
@@ -170,7 +169,7 @@ public:
 private:
 	union
 	{
-		Real m_Color[4];
+		Real mColor[4];
 		struct
 		{
 			Real mRed;
