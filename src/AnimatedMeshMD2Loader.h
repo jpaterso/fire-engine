@@ -21,6 +21,12 @@ namespace fire_engine
 
 class string;
 
+namespace io
+{
+class IFile;
+class IFileProvider;
+}
+
 class  _FIRE_ENGINE_API_ AnimatedMeshMD2Loader : public ILoader<AnimatedMeshMD2>
 {
 private:
@@ -86,7 +92,8 @@ public:
 
 	virtual ~AnimatedMeshMD2Loader();
 
-	virtual AnimatedMeshMD2 * load(const string& filename) const;
+	//! Implementation for ILoader
+	virtual AnimatedMeshMD2 * load(const string& filename, io::IFileProvider * fileProvider) const;
 
 private:
 	static vector3f m_normal_list[__FIRE_ENGINE_MAX_MD2_NORMALS];

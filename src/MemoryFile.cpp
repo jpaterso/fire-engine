@@ -17,14 +17,16 @@ namespace io
 MemoryFile::MemoryFile()
 	: mData(0), mDataSize(0), mCurrentOffset(0), mFreeWhenDestroyed(false)
 {
-	mError = false;
+	Filename = "";
+	ErrorOccured = false;
 }
 
 MemoryFile::MemoryFile(void * data, s32 size, bool free_when_destroyed)
 	: mData(data), mDataSize(size), mCurrentOffset(0),
 	  mFreeWhenDestroyed(free_when_destroyed)
 {
-	mError = false;
+	Filename = "";
+	ErrorOccured = false;
 }
 
 MemoryFile::~MemoryFile()
@@ -42,7 +44,7 @@ bool MemoryFile::read(void * data, s32 size)
 {
 	if ((mCurrentOffset+size) > mDataSize)
 	{
-		mError = true;
+		ErrorOccured = true;
 		return false;
 	}
 	const u8 * dataPtr = (u8*)mData;
@@ -53,7 +55,7 @@ bool MemoryFile::read(void * data, s32 size)
 
 bool MemoryFile::write(const void * data, s32 size)
 {
-	mError = true;
+	ErrorOccured = true;
 	return false;
 }
 
@@ -87,7 +89,7 @@ s32 MemoryFile::getCurrentPosition() const
 
 bool MemoryFile::remove()
 {
-	mError = true;
+	ErrorOccured = true;
 	return false;
 }
 

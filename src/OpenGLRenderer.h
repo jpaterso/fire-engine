@@ -33,6 +33,11 @@ class Image;
 class Light;
 class Device;
 
+namespace io
+{
+class IFileProvider;
+}
+
 /** The OpenGL renderer. When the chosen driver for rendering is OpenGL, an instance of
  this class will be created. All drawing is done here, as well as other things such as
  lighting and shadows (not yet). */
@@ -91,7 +96,7 @@ public:
 
 	virtual void setMaterial(const Material& mat);
 
-	virtual ITexture * createTexture(const string& filename) const;
+	virtual ITexture * createTexture(const string& filename, io::IFileProvider * fileProvider) const;
 
 private:
 	/** A list of extensions that are used. */

@@ -12,6 +12,7 @@
 #include "dimension2.h"
 #include "ColorConverter.h"
 #include "IFile.h"
+#include "File.h"
 #include "FileSystem.h"
 #include <string.h>
 
@@ -20,21 +21,22 @@
 namespace fire_engine
 {
 
-ImageLoaderBMP::ImageLoaderBMP(void)
+ImageLoaderBMP::ImageLoaderBMP()
 {
 }
 
-ImageLoaderBMP::~ImageLoaderBMP(void)
+ImageLoaderBMP::~ImageLoaderBMP()
 {
 }
 
-Image * ImageLoaderBMP::load(const string& filename) const
+Image * ImageLoaderBMP::load(const string& filename, io::IFileProvider * fileProvider) const
 {
-	Image *          image   = 0;
-	u8 *             data    = 0;
-	u8 *             palette = 0;
-	io::IFile *      file = io::FileSystem::Get()->openReadFile(filename, false, false, 
-		                                                        io::EFOF_READ|io::EFOF_BINARY);
+	Image * image   = nullptr;
+	u8 *    data    = nullptr;
+	u8 *    palette = nullptr;
+	io::IFile * file = io::FileSystem::Get()->openReadFile(filename, false, 
+		io::EFOF_READ|io::EFOF_BINARY, fileProvider);
+
 	dimension2i      dim;
 	u8               padding;
 	BitmapFileHeader bmfh;
@@ -72,14 +74,14 @@ Image * ImageLoaderBMP::load(const string& filename) const
 	if (bmfh.bfType != BMP_MAGIC_NUMBER)
 	{
 		Logger::Get()->log(ES_HIGH, "ImageLoaderBMP",
-			"Invalid BMP magic number %d in %s", bmfh.bfType, filename.c_str());
+			"Invalid BMP magic number %d in %s", bmfh.bfType, file->getFilename().c_str());
 		return 0;
 	}
 
 #ifdef	_FIRE_ENGINE_DEBUG_BMP_
-	printf("Statistics for %s\n", filename.c_str());
+	printf("Statistics for %s\n", file->getFilename().c_str());
 	printf("---------------");
-	for (s32 i = 0; i < filename.length(); i++)
+	for (s32 i = 0; i < file->getFilename().length(); i++)
 		putchar('-');
 	putchar('\n');
 	printf("Image type              = %u\n", bmfh.bfType);
@@ -117,7 +119,7 @@ Image * ImageLoaderBMP::load(const string& filename) const
 			Logger::Get()->log(ES_HIGH,
 				string("ImageLoaderBMP"),
 				string("") + bmih.biBitCount + string("bit bitmaps not supported"));
-			return 0;
+			return nullptr;
 
 		case 8:
 			data = new u8[dim.getHeight()*(dim.getWidth()+padding)];
@@ -161,9 +163,9 @@ Image * ImageLoaderBMP::load(const string& filename) const
 	if (file->fail())
 	{
 		Logger::Get()->log(ES_HIGH, "ImageLoaderBMP",
-			"An error occurred while loading %s", filename.c_str());
+			"An error occurred while loading %s", file->getFilename().c_str());
 		delete image;
-		image = 0;
+		image = nullptr;
 	}
 	delete file;
 	return image;
@@ -214,14 +216,14 @@ bool ImageLoaderBMP::write(const string& filename, const Image * image) const
 	bih.biSizeImage = datasize;
 
 #if defined(_FIRE_ENGINE_BIG_ENDIAN_)
-	bfh.bfType = ByteConverter::ByteSwap(bmfh.bfType);
-	bfh.bfSize = ByteConverter::ByteSwap(bmfh.bfSize);
-	bfh.bfOffBits = ByteConverter::ByteSwap(bmfh.bfOffBits);
-	bih.biSize = ByteConverter::ByteSwap(bmih.biSize);
-	bih.biWidth = ByteConverter::ByteSwap(bmih.biWidth);
-	bih.biHeight = ByteConverter::ByteSwap(bmih.biHeight);
-	bih.biBitCount = ByteConverter::ByteSwap(bmih.biBitCount);
-	bih.biSizeImage = ByteConverter::ByteSwap(bmih.biSizeImage);
+	bfh.bfType = ByteConverter::ByteSwap(bfh.bfType);
+	bfh.bfSize = ByteConverter::ByteSwap(bfh.bfSize);
+	bfh.bfOffBits = ByteConverter::ByteSwap(bfh.bfOffBits);
+	bih.biSize = ByteConverter::ByteSwap(bih.biSize);
+	bih.biWidth = ByteConverter::ByteSwap(bih.biWidth);
+	bih.biHeight = ByteConverter::ByteSwap(bih.biHeight);
+	bih.biBitCount = ByteConverter::ByteSwap(bih.biBitCount);
+	bih.biSizeImage = ByteConverter::ByteSwap(bih.biSizeImage);
 #endif
 
 	f.write(&bfh, sizeof(BitmapFileHeader));

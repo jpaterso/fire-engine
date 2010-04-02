@@ -21,6 +21,12 @@ namespace fire_engine
 
 class Image;
 
+namespace io
+{
+class IFile;
+class IFileProvider;
+}
+
 class _FIRE_ENGINE_API_ ImageLoaderBMP : public ILoader<Image>, public IWriter<Image>
 {
 private:
@@ -59,10 +65,12 @@ public:
 	//! Default dtor
 	virtual ~ImageLoaderBMP(void);
 
-	//! Implementation of the load() method of IImageLoader
-	virtual Image * load(const string& filename) const;
+	//! Implementation for ILoader
+	virtual Image * load(const string& filename, io::IFileProvider * fileProvider) const;
 
 	virtual bool write(const string& filename, const Image * image) const;
+
+protected:
 };
 
 } // namespace fire_engine

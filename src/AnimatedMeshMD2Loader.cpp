@@ -198,21 +198,21 @@ AnimatedMeshMD2Loader::~AnimatedMeshMD2Loader()
 {
 }
 
-AnimatedMeshMD2 * AnimatedMeshMD2Loader::load(const string& filename) const
+AnimatedMeshMD2 * AnimatedMeshMD2Loader::load(const string& filename, io::IFileProvider * fileProvider) const
 {
 	AnimatedMeshMD2 *  amesh      = 0;
-	io::IFile *        file = io::FileSystem::Get()->openReadFile(filename, false, true);
 	md2_skin_t *       skins      = 0;
 	md2_triangle_t *   triangles  = 0;
 	md2_tex_coords_t * tex_coords = 0;
 	md2_frame_t *      frames     = 0;
 	s32 *              glCommands = 0; //TODO fix GL commands, make it a proper type
 	MD2Header          md2h;
+	io::IFile * file = io::FileSystem::Get()->openReadFile(filename, false, io::EFOF_READ|io::EFOF_BINARY, fileProvider);
 
 	if (file == 0)
 	{
 		Logger::Get()->log(ES_HIGH, "AnimatedMeshMD2Loader", "Could not open %s for reading", filename.c_str());
-		return 0;
+		return nullptr;
 	}
 
 	file->read(&md2h, sizeof(MD2Header));
@@ -238,9 +238,9 @@ AnimatedMeshMD2 * AnimatedMeshMD2Loader::load(const string& filename) const
 #endif
 
 #if defined(_FIRE_ENGINE_DEBUG_MD2_)
-	printf("Statistics for %s\n", filename.c_str());
+	printf("Statistics for %s\n", file->getFilename().c_str());
 	printf("---------------");
-	for (s32 i = 0; i < filename.length(); i++)
+	for (s32 i = 0; i < file->getFilename().length(); i++)
 		putchar('-');
 	putchar('\n');
 	printf("Magic Number:                  %x\n", md2h.magic);
@@ -266,7 +266,7 @@ AnimatedMeshMD2 * AnimatedMeshMD2Loader::load(const string& filename) const
 	{
 		Logger::Get()->log(ES_HIGH, "AnimatedMeshMD2Loader",
 			"Invalid header in %s: expected (%d, %d) as (magic, version), got (%d, %d)",
-			filename.c_str(), MD2_MAGIC, MD2_VERSION, md2h.magic, md2h.version);
+			file->getFilename().c_str(), MD2_MAGIC, MD2_VERSION, md2h.magic, md2h.version);
 		return 0;
 	}
 
@@ -307,7 +307,7 @@ AnimatedMeshMD2 * AnimatedMeshMD2Loader::load(const string& filename) const
 	if (file->fail()) // some i/o error occurred, abort!
 	{
 		Logger::Get()->log(ES_HIGH, "AnimatedMeshMD2Loader",
-			"An error occurred while loading MD2 model %s, aborting", filename.c_str());
+			"An error occurred while loading MD2 model %s, aborting", file->getFilename().c_str());
 		amesh = 0x00;
 	}
 	else

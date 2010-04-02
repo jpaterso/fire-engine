@@ -9,10 +9,12 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
+#include "Object.h"
 #include "Array.h"
 #include "string.h"
 #include "List.h"
-#include "File.h"
+#include "IFile.h"
+#include "IFileProvider.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -22,7 +24,6 @@ namespace io
 {
 
 class ZipFileReader;
-class IFile;
 
 /** A simple structure for holding information about a given file. */
 struct _FIRE_ENGINE_API_ FileInfo
@@ -46,7 +47,7 @@ struct _FIRE_ENGINE_API_ FileInfo
 
 /** A virtual file system, where file archives can be added, providing easy access
  to files. */
-class _FIRE_ENGINE_API_ FileSystem
+class _FIRE_ENGINE_API_ FileSystem : public Object
 {
 public:
 	/** Creates a FileSystem if it does not already exist, and return it. */
@@ -56,56 +57,42 @@ public:
 	static FileSystem * Get();
 
 	/** Destructor. */
-	~FileSystem();
-
-	/** Returns a list of all the files in the current directory. */
-	Array<FileInfo> * listFiles();
+	virtual ~FileSystem();
 
 	/** Searches the current file system for a given file. If the file is found
-	 within the virtual file system, an IFile pointer to that file is returned. If
-	 it is not found, then an attempt is made to open the file on the OS's file
-	 system.
-	 The default search parameters for the file are a case-sensitive search that
-	 preserves directory information. If the file is found, it is open for reading
-	 in binary mode.
-	 \param filename    The name of the file to look for.
-	 \return            An IFile pointer to either a file found in the virtual file system
-	                    if it exists, or an IFile pointing to a file on the OS's file system. */
-	inline IFile * openReadFile(const string& filename)
-	{
-		return openReadFile(filename, false, false, EFOF_READ|EFOF_BINARY);
-	}
-
-	/** Searches the current file system for a given file. If the file is found
-	 within the virtual file system, an IFile pointer to that file is returned. If
-	 it is not found, then an attempt is made to open the file on the OS's file
-	 system.
+	 within the virtual file system, an IFile pointer to that file is returned.
+	 This method takes in an extra argument which is a 'prefered' file provider which is used
+	 first when looking for the file. Useful when attempting to locate a file within a particular
+	 archive or directory, for example when loading textures associated with a model within a particular
+	 .MD3 archive.
 	 \param filename    The name of the file to look for.
 	 \param ignore_case Whether to ignore the case when looking for the file.
-	 \param ignore_dirs Whether to ignore directories when looking for the file.
 	 \param flags       The flags to open the file with. Ignored if the file is contained
 	                    within an archive.
+	 \param preferedFileProvider This file provider will be used first when looking for the file.
 	 \return            An IFile pointer to either a file found in the virtual file system
 	                    if it exists, or an IFile pointing to a file on the OS's file system. */
-	IFile * openReadFile(const string& filename, bool ignore_case = false,
-		bool ignore_dirs = false, u32 flags = EFOF_READ | EFOF_BINARY);
+	IFile * openReadFile(const string& filename, 
+		bool ignoreCase = false, 
+		u32 flags = EFOF_READ|EFOF_BINARY, 
+		IFileProvider * preferedFileProvider = nullptr);
 
-    /** Checks whether a file exists within the filesystem.
+    /** Checks whether a file exists within the file system.
      \param filename The name of the file to look for.
-     \return true if the file exists somewhere in the filesystem, false otherwise. */
+     \return true if the file exists somewhere in the file system, false otherwise. */
     bool exists(const string& filename) const;
 
-	/** Attempts to change the working directory, and returns whether it was
-	 successful or not. */
-	bool changeDirectory(const string& newdir);
-
 	/** Adds a .ZIP archive to the file system.
-	 \return true if the ZIP file was correctly loaded, false otherwise. */
-	bool addZipArchive(const string& filename);
+	 \return A pointer to the IFileProvider created for the .ZIP file. */
+	IFileProvider * addArchive(const string& filename);
+
+	/** Adds a directory to the file system.
+	 \return A pointer to the IFileProvider created for the directory. */
+	IFileProvider * addDirectory(const string& directoryName);
 
 private:
-	static FileSystem * mInstance;
-	List<ZipFileReader*> * mZipFileReaders;
+	static FileSystem * Instance;
+	List<IFileProvider*> FileProviders;
 
 	/** Constructor - made private to ensure only a singleton instance of the class is
 	 ever created. */

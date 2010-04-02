@@ -22,21 +22,20 @@
 namespace fire_engine
 {
 
-ImageLoaderPCX::ImageLoaderPCX(void)
+ImageLoaderPCX::ImageLoaderPCX()
 {
 }
 
-ImageLoaderPCX::~ImageLoaderPCX(void)
+ImageLoaderPCX::~ImageLoaderPCX()
 {
 }
 
-Image * ImageLoaderPCX::load(const string& filename) const
+Image * ImageLoaderPCX::load(const string& filename, io::IFileProvider * fileProvider) const
 {
-	io::IFile * file       = io::FileSystem::Get()->openReadFile(filename, false, false, 
-		                                                         io::EFOF_READ|io::EFOF_BINARY);
-	u8 *        texel_data = 0;
-	u8 *        color_map  = 0;
-	Image *     image      = 0;
+	u8 *        texel_data = nullptr;
+	u8 *        color_map  = nullptr;
+	Image *     image      = nullptr;
+	io::IFile * file       = io::FileSystem::Get()->openReadFile(filename, false, io::EFOF_READ|io::EFOF_BINARY, fileProvider);
 	PCXHeader   pcxh;
 	dimension2i dim;
 
@@ -65,14 +64,14 @@ Image * ImageLoaderPCX::load(const string& filename) const
 	{
 		Logger::Get()->log(ES_HIGH, "ImageLoaderPCX",
 			"%s is not a valid PCX file: the magic number (%d) is not the expected %d",
-			filename.c_str(), pcxh.magic, PCX_MAGIC_NUMBER);
+			file->getFilename().c_str(), pcxh.magic, PCX_MAGIC_NUMBER);
 		return 0;
 	}
 
 #if defined(_FIRE_ENGINE_DEBUG_PCX_)
-	printf("Statistics for %s\n", filename.c_str());
+	printf("Statistics for %s\n", file->getFilename().c_str());
 	printf("---------------");
-	for (s32 i = 0; i < filename.length(); i++)
+	for (s32 i = 0; i < file->getFilename().length(); i++)
 		putchar('-');
 	putchar('\n');
 	printf("Magic number:               %d\n", pcxh.magic);
@@ -142,9 +141,9 @@ Image * ImageLoaderPCX::load(const string& filename) const
 	if (file->fail())
 	{
 		Logger::Get()->log(ES_HIGH, "ImageLoaderPCX",
-			"An error occurred while loading %s", filename.c_str());
+			"An error occurred while loading %s", file->getFilename().c_str());
 		delete image;
-		image = 0;
+		image = nullptr;
 	}
 	delete file;
 	return image;

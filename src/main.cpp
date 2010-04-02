@@ -52,10 +52,10 @@ int main(int argc, const char * argv[])
 	LightSpaceNode * lsn2 = sc->addDynamicLight(light2);
 	light2->drop();
 
-	FileSystem::Get()->addZipArchive("../media/md3/md3-kt_kubalwagon.pk3");
-	FileSystem::Get()->addZipArchive("../media/md3/quake3-model1.pk3");
-	FileSystem::Get()->addZipArchive("../media/md3/chicken.md3");
-	FileSystem::Get()->addZipArchive("../media/bsp/map-20kdm2.zip");
+	FileSystem::Get()->addArchive("../media/md3/md3-kt_kubalwagon.pk3");
+	FileSystem::Get()->addArchive("../media/md3/quake3-model1.pk3");
+	FileSystem::Get()->addArchive("../media/md3/chicken.md3");
+	//FileSystem::Get()->addArchive("../media/bsp/map-20kdm2.zip");
 
 	AnimatedMeshMD3 * ammd3 = mm->load<AnimatedMeshMD3>("chicken_lower.md3");
 	model_lower = dynamic_cast<AnimatedModelMD3*>(sc->addAnimatedMesh(ammd3));

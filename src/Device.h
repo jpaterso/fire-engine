@@ -34,6 +34,11 @@ class StringBundle;
 class KeyEvent;
 class MouseEvent;
 
+namespace io
+{
+class FileSystem;
+}
+
 /** The 3D drivers currently supported by the system. */
 enum EDRIVER_TYPE
 {
@@ -121,6 +126,7 @@ class _FIRE_ENGINE_API_ Device : public virtual Object
 		IRenderer *            mRenderer;      //! The Renderer, in charge of writing into the window
 		Array<IEventReceiver*> mEvtReceivers;         //! The Event Receiver - should be custom
 		FPSCalculator *        mFPSCalculator;
+		io::FileSystem *       mFileSystem;
 
 		/**
 		 *	Construct a device using a specific driver.

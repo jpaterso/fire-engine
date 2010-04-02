@@ -19,21 +19,21 @@
 namespace fire_engine
 {
 
-ImageLoaderTGA::ImageLoaderTGA(void)
+ImageLoaderTGA::ImageLoaderTGA()
 {
 }
 
-ImageLoaderTGA::~ImageLoaderTGA(void)
+ImageLoaderTGA::~ImageLoaderTGA()
 {
 }
 
-Image * ImageLoaderTGA::load(const string& filename) const
+Image * ImageLoaderTGA::load(const string& filename, io::IFileProvider * fileProvider) const
 {
-	Image *     image   = 0;
-	c8 *        id      = 0;
-	void *      data    = 0;
-	io::IFile * file = io::FileSystem::Get()->openReadFile(filename, false, false, 
-		                                                   io::EFOF_READ|io::EFOF_BINARY);
+	Image * image    = nullptr;
+	c8 *    id       = nullptr;
+	void *  data     = nullptr;
+	io::IFile * file = io::FileSystem::Get()->openReadFile(filename, false,  io::EFOF_READ|io::EFOF_BINARY, fileProvider);
+	
 	dimension2i dim;
 	TGAHeader   header;
 	u8          bpp;
@@ -57,9 +57,9 @@ Image * ImageLoaderTGA::load(const string& filename) const
 #endif
 
 #if defined(_FIRE_ENGINE_DEBUG_TGA_)
-	printf("Statistics for %s\n", filename.c_str());
+	printf("Statistics for %s\n", file->getFilename().c_str());
 	printf("---------------");
-	for (s32 i = 0; i < filename.length(); i++)
+	for (s32 i = 0; i < file->getFilename().length(); i++)
 		putchar('-');
 	putchar('\n');
 	printf("Color map type        =  %u\n", header.cmapType);
@@ -85,7 +85,7 @@ Image * ImageLoaderTGA::load(const string& filename) const
 		file->read(id, header.idFieldSize);
 		id[header.idFieldSize] = '\0';
 #if defined(_FIRE_ENGINE_DEBUG_TGA_)
-		printf("Identificatiion field = %s\n", id);
+		printf("Identification field = %s\n", id);
 #endif
 	}
 
@@ -114,9 +114,9 @@ Image * ImageLoaderTGA::load(const string& filename) const
 			break;
 
 		default:
-			Logger::Get()->log(ES_HIGH, "ImageLoaderTGA", "%s: invalid TGA header", filename.c_str());
+			Logger::Get()->log(ES_HIGH, "ImageLoaderTGA", "%s: invalid TGA header", file->getFilename().c_str());
 			delete file;
-			return 0;
+			return nullptr;
 			break;
 	}
 
@@ -124,7 +124,7 @@ Image * ImageLoaderTGA::load(const string& filename) const
 	{
 		case 8:
 			Logger::Get()->log(ES_HIGH, "ImageLoaderTGA", "8 bit color mapped data not supported");
-			return 0;
+			return nullptr;
 			break;
 
 		//TODO: test with 16 bit data
@@ -145,7 +145,7 @@ Image * ImageLoaderTGA::load(const string& filename) const
 
 		default:
 			Logger::Get()->log(ES_HIGH, "ImageLoaderTGA",
-				"invalid pixel size %d in file %s", header.pixelSize, filename.c_str());
+				"invalid pixel size %d in file %s", header.pixelSize, file->getFilename().c_str());
 			break;
 	}
 	delete [] static_cast<u8*>(data);

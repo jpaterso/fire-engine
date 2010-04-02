@@ -9,9 +9,8 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "IFile.h"
-#include "File.h"
 #include "Array.h"
+#include "IFileProvider.h"
 
 namespace fire_engine
 {
@@ -21,11 +20,13 @@ class string;
 namespace io
 {
 
+class IFile;
+
 /** A simple class for loading and exploring .ZIP files. For now, only files
  that are "stored" (ie. not compressed) are supported.
  For access to some file in the ZIP archive, see the comments on the openFile()
  method. */
-class _FIRE_ENGINE_API_ ZipFileReader
+class _FIRE_ENGINE_API_ ZipFileReader : public IFileProvider
 {
 public:
 #pragma pack(push, 1)
@@ -64,10 +65,7 @@ public:
 
 	ZipFileReader(const string& filename);
 
-	~ZipFileReader();
-
-	/** Returns whether the zip file was open correctly. */
-	bool isOpen() const;
+	virtual ~ZipFileReader();
 
 	/** Attempts to find a file within the archive, and returns it.
 	 \param filename    The name of the file to search for
@@ -95,9 +93,15 @@ public:
 	 the .ZIP archive. */
 	const Array<ZipFileEntry> * getEntries() const;
 
+	virtual IFile * openFile(const string& filename, bool ignoreCase, u32 flags);
+
+	virtual bool contains(const string& filename, bool ignoreCase);
+
+	virtual bool isReady() const;
+
 private:
-	IFile *             mZipFile;
-	Array<ZipFileEntry> mFiles;
+	IFile *             ZipArchive;
+	Array<ZipFileEntry> FileEntries;
 
 	/** Look for the next local file header, read it, and insert it into the list of files.
 	 \return true if a local file header was found, false otherwise. */

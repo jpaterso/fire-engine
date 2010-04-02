@@ -7,7 +7,6 @@
 #include "ZipFileReader.h"
 #include "ByteConverter.h"
 #include "MemoryFile.h"
-#include "CompileConfig.h"
 #include "Logger.h"
 #include "FileSystem.h"
 #include "FileUtils.h"
@@ -22,14 +21,20 @@ namespace io
 {
 
 ZipFileReader::ZipFileReader()
-	: mZipFile(0)
+	: ZipArchive(0)
 {
+#if defined(_FIRE_ENGINE_DEBUG_OBJECT_)
+	setDebugName("fire_engine::io::ZipFileReader");
+#endif
 }
 
 ZipFileReader::ZipFileReader(const string& filename)
 {
-	mZipFile = FileSystem::Get()->openReadFile(filename, false, false, io::EFOF_READ|io::EFOF_BINARY);
-	if (mZipFile == nullptr)
+#if defined(_FIRE_ENGINE_DEBUG_OBJECT_)
+	setDebugName("fire_engine::io::ZipFileReader");
+#endif
+	ZipArchive = FileSystem::Get()->openReadFile(filename, false, io::EFOF_READ|io::EFOF_BINARY);
+	if (ZipArchive == nullptr)
 	{
         Logger::Get()->log(ES_HIGH, "io::ZipFileReader", "Could not open %s for reading",
                            filename.c_str());
@@ -45,15 +50,16 @@ ZipFileReader::ZipFileReader(const string& filename)
 
 ZipFileReader::~ZipFileReader()
 {
-	if (mZipFile != nullptr)
+	if (ZipArchive != nullptr)
 	{
-		delete mZipFile;
+		delete ZipArchive;
 	}
 }
 
-bool ZipFileReader::isOpen() const
+
+bool ZipFileReader::isReady() const
 {
-	return mZipFile != nullptr;
+	return ZipArchive != nullptr;
 }
 
 IFile * ZipFileReader::getFile(const string& filename, bool ignore_case, bool ignore_dirs)
@@ -61,28 +67,38 @@ IFile * ZipFileReader::getFile(const string& filename, bool ignore_case, bool ig
 	return getFile(indexOf(filename, ignore_case, ignore_dirs));
 }
 
+IFile * ZipFileReader::openFile(const string& filename, bool ignoreCase, u32 flags)
+{
+	return getFile(indexOf(filename, ignoreCase, false));
+}
+
+bool ZipFileReader::contains(const string& filename, bool ignoreCase)
+{
+	return indexOf(filename, ignoreCase, false) != -1;
+}
+
 IFile * ZipFileReader::getFile(s32 index)
 {
 	u8 * data;
 	IFile * retval;
-	if (index < 0 || index >= mFiles.size())
+	if (index < 0 || index >= FileEntries.size())
 	{
 		return nullptr;
 	}
 
-	switch (mFiles[index].ZipHeader.CompressionMethod)
+	switch (FileEntries[index].ZipHeader.CompressionMethod)
 	{
 	case 0x00:
-		data = new u8[mFiles[index].ZipHeader.Descriptor.CompressedSize];
-		mZipFile->seek(EFSP_START, mFiles[index].Offset);
-		mZipFile->read(data, mFiles[index].ZipHeader.Descriptor.CompressedSize);
-		retval = new MemoryFile(data, mFiles[index].ZipHeader.Descriptor.CompressedSize, true);
+		data = new u8[FileEntries[index].ZipHeader.Descriptor.CompressedSize];
+		ZipArchive->seek(EFSP_START, FileEntries[index].Offset);
+		ZipArchive->read(data, FileEntries[index].ZipHeader.Descriptor.CompressedSize);
+		retval = new MemoryFile(data, FileEntries[index].ZipHeader.Descriptor.CompressedSize, true);
 		break;
 
 	default:
 		Logger::Get()->log(ES_HIGH, "io::ZipFileReader",
-			"Compression method %d not supported in %s", mFiles[index].ZipHeader.CompressionMethod,
-			mFiles[index].Name.c_str());
+			"Compression method %d not supported in %s", FileEntries[index].ZipHeader.CompressionMethod,
+			FileEntries[index].Name.c_str());
 		retval = nullptr;
 		break;
 	}
@@ -100,9 +116,9 @@ s32 ZipFileReader::indexOf(const string& filename, bool ignore_case, bool ignore
 	if (ignore_dirs)
 	{
 		string filename_dirsIgnored = FileUtils::StripDirectory(filename);
-		for (s32 i = 0; i < mFiles.size(); i++)
+		for (s32 i = 0; i < FileEntries.size(); i++)
 		{
-			if (equals(filename_dirsIgnored, mFiles[i].Name))
+			if (equals(filename_dirsIgnored, FileEntries[i].Name))
 			{
 				index = i;
 				break;
@@ -111,9 +127,9 @@ s32 ZipFileReader::indexOf(const string& filename, bool ignore_case, bool ignore
 	}
 	else
 	{
-		for (s32 i = 0; i < mFiles.size(); i++)
+		for (s32 i = 0; i < FileEntries.size(); i++)
 		{
-			if (equals(filename, mFiles[i].FullName))
+			if (equals(filename, FileEntries[i].FullName))
 			{
 				index = i;
 				break;
@@ -130,13 +146,13 @@ bool ZipFileReader::contains(const string& filename, bool ignore_case, bool igno
 
 const Array<ZipFileReader::ZipFileEntry> * ZipFileReader::getEntries() const
 {
-	return &mFiles;
+	return &FileEntries;
 }
 
 bool ZipFileReader::scanLocalFileHeader()
 {
 	ZipFileEntry entry;
-	mZipFile->read(&entry.ZipHeader, sizeof(zip_local_file_header_t));
+	ZipArchive->read(&entry.ZipHeader, sizeof(zip_local_file_header_t));
 	c8 * name = nullptr;
 	c8 * simple_name = nullptr;
 
@@ -160,27 +176,27 @@ bool ZipFileReader::scanLocalFileHeader()
 	// Extract the name
 	name = new c8[entry.ZipHeader.FilenameLen+1];
 	name[entry.ZipHeader.FilenameLen] = '\0';
-	mZipFile->read(name, entry.ZipHeader.FilenameLen);
+	ZipArchive->read(name, entry.ZipHeader.FilenameLen);
 	entry.FullName = string(name);
 	entry.Name = FileUtils::StripDirectory(entry.FullName);
 	delete [] name;
 
-	mZipFile->seek(EFSP_CURRENT, entry.ZipHeader.ExtraFieldLen);
+	ZipArchive->seek(EFSP_CURRENT, entry.ZipHeader.ExtraFieldLen);
 	if ((entry.ZipHeader.Flags & ZIP_DATA_DESCRIPTOR_FLAG) != 0)
 	{
-		mZipFile->read(&entry.ZipHeader.Descriptor, sizeof(zip_data_descriptor_t));
+		ZipArchive->read(&entry.ZipHeader.Descriptor, sizeof(zip_data_descriptor_t));
 	}
 
-	entry.Offset = mZipFile->getCurrentPosition();
+	entry.Offset = ZipArchive->getCurrentPosition();
 
 #if defined(_FIRE_ENGINE_DEBUG_ZIP_)
     Logger::Get()->log(ES_DEBUG, "io::ZipFileReader", "%s entry read", entry.FullName.c_str());
 #endif
 
 	// Seek to the next possible local file header
-	mZipFile->seek(EFSP_CURRENT, entry.ZipHeader.Descriptor.CompressedSize);
+	ZipArchive->seek(EFSP_CURRENT, entry.ZipHeader.Descriptor.CompressedSize);
 
-	mFiles.push_back(entry);
+	FileEntries.push_back(entry);
 	return true;
 }
 

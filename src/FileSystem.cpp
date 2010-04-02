@@ -6,6 +6,8 @@
 
 #include "FileSystem.h"
 #include "ZipFileReader.h"
+#include "DirectoryFileProvider.h"
+#include "File.h"
 
 #ifdef _FIRE_ENGINE_WIN32_
 #	include <io.h>
@@ -19,125 +21,91 @@ namespace fire_engine
 namespace io
 {
 
-FileSystem * FileSystem::mInstance = 0;
+FileSystem * FileSystem::Instance = 0;
 
 FileSystem::FileSystem()
 {
-	mZipFileReaders = new List<ZipFileReader*>();
 }
 
 FileSystem * FileSystem::Create()
 {
-	if (mInstance == nullptr)
+	if (Instance == nullptr)
 	{
-		mInstance = new FileSystem();
+		Instance = new FileSystem();
+		// Add current directory for loading files.
+		Instance->addDirectory(".");
 	}
-	return mInstance;
+	return Instance;
 }
 
 FileSystem * FileSystem::Get()
 {
-	return mInstance;
+	return Instance;
 }
 
 FileSystem::~FileSystem()
 {
-	mInstance = 0;
-	for (List<ZipFileReader*>::iterator it = mZipFileReaders->begin(); it != mZipFileReaders->end(); it++)
+	Instance = 0;
+	for (List<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
 	{
-		delete *it;
+		it->drop();
 	}
-	delete mZipFileReaders;
 }
 
-Array<FileInfo> * FileSystem::listFiles()
+IFile * FileSystem::openReadFile(const string& filename, bool ignoreCase, u32 flags, IFileProvider * preferedFileProvider)
 {
-	Array<FileInfo> * files;
-#ifdef _FIRE_ENGINE_WIN32_
-	files = new Array<FileInfo>();
-	struct _finddata_t tmp_file;
-	char wd[_MAX_PATH+1];
-	long handle;
-
-	_getcwd(wd, _MAX_PATH+1);
-	if ((handle = _findfirst("*", &tmp_file)) > 0)
+	if (preferedFileProvider != nullptr)
 	{
-		do
+		if (preferedFileProvider->contains(filename, ignoreCase))
 		{
-			files->push_back(FileInfo(tmp_file.name, wd, tmp_file.size, (tmp_file.attrib&_A_SUBDIR) != 0));
-		} while (_findnext(handle, &tmp_file) == 0);
-		_findclose(handle);
+			return preferedFileProvider->openFile(filename, ignoreCase, flags);
+		}
+		Logger::Get()->log(ES_DEBUG, "FileSystem", 
+			"Warning: Could not load %s in specified file provider", filename.c_str());
 	}
-#else
-	//TODO: Implement for non-Win32 systems
-	files = 0;
-#endif
-	return files;
-}
-
-IFile * FileSystem::openReadFile(const string& filename, bool ignore_case, bool ignore_dirs, u32 flags)
-{
-	s32 index;
-	for (List<ZipFileReader*>::iterator it = mZipFileReaders->begin(); it != mZipFileReaders->end(); it++)
+	for (List<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
 	{
-		if ((index = it->indexOf(filename, ignore_case, ignore_dirs)) != -1)
+		if (it->contains(filename, ignoreCase))
 		{
-			return it->getFile(index);
+			return it->openFile(filename, ignoreCase, flags);
 		}
 	}
-	IFile * ret = new File(filename, flags);
-	if (!ret->isOpen())
-	{
-		delete ret;
-		return nullptr;
-	}
-	return ret;
+	return nullptr;
 }
 
 bool FileSystem::exists(const string& filename) const
 {
 	bool fileExists = false;
-	for (List<ZipFileReader*>::iterator it = mZipFileReaders->begin(); it != mZipFileReaders->end(); it++)
+	for (List<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
 	{
-		if (it->indexOf(filename, false, false) > 0)
+		if (it->contains(filename, false))
 		{
 			fileExists = true;
 			break;
 		}
 	}
-	if (!fileExists)
-	{
-		IFile * ret = new File(filename, EFOF_READ);
-		if (!ret->fail())
-		{
-			fileExists = true;
-		}
-		delete ret;
-	}
-    return fileExists;
+	return fileExists;
 }
 
-bool FileSystem::changeDirectory(const string& newdir)
+IFileProvider * FileSystem::addArchive(const string& filename)
 {
-#ifdef _FIRE_ENGINE_WIN32_
-	return _chdir(newdir.c_str()) == 0;
-#else
-	return false;
-#endif
-}
-
-bool FileSystem::addZipArchive(const string& filename)
-{
-	ZipFileReader * zip_reader = new ZipFileReader(filename);
-	if (!zip_reader->isOpen())
+	IFileProvider * zip_reader = new ZipFileReader(filename);
+	if (!zip_reader->isReady())
 	{
 	    Logger::Get()->log(ES_HIGH, "FileSystem",
 	                       "Could not add %s to the zip archive list\n", filename.c_str());
 		delete zip_reader;
-		return false;
+		return nullptr;
 	}
-	mZipFileReaders->push_back(zip_reader);
-	return true;
+	FileProviders.push_back(zip_reader);
+	return zip_reader;
+}
+
+IFileProvider * FileSystem::addDirectory(const string& directoryName)
+{
+	IFileProvider * directoryReader = new DirectoryFileProvider(directoryName);
+	FileProviders.push_back(directoryReader);
+	return directoryReader;
 }
 
 } // namespace io

@@ -22,13 +22,20 @@ class Q3Map;
 class string;
 class ITexture;
 
+namespace io
+{
+class IFile;
+class IFileProvider;
+}
+
 /** A loader for Quake III BSP maps. Implements the ILoader interface. */
 class _FIRE_ENGINE_API_ Q3MapLoader : public ILoader<Q3Map>
 {
 public:
 	virtual ~Q3MapLoader();
 
-	virtual Q3Map * load(const string& filename) const;
+	//! Implementations for ILoader
+	virtual Q3Map * load(const string& filename, io::IFileProvider * fileProvider) const;
 
 private:
 	/** Swizzle a Quake III vector: set Y to Z, and set Z to -Y. */
@@ -36,7 +43,7 @@ private:
 
 	void swizzle(vector2f& vector) const;
 
-	ITexture ** loadTextures(const q3::bsp_texture_t * q3textures, s32 num_textures) const;
+	ITexture ** loadTextures(const q3::bsp_texture_t * q3textures, s32 num_textures, io::IFileProvider * fileProvider) const;
 };
 
 }

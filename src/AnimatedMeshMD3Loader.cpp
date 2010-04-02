@@ -34,9 +34,8 @@ AnimatedMeshMD3Loader::~AnimatedMeshMD3Loader()
 {
 }
 
-AnimatedMeshMD3 * AnimatedMeshMD3Loader::load(const string& filename) const
+AnimatedMeshMD3 * AnimatedMeshMD3Loader::load(const string& filename, io::IFileProvider * fileProvider) const
 {
-	io::IFile * file = io::FileSystem::Get()->openReadFile(filename, false, true);
 	md3_header_t header;
 	md3_bone_frame_t * bone_frames = nullptr;
 	md3_tag_t * tags = nullptr;
@@ -44,6 +43,7 @@ AnimatedMeshMD3 * AnimatedMeshMD3Loader::load(const string& filename) const
 	MeshBufferMD3 ** meshes = nullptr;
 	Array<MD3QuaternionTag*> * tagArray = nullptr;
 	AnimatedMeshMD3 * mesh = nullptr;
+	io::IFile * file = io::FileSystem::Get()->openReadFile(filename, false, io::EFOF_READ|io::EFOF_BINARY, fileProvider);
 
 	if (file == nullptr)
 	{
@@ -68,9 +68,9 @@ AnimatedMeshMD3 * AnimatedMeshMD3Loader::load(const string& filename) const
 #endif
 
 #if defined(_FIRE_ENGINE_DEBUG_MD3_)
-	printf("Statistics for %s\n", filename.c_str());
+	printf("Statistics for %s\n", file->getFilename().c_str());
 	printf("---------------");
-	for (s32 i = 0; i < filename.length(); i++)
+	for (s32 i = 0; i < file->getFilename().length(); i++)
 		putchar('-');
 	putchar('\n');
 	printf("Magic Number:              %d\n", header.magic);
@@ -90,7 +90,7 @@ AnimatedMeshMD3 * AnimatedMeshMD3Loader::load(const string& filename) const
 	{
 		Logger::Get()->log(ES_HIGH, "AnimatedMeshMD2Loader",
 			"Invalid header in %s: expected (%d, %d) as (magic, version), got (%d, %d)",
-			filename.c_str(), MD3_MAGIC, MD3_VERSION, header.magic, header.version);
+			file->getFilename().c_str(), MD3_MAGIC, MD3_VERSION, header.magic, header.version);
 		return 0;
 	}
 
@@ -240,7 +240,7 @@ AnimatedMeshMD3 * AnimatedMeshMD3Loader::load(const string& filename) const
 		// We need the IRenderer to create the textures for us
 		if (strlen(shaders[0].name) > 0)
 		{
-			tex = Device::Get()->getRenderer()->createTexture(shaders[0].name);
+			tex = Device::Get()->getRenderer()->createTexture(shaders[0].name, fileProvider);
 		}
 		else
 		{
@@ -266,7 +266,7 @@ AnimatedMeshMD3 * AnimatedMeshMD3Loader::load(const string& filename) const
 	if (file->fail())
 	{
 		Logger::Get()->log(ES_HIGH, "AnimatedMeshMD3Loader",
-			"An error occurred while loading %s", filename.c_str());
+			"An error occurred while loading %s", file->getFilename().c_str());
 		for (s32 i = 0; i < header.num_meshes; i++)
 		{
 			delete meshes[i];

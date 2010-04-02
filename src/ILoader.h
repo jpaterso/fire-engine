@@ -16,6 +16,11 @@
 namespace fire_engine
 {
 
+namespace io
+{
+class IFileProvider;
+}
+
 /** An interface for a class that can load some sort of Object from a file.
  This class is used by the MediaManager, to ease the loading of objects from disk. */
 template <class Obj>
@@ -32,8 +37,9 @@ public:
 	 with the MediaManager class, to provide seamless loading of objects
 	 from disk using a single entry point.
 	 \param filename A string object containing the name of the file to load.
+	 \param fileProvider A file provider to use first. Useful if loading from within some archive.
 	 \return A pointer to the object created. */
-	virtual Obj * load(const string& filename) const = 0;
+	virtual Obj * load(const string& filename, io::IFileProvider * fileProvider) const = 0;
 };
 
 }

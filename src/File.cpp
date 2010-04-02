@@ -21,18 +21,19 @@ namespace io
 
 
 File::File(void)
-	: mFD(-1), mFilename(""), mSize(0)
+	: mFD(-1), mSize(0)
 {
-	mError = false;
+	Filename = "";
+	ErrorOccured = false;
 }
 
 File::File(const string& filename, u32 flags)
-	: mFilename(filename)
 {
+	Filename = filename;
 	// Open the file, and if created, allow read/write access
 	mFD = _open(filename.c_str(), flags, _S_IREAD | _S_IWRITE);
-	mError = mFD < 0;
-	if (!mError)
+	ErrorOccured = mFD < 0;
+	if (!ErrorOccured)
 	{
 		mSize = _lseek(mFD, 0L, SEEK_END);
 		_lseek(mFD, 0L, SEEK_SET);
@@ -55,7 +56,7 @@ bool File::read(void * out, s32 size)
 		return false;
 	if (_read(mFD, out, size) != size)
 	{
-		mError = true;
+		ErrorOccured = true;
 		return false;
 	}
 	return true;
@@ -67,7 +68,7 @@ bool File::write(const void * data, s32 size)
 		return false;
 	if (_write(mFD, data, size) != size)
 	{
-		mError = true;
+		ErrorOccured = true;
 		return false;
 	}
 	return true;
@@ -79,7 +80,7 @@ bool File::seek(EFILE_SEEK_POSITION from, s32 offset)
 		return false;
 	if (_lseek(mFD, offset, from) < 0)
 	{
-		mError = true;
+		ErrorOccured = true;
 		return false;
 	}
 	return true;
@@ -97,7 +98,7 @@ bool File::remove(void)
 		_close(mFD);
 		mFD = -1;
 	}
-	return _unlink(mFilename.c_str()) == 0;
+	return _unlink(Filename.c_str()) == 0;
 }
 
 bool File::close(void)
@@ -111,7 +112,7 @@ bool File::close(void)
 
 string File::toString() const
 {
-	return string("File[ \"") + mFilename + "\" size = " + static_cast<f32>(mSize)/1024 + "kb ]";
+	return string("File[ \"") + Filename + "\" size = " + static_cast<f32>(mSize)/1024 + "kb ]";
 }
 
 }
