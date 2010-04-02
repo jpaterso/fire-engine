@@ -38,7 +38,7 @@ Device::Device(EDRIVER_TYPE dType, const dimension2i& size, const string& title,
 	mInstance = this;
 	Math32::Create();
     Logger::Create();
-	io::FileSystem::Create();
+	mFileSystem = io::FileSystem::Create();
 	mFPSCalculator = new FPSCalculator();
 #if defined(_FIRE_ENGINE_DEBUG_ALL_)
 	Logger::Get()->log(ES_DEBUG, "Device", "DEBUG MODE ACTIVATED");
@@ -139,8 +139,11 @@ Device::~Device(void)
 		mWindowManager->drop();
 	if (mRenderer)
 		mRenderer->drop();
+	if (mFileSystem != nullptr)
+	{
+		mFileSystem->drop();
+	}
 	delete mFPSCalculator;
 	delete Math32::Get();
-	delete io::FileSystem::Get();
 }
 } // namespace fire_engine

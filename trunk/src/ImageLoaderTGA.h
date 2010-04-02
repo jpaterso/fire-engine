@@ -25,6 +25,7 @@ class Image;
 namespace io
 {
 class IFile;
+class IFileProvider;
 }
 
 //! A Loader/Writer for Targa (.TGA) files
@@ -72,12 +73,14 @@ private:
 	};
 
 public:
-	ImageLoaderTGA(void);
+	ImageLoaderTGA();
 
-	virtual ~ImageLoaderTGA(void);
+	virtual ~ImageLoaderTGA();
 
-	virtual Image * load(const string& filename) const;
+	//! Implementation for ILoader
+	virtual Image * load(const string& filename, io::IFileProvider * fileProvider) const;
 
+	//! Implementaions for IWriter
 	virtual bool write(const string& filename, const Image * image) const;
 
 private:

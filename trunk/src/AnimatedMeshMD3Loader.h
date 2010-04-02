@@ -18,6 +18,12 @@ namespace fire_engine
 class AnimatedMeshMD3;
 class string;
 
+namespace io
+{
+class IFile;
+class IFileProvider;
+}
+
 /** A class for loading Quake III .MD3 files. */
 class _FIRE_ENGINE_API_ AnimatedMeshMD3Loader : public ILoader<AnimatedMeshMD3>
 {
@@ -103,8 +109,9 @@ public:
 	virtual ~AnimatedMeshMD3Loader();
 
 	/** Load and create an AnimatedMeshMD3 from an .MD3 file */
-	virtual AnimatedMeshMD3 * load(const string& filename) const;
-private:
+	virtual AnimatedMeshMD3 * load(const string& filename, io::IFileProvider * fileProvider) const;
+
+protected:
 };
 
 } // namespace fire_engine

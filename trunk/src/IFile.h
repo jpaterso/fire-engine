@@ -11,7 +11,10 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
+#include "string.h"
 #include <stdio.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 namespace fire_engine
 {
@@ -29,6 +32,18 @@ enum EFILE_SEEK_POSITION
 	EFSP_CURRENT = SEEK_CUR   // From the current position in the file
 };
 
+//! Flags to open the file with
+enum EFILE_OPEN_FLAGS
+{
+	EFOF_READ     = _O_RDONLY,  // Open the file for reading
+	EFOF_WRITE    = _O_WRONLY,  // Open the file for writing
+	EFOF_RW       = _O_RDWR,    // Open the file for both reading and writing
+	EFOF_CREATE   = _O_CREAT,   // Create the file if it does not exist
+	EFOF_APPEND   = _O_APPEND,  // If the file exists, append to it instead of truncating it
+	EFOF_TRUNCATE = _O_TRUNC,   // If the file exists, truncate it
+	EFOF_BINARY   = _O_BINARY   // Open the file in binary
+};
+
 /** An interface for some sort of file: something that can be read or written
  to. */
 class _FIRE_ENGINE_API_ IFile
@@ -37,6 +52,12 @@ public:
 	/** Destructor. */
 	virtual ~IFile()
 	{
+	}
+
+	/** Returns the name of the file. */
+	inline const string& getFilename() const
+	{
+		return Filename;
 	}
 
 	/** Returns whether the file is open or not. */
@@ -70,8 +91,8 @@ public:
 	/** Returns whether an error occurred previously, and clears the error bit. */
 	bool fail()
 	{
-		bool ret = mError;
-		mError = false;
+		bool ret = ErrorOccured;
+		ErrorOccured = false;
 		return ret;
 	}
 
@@ -83,7 +104,8 @@ public:
 	virtual string toString() const = 0;
 
 protected:
-	bool mError;
+	bool ErrorOccured;
+	string Filename;
 };
 
 } // namespace io

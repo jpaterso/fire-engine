@@ -24,6 +24,7 @@ class string;
 namespace io
 {
 class IFile;
+class IFileProvider;
 }
 
 class _FIRE_ENGINE_API_ ImageLoaderPCX : public ILoader<Image>, public IWriter<Image>
@@ -55,11 +56,13 @@ private:
 #pragma pack(pop)
 
 public:
-	ImageLoaderPCX(void);
-	virtual ~ImageLoaderPCX(void);
+	ImageLoaderPCX();
+	virtual ~ImageLoaderPCX();
 
-	virtual Image * load(const string& filename) const;
+	//! Implementation for ILoader
+	virtual Image * load(const string& filename, io::IFileProvider * fileProvider) const;
 
+	//! Implementations for IWriter
 	virtual bool write(const string& filename, const Image * image) const;
 
 private:

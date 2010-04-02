@@ -288,6 +288,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\src\DirectoryFileProvider.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\src\DirectoryFileProvider.h"
+			>
+		</File>
+		<File
 			RelativePath="..\src\File.cpp"
 			>
 		</File>
@@ -357,6 +365,10 @@
 		</File>
 		<File
 			RelativePath="..\src\IFile.h"
+			>
+		</File>
+		<File
+			RelativePath="..\src\IFileProvider.h"
 			>
 		</File>
 		<File

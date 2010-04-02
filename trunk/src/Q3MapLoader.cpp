@@ -27,7 +27,7 @@ Q3MapLoader::~Q3MapLoader()
 {
 }
 
-Q3Map * Q3MapLoader::load(const string& filename) const
+Q3Map * Q3MapLoader::load(const string& filename, io::IFileProvider * fileProvider) const
 {
 	q3::bsp_header_t header;
 	q3::bsp_lump_t lumps[q3::EBL_LUMP_COUNT];
@@ -48,9 +48,7 @@ Q3Map * Q3MapLoader::load(const string& filename) const
 	q3::bsp_lightmap_t * lightmaps = nullptr;
 	q3::bsp_light_volume_t * light_volumes = nullptr;
 	q3::bsp_visibility_data_t visibility_data;
-
-	io::IFile * file = io::FileSystem::Get()->openReadFile(filename, false, false,
-		io::EFOF_READ|io::EFOF_BINARY);
+	io::IFile * file = io::FileSystem::Get()->openReadFile(filename, false, io::EFOF_READ|io::EFOF_BINARY, fileProvider);
 
 	if (file == nullptr)
 	{
@@ -66,7 +64,7 @@ Q3Map * Q3MapLoader::load(const string& filename) const
 #endif
 	if (header.id != Q3_MAGIC_ID || header.version != Q3_MAGIC_VERSION)
 	{
-		Logger::Get()->log(ES_HIGH, "Q3MapLoader", "Invalid header in file %s", filename.c_str());
+		Logger::Get()->log(ES_HIGH, "Q3MapLoader", "Invalid header in file %s", file->getFilename().c_str());
 		delete file;
 		return nullptr;
 	}
@@ -100,7 +98,7 @@ Q3Map * Q3MapLoader::load(const string& filename) const
 #endif
 
 	// Create textures
-	ITexture ** textures = loadTextures(q3textures, num_textures);
+	ITexture ** textures = loadTextures(q3textures, num_textures, fileProvider);
 
 	/* read in plane information */
 	//TODO do something with plane information
@@ -359,7 +357,7 @@ Q3Map * Q3MapLoader::load(const string& filename) const
     file->read(visibility_data.vectors, visibility_data.num_vectors*visibility_data.size_vector);
 
 	delete file;
-	return 0x00;
+	return nullptr;
 }
 
 void Q3MapLoader::swizzle(vector3f& vector) const
@@ -373,7 +371,7 @@ void Q3MapLoader::swizzle(vector2f& vector) const
 {
 }
 
-ITexture ** Q3MapLoader::loadTextures(const q3::bsp_texture_t *q3textures, s32 num_textures) const
+ITexture ** Q3MapLoader::loadTextures(const q3::bsp_texture_t *q3textures, s32 num_textures, io::IFileProvider * fileProvider) const
 {
 	ITexture ** textures = new ITexture*[num_textures];
 	IRenderer * renderer = Device::Get()->getRenderer();
@@ -382,11 +380,11 @@ ITexture ** Q3MapLoader::loadTextures(const q3::bsp_texture_t *q3textures, s32 n
 		string filename = io::FileUtils::StripExtension(q3textures[i].name);
 		if (io::FileSystem::Get()->exists(filename + ".jpg"))
 		{
-			textures[i] = renderer->createTexture(filename + ".jpg");
+			textures[i] = renderer->createTexture(filename + ".jpg", fileProvider);
 		}
 		else if (io::FileSystem::Get()->exists(filename + ".tga"))
 		{
-			textures[i] = renderer->createTexture(filename + ".tga");
+			textures[i] = renderer->createTexture(filename + ".tga", fileProvider);
 		}
 		if (textures[i] == nullptr)
 		{

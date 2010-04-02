@@ -25,6 +25,11 @@ class AnimatedMeshMD2;
 class AnimatedMeshMD3;
 class Q3Map;
 
+namespace io
+{
+class IFileProvider;
+}
+
 template <class T>
 struct _FIRE_ENGINE_API_ MediaHolder
 {
@@ -72,11 +77,11 @@ public:
 	}
 
 	template <class Object>
-	Object * load(const string& filename) const
+	Object * load(const string& filename, io::IFileProvider * fileProvider = nullptr) const
 	{
 		ILoader<Object> ** loader = MediaHolder<Object>::m_loaders.find(io::FileUtils::GetFileExtension(filename));
 		if (loader != 0)
-			return (*loader)->load(filename);
+			return (*loader)->load(filename, fileProvider);
 		else // No loader registered for that type
 		{
 			Logger::Get()->log(ES_DEBUG, "MediaManager", "Couldn't find a loader for file %s",

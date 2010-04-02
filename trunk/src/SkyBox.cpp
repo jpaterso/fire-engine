@@ -32,12 +32,12 @@ SkyBox::SkyBox(const IRenderer * renderer, const string& ft, const string& bk, c
 #endif
 	mTextures = new ITexture*[6];
 	{
-		mTextures[0] = renderer->createTexture(ft);
-		mTextures[1] = renderer->createTexture(bk);
-		mTextures[2] = renderer->createTexture(up);
-		mTextures[3] = renderer->createTexture(dn);
-		mTextures[4] = renderer->createTexture(lt);
-		mTextures[5] = renderer->createTexture(rt);
+		mTextures[0] = renderer->createTexture(ft, nullptr);
+		mTextures[1] = renderer->createTexture(bk, nullptr);
+		mTextures[2] = renderer->createTexture(up, nullptr);
+		mTextures[3] = renderer->createTexture(dn, nullptr);
+		mTextures[4] = renderer->createTexture(lt, nullptr);
+		mTextures[5] = renderer->createTexture(rt, nullptr);
 	}
 	for (s32 i = 0; i < 6; i++)
 	{

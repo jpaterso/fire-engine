@@ -463,9 +463,9 @@ void OpenGLRenderer::setMaterial(const Material& mat)
 	}
 }
 
-ITexture * OpenGLRenderer::createTexture(const string& filename) const
+ITexture * OpenGLRenderer::createTexture(const string& filename, io::IFileProvider * fileProvider) const
 {
-	Image * im = MediaManager::Get()->load<Image>(filename);
+	Image * im = MediaManager::Get()->load<Image>(filename, fileProvider);
 	if (im != nullptr)
 	{
 		return new OpenGLTexture(im);
