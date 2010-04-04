@@ -138,6 +138,19 @@ const c8 * string::substring(const c8 * str) const
 	return strstr(mContent, str);
 }
 
+void string::replaceAll(c8 charA, c8 charB)
+{
+	c8 * buf = mContent;
+	while (*buf != '\0')
+	{
+		if (*buf == charA)
+		{
+			*buf = charB;
+		}
+		buf++;
+	}
+}
+
 void string::makeLower()
 {
 	for (s32 i = 0; i < mLength; i++)
@@ -163,7 +176,6 @@ bool string::equalsIgnoreCase(const string& l, const string& r)
 {
 	return l.equalsIgnoreCase(r);
 }
-
 
 const string& string::operator=(const string& other)
 {

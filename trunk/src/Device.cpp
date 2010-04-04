@@ -145,5 +145,6 @@ Device::~Device(void)
 	}
 	delete mFPSCalculator;
 	delete Math32::Get();
+	Logger::Get()->drop();
 }
 } // namespace fire_engine

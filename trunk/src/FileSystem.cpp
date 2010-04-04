@@ -5,6 +5,7 @@
 **/
 
 #include "FileSystem.h"
+#include "FileUtils.h"
 #include "ZipFileReader.h"
 #include "DirectoryFileProvider.h"
 #include "File.h"
@@ -54,20 +55,22 @@ FileSystem::~FileSystem()
 
 IFile * FileSystem::openReadFile(const string& filename, bool ignoreCase, u32 flags, IFileProvider * preferedFileProvider)
 {
+	string filenamePathFixed = filename;
+	FileUtils::ConvertPath(filenamePathFixed);
 	if (preferedFileProvider != nullptr)
 	{
-		if (preferedFileProvider->contains(filename, ignoreCase))
+		if (preferedFileProvider->contains(filenamePathFixed, ignoreCase))
 		{
-			return preferedFileProvider->openFile(filename, ignoreCase, flags);
+			return preferedFileProvider->openFile(filenamePathFixed, ignoreCase, flags);
 		}
 		Logger::Get()->log(ES_DEBUG, "FileSystem", 
-			"Warning: Could not load %s in specified file provider", filename.c_str());
+			"Warning: Could not load %s in specified file provider", filenamePathFixed.c_str());
 	}
 	for (List<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
 	{
-		if (it->contains(filename, ignoreCase))
+		if (it->contains(filenamePathFixed, ignoreCase))
 		{
-			return it->openFile(filename, ignoreCase, flags);
+			return it->openFile(filenamePathFixed, ignoreCase, flags);
 		}
 	}
 	return nullptr;
@@ -75,10 +78,12 @@ IFile * FileSystem::openReadFile(const string& filename, bool ignoreCase, u32 fl
 
 bool FileSystem::exists(const string& filename) const
 {
+	string filenamePathFixed = filename;
+	FileUtils::ConvertPath(filenamePathFixed);
 	bool fileExists = false;
 	for (List<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
 	{
-		if (it->contains(filename, false))
+		if (it->contains(filenamePathFixed, false))
 		{
 			fileExists = true;
 			break;

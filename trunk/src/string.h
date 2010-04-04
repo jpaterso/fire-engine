@@ -76,6 +76,11 @@ class _FIRE_ENGINE_API_ string
 	 location. Returns 0 (NULL) if str is not found. */
     const c8 * substring(const c8 * str) const;
 
+	/** Replaces all occurences of charA with charB.
+	 \param charA The character to look for and replace.
+	 \param charB The character to replace charA with. */
+	void replaceAll(c8 charA, c8 charB);
+
 	/** Makes all the characters in the string lowercase. */
 	void makeLower();
 

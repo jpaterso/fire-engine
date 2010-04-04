@@ -178,6 +178,7 @@ bool ZipFileReader::scanLocalFileHeader()
 	name[entry.ZipHeader.FilenameLen] = '\0';
 	ZipArchive->read(name, entry.ZipHeader.FilenameLen);
 	entry.FullName = string(name);
+	FileUtils::ConvertPath(entry.FullName);
 	entry.Name = FileUtils::StripDirectory(entry.FullName);
 	delete [] name;
 
