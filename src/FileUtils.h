@@ -37,6 +37,10 @@ public:
 	 \return         The extension of the file, or an empty string if the file has
 	                 no extension. */ 
 	static string GetFileExtension(const string& filename);
+
+	/** Fixes a given path so that directory delimiters are consistent.
+	 \param path The path to modify. This will be done in place. */
+	static void ConvertPath(string& path);
 };
 
 } //namespace io

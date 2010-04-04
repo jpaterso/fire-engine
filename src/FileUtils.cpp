@@ -54,5 +54,10 @@ string FileUtils::GetFileExtension(const string& filename)
 	return string(occ+1);
 }
 
+void FileUtils::ConvertPath(string& path)
+{
+	path.replaceAll('\\', '/');
+}
+
 } //namespace io
 } //namespace fire_engine
