@@ -109,9 +109,17 @@ public:
 	 debugging. */
 	virtual void drawAABoundingBox(const AABoundingBoxf& box, const Color32& color) = 0;
 
-	/** Draw a list of indexed primitives, of type primitiveType. */
+	/** Draw a list of indexed primitives, of type primitiveType. 
+	 \param primitiveType The type of primitive to draw.
+	 \param numIndices The number of indices in the index buffer.
+	 \param vertices A pointer to the vertex buffer.
+	 \param indices A pointer to the index buffer. */
 	virtual void drawIndexedPrimitiveList(EPOLYGON_TYPE primitiveType,
-		s32 num_primitives, const Vertex3 * vertices, const u32 * indices) = 0;
+		s32 numIndices, const Vertex3 * vertices, const u32 * indices) = 0;
+
+	/** Draws a mesh buffer to the screen. 
+	 \param mb A pointer to the IMeshBuffer object to draw. */
+	virtual void drawMeshBuffer(const IMeshBuffer * mb) = 0;
 
 	/** Returns a screenshot, in R8G8B8 color format. */
 	virtual Image * screenshot(void) const = 0;

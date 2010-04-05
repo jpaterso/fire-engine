@@ -74,8 +74,6 @@ public:
 
 	virtual Material getMaterial() const;
 
-	virtual s32 render(IRenderer * rd);
-
 	/** Returns the BoundingBox for the current interpolation. */
 	virtual const AABoundingBoxf& getBoundingBox() const;
 

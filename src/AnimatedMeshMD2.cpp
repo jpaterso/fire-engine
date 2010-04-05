@@ -100,13 +100,6 @@ AnimatedMeshMD2::~AnimatedMeshMD2()
 		mTexture->drop();
 }
 
-s32 AnimatedMeshMD2::render(IRenderer * renderer)
-{
-	renderer->drawIndexedPrimitiveList(EPT_TRIANGLES, mIndices->size(),
-		mInterpolationBuffer, mIndices->const_pointer());
-	return mIndices->size() / 3;
-}
-
 void AnimatedMeshMD2::animate(s32 first, s32 second, f32 ipol)
 {
 	f32 om_ipol = 1.0f-ipol;

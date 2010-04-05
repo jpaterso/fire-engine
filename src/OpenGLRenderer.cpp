@@ -287,7 +287,7 @@ IRenderer * OpenGLRenderer::Create()
 }
 
 void OpenGLRenderer::drawIndexedPrimitiveList(EPOLYGON_TYPE primitiveType,
-	s32 num_primitives, const Vertex3 * vertices, const u32 * indices)
+	s32 numIndices, const Vertex3 * vertices, const u32 * indices)
 {
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -309,22 +309,22 @@ void OpenGLRenderer::drawIndexedPrimitiveList(EPOLYGON_TYPE primitiveType,
 	switch (primitiveType)
 	{
 	case EPT_LINES:
-		glDrawElements(GL_LINES, num_primitives, GL_UNSIGNED_INT, (const void*)indices);
+		glDrawElements(GL_LINES, numIndices, GL_UNSIGNED_INT, (const void*)indices);
 		break;
 	case EPT_POINTS:
-		glDrawArrays(GL_POINTS, 0, num_primitives);
+		glDrawArrays(GL_POINTS, 0, numIndices);
 		break;
 	case EPT_TRIANGLES:
-		glDrawElements(GL_TRIANGLES, num_primitives, GL_UNSIGNED_INT, (const void*)indices);
+		glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, (const void*)indices);
 		break;
 	case EPT_QUADS:
-		glDrawElements(GL_QUADS, num_primitives, GL_UNSIGNED_INT, (const void*)indices);
+		glDrawElements(GL_QUADS, numIndices, GL_UNSIGNED_INT, (const void*)indices);
 		break;
 	case EPT_TRIANGLE_STRIP:
-		glDrawElements(GL_TRIANGLE_STRIP, num_primitives, GL_UNSIGNED_INT, (const void*)indices);
+		glDrawElements(GL_TRIANGLE_STRIP, numIndices, GL_UNSIGNED_INT, (const void*)indices);
 		break;
 	case EPT_TRIANGLE_FAN:
-		glDrawElements(GL_TRIANGLE_FAN, num_primitives, GL_UNSIGNED_INT, (const void*)indices);
+		glDrawElements(GL_TRIANGLE_FAN, numIndices, GL_UNSIGNED_INT, (const void*)indices);
 		break;
 	}
 
@@ -335,6 +335,18 @@ void OpenGLRenderer::drawIndexedPrimitiveList(EPOLYGON_TYPE primitiveType,
 		glDisableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
+}
+
+void OpenGLRenderer::drawMeshBuffer(const IMeshBuffer * mb)
+{
+	setMaterial(mb->getMaterial());
+	if (mb->getTexture() != nullptr)
+	{
+		setTexture(0, mb->getTexture());
+	}
+	drawIndexedPrimitiveList(mb->getPolygonType(), mb->getIndices()->getCount(), 
+		mb->getVertices(), mb->getIndices()->const_pointer());
+	setTexture(0, nullptr);
 }
 
 Image * OpenGLRenderer::screenshot(void) const

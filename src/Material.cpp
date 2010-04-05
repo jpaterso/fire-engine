@@ -19,12 +19,12 @@ Material::Material(const string& name)
 	  m_shininess(0.0f), mUseAlphaBlending(true), mLightingEnabled(true),
 	  mWireframe(false), mWriteToZBuffer(true)
 {
-	memset(mTextures, 0, MATERIAL_MAX_NUM_TEXTURES*sizeof(ITexture*));
+	memset(Textures, 0, MATERIAL_MAX_NUM_TEXTURES*sizeof(ITexture*));
 }
 
 Material::Material(const Material& other)
 {
-	memset(mTextures, 0, MATERIAL_MAX_NUM_TEXTURES*sizeof(ITexture *));
+	memset(Textures, 0, MATERIAL_MAX_NUM_TEXTURES*sizeof(ITexture *));
 	*this = other;
 }
 
@@ -32,9 +32,9 @@ Material::~Material()
 {
 	for (s32 i = 0; i < MATERIAL_MAX_NUM_TEXTURES; i++)
 	{
-		if (mTextures[i] != 0)
+		if (Textures[i] != 0)
 		{
-			mTextures[i]->drop();
+			Textures[i]->drop();
 		}
 	}
 }
@@ -93,13 +93,19 @@ const Material& Material::operator=(const Material& other)
 	mWireframe = other.mWireframe;
 	mWriteToZBuffer = other.mWriteToZBuffer;
 	for (s32 i = 0; i < MATERIAL_MAX_NUM_TEXTURES; i++)
-		if (mTextures[i] != 0)
-			mTextures[i]->drop();
+	{
+		if (Textures[i] != 0)
+		{	
+			Textures[i]->drop();
+		}
+	}
 	for (s32 i = 0; i < MATERIAL_MAX_NUM_TEXTURES; i++)
 	{
-		mTextures[i] = other.mTextures[i];
-		if (mTextures[i])
-			mTextures[i]->grab();
+		Textures[i] = other.Textures[i];
+		if (Textures[i])
+		{
+			Textures[i]->grab();
+		}
 	}
 
 	return *this;
@@ -108,12 +114,18 @@ const Material& Material::operator=(const Material& other)
 void Material::setTexture(s32 level, ITexture * tex)
 {
 	if (level >= MATERIAL_MAX_NUM_TEXTURES)
+	{
 		return;
-	if (mTextures[level])
-		mTextures[level]->drop();
-	mTextures[level] = tex;
-	if (mTextures[level])
-		mTextures[level]->grab();
+	}
+	if (Textures[level])
+	{
+		Textures[level]->drop();
+	}
+	Textures[level] = tex;
+	if (Textures[level])
+	{	
+		Textures[level]->grab();
+	}
 }
 
 const ITexture * Material::getTexture(s32 level) const
@@ -122,7 +134,7 @@ const ITexture * Material::getTexture(s32 level) const
 	{
 		return nullptr;
 	}
-	return mTextures[level];
+	return Textures[level];
 }
 
 }

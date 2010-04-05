@@ -74,13 +74,6 @@ Material MeshBufferMD3::getMaterial() const
 	return mMaterial;
 }
 
-s32 MeshBufferMD3::render(IRenderer * rd)
-{
-	rd->drawIndexedPrimitiveList(EPT_TRIANGLES, mIndices->size(), mInterpolationBuffer,
-		mIndices->const_pointer());
-	return mIndices->size() / 3;
-}
-
 const AABoundingBoxf& MeshBufferMD3::getBoundingBox() const
 {
 	return mInterpolationBoundingBox;

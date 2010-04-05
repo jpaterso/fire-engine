@@ -18,17 +18,10 @@ class _FIRE_ENGINE_API_ Octree : public virtual Object
 {
 public:
 	/** Construct an Octree from some Mesh. The mesh should not be animated.
-	 \param mesh The mesh to construct the Octree from. */
-	Octree(IMesh * mesh) 
-		: Octree(mesh, 256)
-	{
-	}
-
-	/** Construct an Octree from some Mesh. The mesh should not be animated.
 	 \param mesh The mesh to construct the Octree from. 
 	 \param maxPolyCount The maximum number of polygons per child Octant. */
-	Octree(IMesh * mesh, int maxPolyCount)
-		: Mesh(mesh), MaxPolyCount(maxPolyCount)
+	Octree(IMesh * mesh, int maxPolygonCount = 256) 
+		: Mesh(mesh), MaxPolyCount(maxPolygonCount)
 	{
 		if (Mesh != nullptr)
 		{
@@ -138,14 +131,8 @@ private:
 			return Material();
 		}
 
-		virtual s32 render(IRenderer * rd)
-		{
-			return 0;
-		}
-
 		virtual const AABoundingBoxf& getBoundingBox() const
 		{
-
 		}
 
 	private:
@@ -176,26 +163,8 @@ private:
 
 			if (polyCount > maxPolyCount)
 			{
-				vector3<T> minp = Box.getMinPoint();
-				vector3<T> maxp = Box.getMaxPoint();
-				vector3<T> center = Box.getCenter();
 				AABoundingBox<T> childBox[8];
-
-				childBox[0] = AABoundingBox<T>(minp, center);
-				childBox[1] = AABoundingBox<T>(vector3<T>(center.getX(), minp.getY(), minp.getZ()), 
-												vector3<T>(maxp.getX(), center.getY(), center.getZ()));
-				childBox[2] = AABoundingBox<T>(vector3<T>(minp.getX(), center.getY(), minp.getZ()), 
-												vector3<T>(center.getX(), maxp.getY(), center.getZ()));
-				childBox[3] = AABoundingBox<T>(vector3<T>(center.getX(),center.getY(), minp.getZ()), 
-												vector3<T>(maxp.getX(), maxp.getY(), center.getZ()));
-				childBox[4] = AABoundingBox<T>(vector3<T>(minp.getX(), minp.getY(), center.getZ()),
-												vector3<T>(center.getX(), center.getY(), maxp.getZ()));
-				childBox[5] = AABoundingBox<T>(vector3<T>(center.getX(), minp.getY(), center.getZ()),
-												vector3<T>(maxp.getX(), center.getY(), maxp.getZ()));
-				childBox[6] = AABoundingBox<T>(vector3<T>(minp.getX(), center.getY(), center.getZ()),
-												vector3<T>(center.getX(), maxp.getY(), maxp.getZ()));
-				childBox[7] = AABoundingBox<T>(center, maxp);
-
+				calculateChildBoundingBoxes(childBox);
 
 				for (int i = 0; i < mesh->getMeshBufferCount(); i++)
 				{
@@ -248,8 +217,6 @@ private:
 
 						if (indices.size() > 0)
 						{
-							//chunk = new OctreeMeshBufferChunk();
-
 						}
 					}
 				}
@@ -279,6 +246,27 @@ private:
         OctreeNode * Children;
         Vertex3 * Vertices;
         AABoundingBox<T> Box;
+
+		void calculateChildBoundingBoxes(AABoundingBox*& childBox) const
+		{
+			vector3<T> minp = Box.getMinPoint();
+			vector3<T> maxp = Box.getMaxPoint();
+			vector3<T> center = Box.getCenter();
+			childBox[0] = AABoundingBox<T>(minp, center);
+			childBox[1] = AABoundingBox<T>(vector3<T>(center.getX(), minp.getY(), minp.getZ()), 
+				vector3<T>(maxp.getX(), center.getY(), center.getZ()));
+			childBox[2] = AABoundingBox<T>(vector3<T>(minp.getX(), center.getY(), minp.getZ()), 
+				vector3<T>(center.getX(), maxp.getY(), center.getZ()));
+			childBox[3] = AABoundingBox<T>(vector3<T>(center.getX(),center.getY(), minp.getZ()), 
+				vector3<T>(maxp.getX(), maxp.getY(), center.getZ()));
+			childBox[4] = AABoundingBox<T>(vector3<T>(minp.getX(), minp.getY(), center.getZ()),
+				vector3<T>(center.getX(), center.getY(), maxp.getZ()));
+			childBox[5] = AABoundingBox<T>(vector3<T>(center.getX(), minp.getY(), center.getZ()),
+				vector3<T>(maxp.getX(), center.getY(), maxp.getZ()));
+			childBox[6] = AABoundingBox<T>(vector3<T>(minp.getX(), center.getY(), center.getZ()),
+				vector3<T>(center.getX(), maxp.getY(), maxp.getZ()));
+			childBox[7] = AABoundingBox<T>(center, maxp);
+		}
 
     };
 

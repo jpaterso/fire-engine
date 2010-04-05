@@ -14,6 +14,7 @@
 #include "string.h"
 #include "Counter.h"
 #include "Array.h"
+#include <stdio.h>
 
 namespace fire_engine
 {
