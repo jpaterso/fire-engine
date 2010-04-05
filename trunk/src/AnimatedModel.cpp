@@ -83,7 +83,7 @@ void AnimatedModel::updateAnimationInfo(f64 time)
 
 s32 AnimatedModel::render(IRenderer * rd)
 {
-	s32 polygon_count = 0;
+	s32 polyCount = 0;
 	const Camera * camera = SceneManager::Get()->getActiveCamera();
 	if (camera == nullptr)
 	{
@@ -100,7 +100,7 @@ s32 AnimatedModel::render(IRenderer * rd)
 	if (camera->calculateIntersection(getTransformedBoundingVolume()) != EFIT_OUTSIDE)
 	{
 		IMesh * mesh = mMesh->getMesh(mAnimInfo.mFrameCur, mAnimInfo.mFrameNext, mAnimInfo.mIpolTime);
-		if (mesh != 0)
+		if (mesh != nullptr)
 		{
 			IMeshBuffer * imb = nullptr;
 			for (s32 i = 0; i < mesh->getMeshBufferCount(); i++)
@@ -109,16 +109,11 @@ s32 AnimatedModel::render(IRenderer * rd)
 				// Check whether mesh buffer is in frustum
 				if (camera->calculateIntersection(mWorldTransform.applyTransformation(imb->getBoundingBox())) != EFIT_OUTSIDE)
 				{
-					rd->setMaterial(mMaterials[i]);
-					if (imb->getTexture() != nullptr)
-					{
-						rd->setTexture(0, imb->getTexture());
-					}
-					polygon_count += imb->render(rd);
-					rd->setTexture(0, nullptr);
+					rd->drawMeshBuffer(imb);
+					polyCount += imb->getVertexCount();
 					if (mShowDebugInformation)
 					{
-						polygon_count += 12;
+						polyCount += 12;
 						rd->drawAABoundingBox(imb->getBoundingBox(), Color32::YELLOW);
 					}
 				}
@@ -126,7 +121,7 @@ s32 AnimatedModel::render(IRenderer * rd)
 		}
 	}
 	ISpaceNode::render(rd);
-	return polygon_count;
+	return polyCount;
 }
 
 Material& AnimatedModel::getMaterial(s32 nr)

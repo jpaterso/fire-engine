@@ -238,9 +238,9 @@ AnimatedMeshMD2 * AnimatedMeshMD2Loader::load(const string& filename, io::IFileP
 #endif
 
 #if defined(_FIRE_ENGINE_DEBUG_MD2_)
-	printf("Statistics for %s\n", file->getFilename().c_str());
+	printf("Statistics for %s\n", filename.c_str());
 	printf("---------------");
-	for (s32 i = 0; i < file->getFilename().length(); i++)
+	for (s32 i = 0; i < filename.length(); i++)
 		putchar('-');
 	putchar('\n');
 	printf("Magic Number:                  %x\n", md2h.magic);

@@ -80,7 +80,9 @@ public:
 	virtual void drawAABoundingBox(const AABoundingBoxf& box, const Color32& color);
 
 	virtual void drawIndexedPrimitiveList(EPOLYGON_TYPE primitiveType,
-		s32 num_primitives, const Vertex3 * vertices, const u32 * indices);
+		s32 numIndices, const Vertex3 * vertices, const u32 * indices);
+
+	virtual void drawMeshBuffer(const IMeshBuffer * mb);
 
 	virtual Image * screenshot() const;
 

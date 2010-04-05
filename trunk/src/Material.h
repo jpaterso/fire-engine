@@ -123,7 +123,7 @@ private:
 		bool mWriteToZBuffer;
 	};
 
-	ITexture * mTextures[MATERIAL_MAX_NUM_TEXTURES];
+	ITexture * Textures[MATERIAL_MAX_NUM_TEXTURES];
 
 };
 

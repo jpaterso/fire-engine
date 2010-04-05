@@ -13,7 +13,6 @@
 #include "CompileConfig.h"
 #include "Array.h"
 #include "Object.h"
-#include "IRenderable.h"
 #include "AABoundingBox.h"
 
 namespace fire_engine
@@ -52,7 +51,7 @@ class Vertex3;
 
 /** A class containing information about some mesh, with a single texture.
  The vertex data contained can represent various polygonal types */
-class _FIRE_ENGINE_API_ IMeshBuffer : public virtual Object, public virtual IRenderable
+class _FIRE_ENGINE_API_ IMeshBuffer : public virtual Object
 {
 public:
 	/** Virtual destructor */
@@ -99,7 +98,7 @@ public:
 
 	/** Inherited from IRenderable. Render the IMeshBuffer, worrying just about
 	 the vertex data, no Materials or anything. */
-	virtual s32 render(IRenderer * rd) = 0;
+	//virtual s32 render(IRenderer * rd) = 0;
 
 	/** Returns a bounding box, that the IMeshBuffer is contained in. */
 	virtual const AABoundingBoxf& getBoundingBox() const = 0;

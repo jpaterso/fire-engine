@@ -80,7 +80,6 @@ public:
 	virtual inline s32 getMeshBufferCount() const;
 
 	/** Renders the interpolation buffer. */
-	virtual s32 render(IRenderer * renderer);
 	virtual IMesh * getMesh(s32 frame, s32 start = -1, s32 end = -1);
 	virtual IMesh * getMesh(s32 first, s32 second, f32 ipol);
 

@@ -34,9 +34,9 @@ Image * ImageLoaderTGA::load(const string& filename, io::IFileProvider * filePro
 	void *  data     = nullptr;
 	io::IFile * file = io::FileSystem::Get()->openReadFile(filename, false,  io::EFOF_READ|io::EFOF_BINARY, fileProvider);
 	
-	dimension2i dim;
-	TGAHeader   header;
-	u8          bpp;
+	dimension2i  dim;
+	tga_header_t header;
+	u8           bpp;
 
 	if (file == nullptr)
 	{
@@ -45,7 +45,7 @@ Image * ImageLoaderTGA::load(const string& filename, io::IFileProvider * filePro
 		return nullptr;
 	}
 
-	file->read(&header, sizeof(TGAHeader));
+	file->read(&header, sizeof(tga_header_t));
 
 #if defined(_FIRE_ENGINE_BIG_ENDIAN_)
 	header.cmapOrigin = ByteConverter::ByteSwap(header.cmapOrigin);
@@ -57,9 +57,9 @@ Image * ImageLoaderTGA::load(const string& filename, io::IFileProvider * filePro
 #endif
 
 #if defined(_FIRE_ENGINE_DEBUG_TGA_)
-	printf("Statistics for %s\n", file->getFilename().c_str());
+	printf("Statistics for %s\n", filename.c_str());
 	printf("---------------");
-	for (s32 i = 0; i < file->getFilename().length(); i++)
+	for (s32 i = 0; i < filename.length(); i++)
 		putchar('-');
 	putchar('\n');
 	printf("Color map type        =  %u\n", header.cmapType);
@@ -91,25 +91,25 @@ Image * ImageLoaderTGA::load(const string& filename, io::IFileProvider * filePro
 
 	switch (header.imageType)
 	{
-		case TGA_NO_DATA:
+		case ETGADT_NO_DATA:
 			return 0;
 			break;
 
-		case TGA_UC_COLOR_MAPPED:
-		case TGA_RLE_COLOR_MAPPED:
+		case ETGADT_UC_COLOR_MAPPED:
+		case ETGADT_RLE_COLOR_MAPPED:
 			Logger::Get()->log(ES_HIGH, "ImageLoaderTGA", "color mapped data not supported");
 			delete file;
 			return 0;
 			break;
 
-		case TGA_UC_RGB:
-		case TGA_UC_BW:
+		case ETGADT_UC_RGB:
+		case ETGADT_UC_BW:
 			data = new u8[bpp*dim.getWidth()*dim.getHeight()];
 			file->read(data, bpp*dim.getWidth()*dim.getHeight());
 			break;
 
-		case TGA_RLE_RGB:
-		case TGA_RLE_BW:
+		case ETGADT_RLE_RGB:
+		case ETGADT_RLE_BW:
 			data = decompressRLE(header, file, dim);
 			break;
 
@@ -140,7 +140,7 @@ Image * ImageLoaderTGA::load(const string& filename, io::IFileProvider * filePro
 
 		case 32:
 			image = new Image(Image::EIDT_A8R8G8B8, dim, true);
-			ColorConverter::convert32BitTo32Bit((const s32 *)data, (s32 *)image->data(), dim, 0, true);
+			ColorConverter::convert32BitTo32Bit((const s32 *)data, (s32 *)image->data(), dim, 0, false);
 			break;
 
 		default:
@@ -155,7 +155,7 @@ Image * ImageLoaderTGA::load(const string& filename, io::IFileProvider * filePro
 
 bool ImageLoaderTGA::write(const string& filename, const Image * image) const
 {
-	TGAHeader header;
+	tga_header_t header;
 	io::File f(filename.c_str(), io::EFOF_CREATE|io::EFOF_WRITE|io::EFOF_TRUNCATE|io::EFOF_BINARY);
 	s32 size  = image->width()*image->height()*3;
 	u8 * data = new u8[size];
@@ -175,18 +175,18 @@ bool ImageLoaderTGA::write(const string& filename, const Image * image) const
 	tga_rle_data_t t = compressRLE(data, 3, image->dim());
 	delete [] data;
 
-	memset(&header, 0, sizeof(TGAHeader));
-	header.imageType   = TGA_UC_RGB;
+	memset(&header, 0, sizeof(tga_header_t));
+	header.imageType   = ETGADT_UC_RGB;
 	header.pixelSize   = 24;
 	header.imageWidth  = image->width();
 	header.imageHeight = image->height();
-	header.imageType = TGA_RLE_RGB;
+	header.imageType = ETGADT_RLE_RGB;
 #if defined(_FIRE_ENGINE_BIG_ENDIAN_)
 	header.imageWidth = ByteConverter::ByteSwap(header.imageWidth);
 	header.imageHeight = ByteConverter::ByteSwap(header.imageHeight);
 #endif
 
-	f.write(&header, sizeof(TGAHeader));
+	f.write(&header, sizeof(tga_header_t));
 	f.write(t.data, t.size);
 
 	delete [] t.data;
@@ -201,7 +201,7 @@ bool ImageLoaderTGA::write(const string& filename, const Image * image) const
 	return true;
 }
 
-u8 * ImageLoaderTGA::decompressRLE(TGAHeader theader, io::IFile * file, const dimension2i& dim) const
+u8 * ImageLoaderTGA::decompressRLE(tga_header_t theader, io::IFile * file, const dimension2i& dim) const
 {
 	u8   bpp    = theader.pixelSize / 8;
 	u8 * data   = new u8[bpp*dim.getWidth()*dim.getHeight()];;
@@ -212,7 +212,7 @@ u8 * ImageLoaderTGA::decompressRLE(TGAHeader theader, io::IFile * file, const di
 	while (offset < (bpp*dim.getWidth()*dim.getHeight()))
 	{
 		file->read(&header, 1);
-		if (header & TGA_RLE_RLE)
+		if (header & ETGADT_RLE_RLE)
 		{
 			file->read(&data[offset], bpp);
 			for (i = 1; i <= (header & 0x7F); i++)
@@ -268,7 +268,7 @@ ImageLoaderTGA::tga_rle_data_t ImageLoaderTGA::compressRLE(const u8 * data, u8 b
 				 identical to the first, then compress the data. */
 				if (pcount > 0)
 				{
-					rle.data[rle.size++] = (pcount-1) | TGA_RLE_RLE;
+					rle.data[rle.size++] = (pcount-1) | ETGADT_RLE_RLE;
 					memcpy(&rle.data[rle.size], header, bpp);
 					width += pcount;
 					rle.size = rle.size+bpp;

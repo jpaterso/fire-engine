@@ -56,20 +56,20 @@ private:
 		u16	imageHeight;     // Height of image (lo-hi)
 		u8	pixelSize;       // Image pixel size
 		u8	imageDescriptor; // Image descriptor byte
-	} TGAHeader;
+	} tga_header_t;
 #pragma pack (pop)
 
 	//! The different types of data a TGA file can contain
-	enum TGADataTypes
+	enum ETGA_DATA_TYPES
 	{
-		TGA_NO_DATA          = 0x00,
-		TGA_UC_COLOR_MAPPED  = 0x01,
-		TGA_UC_RGB           = 0x02,
-		TGA_UC_BW            = 0x03,
-		TGA_RLE_COLOR_MAPPED = 0x09,
-		TGA_RLE_RGB          = 0x0A,
-		TGA_RLE_BW           = 0x0B,
-		TGA_RLE_RLE          = 0x80
+		ETGADT_NO_DATA          = 0x00,
+		ETGADT_UC_COLOR_MAPPED  = 0x01,
+		ETGADT_UC_RGB           = 0x02,
+		ETGADT_UC_BW            = 0x03,
+		ETGADT_RLE_COLOR_MAPPED = 0x09,
+		ETGADT_RLE_RGB          = 0x0A,
+		ETGADT_RLE_BW           = 0x0B,
+		ETGADT_RLE_RLE          = 0x80
 	};
 
 public:
@@ -80,12 +80,12 @@ public:
 	//! Implementation for ILoader
 	virtual Image * load(const string& filename, io::IFileProvider * fileProvider) const;
 
-	//! Implementaions for IWriter
+	//! Implementations for IWriter
 	virtual bool write(const string& filename, const Image * image) const;
 
 private:
 	/** Decompress the RLE data found in the .TGA file. */
-	u8 * decompressRLE(TGAHeader theader, io::IFile * file, const dimension2i& dim) const;
+	u8 * decompressRLE(tga_header_t theader, io::IFile * file, const dimension2i& dim) const;
 
 	/** A structure to contain the compressed data. */
 	typedef struct
