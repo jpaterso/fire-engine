@@ -6,7 +6,7 @@
 **/
 
 #include "INode.h"
-#include "List.h"
+#include "list.h"
 #include <stdio.h>
 
 namespace fire_engine
@@ -15,7 +15,7 @@ namespace fire_engine
 INode::INode(INode * parent)
 	: mParent(0)
 {
-	mChildren = new List<INode*>();
+	mChildren = new list<INode*>();
 	this->setParent(parent);
 }
 
@@ -74,7 +74,7 @@ bool INode::containsChild(INode * child) const
 
 void INode::removeAllChildren()
 {
-	for (List<INode*>::iterator it = mChildren->begin(); it != mChildren->end(); it++)
+	for (list<INode*>::iterator it = mChildren->begin(); it != mChildren->end(); it++)
 	{
 		it->mParent = 0;
 		it->drop();
@@ -92,7 +92,7 @@ INode * INode::createAndAddChild()
 
 void INode::releaseTree()
 {
-	for (List<INode*>::iterator it = mChildren->begin(); it != mChildren->end(); it++)
+	for (list<INode*>::iterator it = mChildren->begin(); it != mChildren->end(); it++)
 		it->releaseTree();
 	this->removeAllChildren();
 }

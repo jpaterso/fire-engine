@@ -12,13 +12,13 @@
 #include "CompileConfig.h"
 #include "IAnimatedMesh.h"
 #include "IMeshBuffer.h"
-#include "AABoundingBox.h"
+#include "aabbox.h"
 #include "Vertex3.h"
-#include "Array.h"
+#include "array.h"
 #include "matrix4.h"
 #include "quaternion.h"
 #include "Material.h"
-#include "List.h"
+#include "list.h"
 
 namespace fire_engine
 {
@@ -50,7 +50,7 @@ class _FIRE_ENGINE_API_ MeshBufferMD3 : public IMeshBuffer
 {
 public:
 	/** Constructor. */
-	MeshBufferMD3(Vertex3 * vertices, Array<u32> * indices, ITexture * texture,
+	MeshBufferMD3(Vertex3 * vertices, array<u32> * indices, ITexture * texture,
 		s32 verts_per_frame, s32 num_frames);
 
 	/** Destructor. */
@@ -66,7 +66,7 @@ public:
 
 	virtual s32 getVertexCount() const;
 
-	virtual const Array<u32> * getIndices() const;
+	virtual const array<u32> * getIndices() const;
 
 	virtual const ITexture * getTexture() const;
 
@@ -75,18 +75,18 @@ public:
 	virtual Material getMaterial() const;
 
 	/** Returns the BoundingBox for the current interpolation. */
-	virtual const AABoundingBoxf& getBoundingBox() const;
+	virtual const aabboxf& getBoundingBox() const;
 
 private:
 	Vertex3 *         mVertices;
-	Array<u32> *      mIndices;
+	array<u32> *      mIndices;
 	ITexture *        mTexture;
 	Material          mMaterial;
-	AABoundingBoxf *  mBoundingBoxes;
+	aabboxf *  mBoundingBoxes;
 	s32               mVerticesPerFrame;
 	s32               mNumFrames;
 	Vertex3 *         mInterpolationBuffer;
-	AABoundingBoxf    mInterpolationBoundingBox;
+	aabboxf    mInterpolationBoundingBox;
 
 	/** we don't want other classes than AnimatedMeshMD3 calling
 	 updateInterpolationBuffer(), so make it a friend, and the method
@@ -110,7 +110,7 @@ class AnimatedMeshMD3 : public IAnimatedMesh
 public:
 	/** Constructor. */
 	AnimatedMeshMD3(MeshBufferMD3 ** buffers, s32 mbuffer_count, s32 frame_count,
-		Array<MD3QuaternionTag*> * tags);
+		array<MD3QuaternionTag*> * tags);
 
 	/** Destructor. */
 	virtual ~AnimatedMeshMD3();
@@ -129,9 +129,9 @@ public:
 	virtual inline s32 getMeshBufferCount() const;
 
 	/** Returns the BoundingBox for the current frame interpolation. */
-	virtual const AABoundingBoxf& getBoundingBox() const;
+	virtual const aabboxf& getBoundingBox() const;
 
-	virtual AABoundingBoxf getBoundingBox(s32 first, s32 second, f32 ipol) const;
+	virtual aabboxf getBoundingBox(s32 first, s32 second, f32 ipol) const;
 
 	/** Returns the number of tags. */
 	s32 getNumTags() const;
@@ -150,9 +150,9 @@ private:
 	MeshBufferMD3 **           mBuffers;
 	s32                        mBufferCount;
 	s32                        mFrameCount;
-	Array<MD3QuaternionTag*> * mTags;
+	array<MD3QuaternionTag*> * mTags;
 
-	AABoundingBoxf  mInterpolationBoundingBox;
+	aabboxf  mInterpolationBoundingBox;
 };
 
 inline Vertex3 * MeshBufferMD3::_getOriginalVertices()

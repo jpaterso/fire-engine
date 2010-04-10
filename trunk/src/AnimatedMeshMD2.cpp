@@ -67,7 +67,7 @@ AnimatedMeshMD2::AnimatedMeshMD2()
 }
 
 AnimatedMeshMD2::AnimatedMeshMD2(const string& name, s32 num_frames, s32 vertices_per_frame,
-	Vertex3 * vertices, Array<u32> * indices, ITexture * texture)
+	Vertex3 * vertices, array<u32> * indices, ITexture * texture)
 	: mNumFrames(num_frames), mNumVerticesPerFrame(vertices_per_frame),
 	  mVertices(vertices), mInterpolationBuffer(0), mIndices(indices),
 	  mTexture(texture), mBoundingBoxes(0)
@@ -79,7 +79,7 @@ AnimatedMeshMD2::AnimatedMeshMD2(const string& name, s32 num_frames, s32 vertice
 	mInterpolationBuffer = new Vertex3[mNumVerticesPerFrame];
 
 	// Calculate bounding boxes
-	mBoundingBoxes = new AABoundingBoxf[num_frames];
+	mBoundingBoxes = new aabboxf[num_frames];
 	for (s32 i = 0; i < num_frames; i++)
 	{
 		const Vertex3 * frameVertices = &vertices[i*vertices_per_frame];
@@ -158,12 +158,12 @@ s32 AnimatedMeshMD2::getFPS(s32 frameStart, s32 frameEnd) const
 	return 1;
 }
 
-const AABoundingBoxf& AnimatedMeshMD2::getBoundingBox() const
+const aabboxf& AnimatedMeshMD2::getBoundingBox() const
 {
 	return mCurrentBoundingBox;
 }
 
-AABoundingBoxf AnimatedMeshMD2::getBoundingBox(s32 first, s32 second, f32 ipol) const
+aabboxf AnimatedMeshMD2::getBoundingBox(s32 first, s32 second, f32 ipol) const
 {
 	return mBoundingBoxes[first].getInterpolate(mBoundingBoxes[second], ipol);
 }

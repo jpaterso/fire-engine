@@ -9,15 +9,15 @@
 
 #include "IStack.h"
 #include "CompileConfig.h"
-#include "Counter.h"
+#include "counter.h"
 
 namespace fire_engine
 {
 template <class Obj>
-class _FIRE_ENGINE_API_ Stack : public IStack<Obj>, public Counter
+class _FIRE_ENGINE_API_ Stack : public IStack<Obj>, public counter
 {
 public:
-	Stack() : Counter()
+	Stack() : counter()
 	{
 		this->m_root = 0;
 	}

@@ -12,7 +12,7 @@
 namespace fire_engine
 {
 
-MeshBufferMD3::MeshBufferMD3(Vertex3 * vertices, Array<u32> * indices, ITexture * texture,
+MeshBufferMD3::MeshBufferMD3(Vertex3 * vertices, array<u32> * indices, ITexture * texture,
 	s32 verts_per_frame, s32 num_frames)
 	: mVertices(vertices), mIndices(indices), mTexture(texture),
 	  mVerticesPerFrame(verts_per_frame), mNumFrames(num_frames)
@@ -22,7 +22,7 @@ MeshBufferMD3::MeshBufferMD3(Vertex3 * vertices, Array<u32> * indices, ITexture 
 #endif
 	if (mTexture)
 		mTexture->grab();
-	mBoundingBoxes = new AABoundingBoxf[mNumFrames];
+	mBoundingBoxes = new aabboxf[mNumFrames];
 	calculateBoundingBoxes();
 	mInterpolationBuffer = new Vertex3[verts_per_frame];
 }
@@ -54,7 +54,7 @@ s32 MeshBufferMD3::getVertexCount() const
 	return mVerticesPerFrame;
 }
 
-const Array<u32> * MeshBufferMD3::getIndices() const
+const array<u32> * MeshBufferMD3::getIndices() const
 {
 	return mIndices;
 }
@@ -74,7 +74,7 @@ Material MeshBufferMD3::getMaterial() const
 	return mMaterial;
 }
 
-const AABoundingBoxf& MeshBufferMD3::getBoundingBox() const
+const aabboxf& MeshBufferMD3::getBoundingBox() const
 {
 	return mInterpolationBoundingBox;
 }
@@ -106,7 +106,7 @@ void MeshBufferMD3::calculateBoundingBoxes()
 }
 
 AnimatedMeshMD3::AnimatedMeshMD3(MeshBufferMD3 ** buffers, s32 mbuffer_count, s32 frame_count,
-	Array<MD3QuaternionTag*> * tags)
+	array<MD3QuaternionTag*> * tags)
 	: mBuffers(buffers), mBufferCount(mbuffer_count), mFrameCount(frame_count),
 	  mTags(tags)
 {
@@ -155,14 +155,14 @@ s32 AnimatedMeshMD3::getFPS(s32 frameStart, s32 frameEnd) const
 	return 10;
 }
 
-const AABoundingBoxf& AnimatedMeshMD3::getBoundingBox() const
+const aabboxf& AnimatedMeshMD3::getBoundingBox() const
 {
 	return mInterpolationBoundingBox;
 }
 
-AABoundingBoxf AnimatedMeshMD3::getBoundingBox(s32 first, s32 second, f32 ipol) const
+aabboxf AnimatedMeshMD3::getBoundingBox(s32 first, s32 second, f32 ipol) const
 {
-	AABoundingBoxf box;
+	aabboxf box;
 	for (s32 i = 0; i < mBufferCount; i++)
 		box.addInternalBoundingBox(mBuffers[i]->mBoundingBoxes[first].getInterpolate(mBuffers[i]->mBoundingBoxes[second], ipol));
 	return box;

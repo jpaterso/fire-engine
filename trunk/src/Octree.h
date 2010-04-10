@@ -4,11 +4,11 @@
 #include "Types.h"
 #include "CompileConfig.h"
 #include "Object.h"
-#include "AABoundingBox.h"
+#include "aabbox.h"
 #include "IMesh.h"
 #include "IMeshBuffer.h"
 #include "Vertex3.h"
-#include "Array.h"
+#include "array.h"
 
 namespace fire_engine
 {
@@ -65,7 +65,7 @@ private:
 	class _FIRE_ENGINE_API_ OctreeMeshBufferChunk : public IMeshBuffer
 	{
 	public:
-		OctreeMeshBufferChunk(Vertex3 * vertices, s32 vertexCount, Array<u32> * indices, EPOLYGON_TYPE polygonType)
+		OctreeMeshBufferChunk(Vertex3 * vertices, s32 vertexCount, array<u32> * indices, EPOLYGON_TYPE polygonType)
 			: Vertices(vertices), Indices(indices), PolygonType(polygonType), VertexCount(vertexCount)
 		{
 		}
@@ -103,7 +103,7 @@ private:
 			return VertexCount;
 		}
 
-		virtual const Array<u32> * getIndices() const
+		virtual const array<u32> * getIndices() const
 		{
 			return Indices;
 		}
@@ -131,13 +131,13 @@ private:
 			return Material();
 		}
 
-		virtual const AABoundingBoxf& getBoundingBox() const
+		virtual const aabboxf& getBoundingBox() const
 		{
 		}
 
 	private:
 		Vertex3 * Vertices;
-		Array<u32> * Indices;
+		array<u32> * Indices;
 		EPOLYGON_TYPE PolygonType;
 		ITexture * Texture;
 		s32 VertexCount;
@@ -163,18 +163,18 @@ private:
 
 			if (polyCount > maxPolyCount)
 			{
-				AABoundingBox<T> childBox[8];
+				aabbox<T> childBox[8];
 				calculateChildBoundingBoxes(childBox);
 
 				for (int i = 0; i < mesh->getMeshBufferCount(); i++)
 				{
 					IMeshBuffer * mb = mesh->getMeshBuffer(i);
 					const Vertex3 * meshVertices = mb->getVertices();
-					const Array<u32> * meshIndices =  mb->getIndices();
+					const array<u32> * meshIndices =  mb->getIndices();
 					for (int j = 0; j < 8; j++)
 					{
 						IMeshBuffer * chunk = nullptr;
-						Array<s32> indices;
+						array<s32> indices;
 						switch (mb->getPolygonType())
 						{
 						case EPT_POINTS:
@@ -245,27 +245,36 @@ private:
 		OctreeMeshBufferChunk * Chunks;
         OctreeNode * Children;
         Vertex3 * Vertices;
-        AABoundingBox<T> Box;
+        aabbox<T> Box;
 
-		void calculateChildBoundingBoxes(AABoundingBox*& childBox) const
+		/** Populate the eight child axis-aligned bounding boxes.\
+		 \param childBox A place to store the boxes. */
+		void calculateChildBoundingBoxes(aabbox<T>* childBox) const
 		{
 			vector3<T> minp = Box.getMinPoint();
 			vector3<T> maxp = Box.getMaxPoint();
 			vector3<T> center = Box.getCenter();
-			childBox[0] = AABoundingBox<T>(minp, center);
-			childBox[1] = AABoundingBox<T>(vector3<T>(center.getX(), minp.getY(), minp.getZ()), 
-				vector3<T>(maxp.getX(), center.getY(), center.getZ()));
-			childBox[2] = AABoundingBox<T>(vector3<T>(minp.getX(), center.getY(), minp.getZ()), 
-				vector3<T>(center.getX(), maxp.getY(), center.getZ()));
-			childBox[3] = AABoundingBox<T>(vector3<T>(center.getX(),center.getY(), minp.getZ()), 
-				vector3<T>(maxp.getX(), maxp.getY(), center.getZ()));
-			childBox[4] = AABoundingBox<T>(vector3<T>(minp.getX(), minp.getY(), center.getZ()),
-				vector3<T>(center.getX(), center.getY(), maxp.getZ()));
-			childBox[5] = AABoundingBox<T>(vector3<T>(center.getX(), minp.getY(), center.getZ()),
-				vector3<T>(maxp.getX(), center.getY(), maxp.getZ()));
-			childBox[6] = AABoundingBox<T>(vector3<T>(minp.getX(), center.getY(), center.getZ()),
-				vector3<T>(center.getX(), maxp.getY(), maxp.getZ()));
-			childBox[7] = AABoundingBox<T>(center, maxp);
+
+			T minx = Box.getMinPoint().getX();
+			T miny = Box.getMinPoint().getY();
+			T minz = Box.getMinPoint().getZ();
+
+			T centerx = Box.getCenter().getX();
+			T centery = Box.getCenter().getY();
+			T centerz = Box.getCenter().getZ();
+
+			T maxx = Box.getMaxPoint().getX();
+			T maxy = Box.getMaxPoint().getY();
+			T maxz = Box.getMaxPoint().getZ();
+
+			childBox[0] = aabbox<T>(minp, center);
+			childBox[1] = aabbox<T>(vector3<T>(centerx, miny, minz), vector3<T>(maxx, centery, centerz));
+			childBox[2] = aabbox<T>(vector3<T>(minx, centery, minz), vector3<T>(centerx, maxy, centerz));
+			childBox[3] = aabbox<T>(vector3<T>(centerx, centery, minz), vector3<T>(maxx, maxy, centerz));
+			childBox[4] = aabbox<T>(vector3<T>(minx, miny, centerz), vector3<T>(centerx, centery, maxz));
+			childBox[5] = aabbox<T>(vector3<T>(centerx, miny, centerz), vector3<T>(maxx, centery, maxz));
+			childBox[6] = aabbox<T>(vector3<T>(minx, centery, centerz), vector3<T>(centerx, maxy, maxz));
+			childBox[7] = aabbox<T>(center, maxp);
 		}
 
     };
@@ -274,6 +283,9 @@ private:
 	IMesh * Mesh;
 	int MaxPolyCount;
 };
+
+template class _FIRE_ENGINE_API_ vector3<f32>;
+template class _FIRE_ENGINE_API_ vector3<f64>;
 
 }
 

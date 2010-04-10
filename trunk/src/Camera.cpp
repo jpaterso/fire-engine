@@ -110,7 +110,7 @@ void Camera::onResize(const dimension2i& newSize)
 	this->setAspectRatio(static_cast<f32>(newSize.getWidth())/newSize.getHeight());
 }
 
-const AABoundingBoxf& Camera::getBoundingVolume() const
+const aabboxf& Camera::getBoundingVolume() const
 {
 	return mBoundingBox;
 }

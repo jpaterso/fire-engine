@@ -238,15 +238,15 @@ void Image::setTexelSize(void)
 	}
 }
 
-Array<Image *> * Image::generateMipmaps(void) const
+array<Image *> * Image::generateMipmaps(void) const
 {
 	s32 weakest_link         = (m_dim.getWidth() > m_dim.getHeight()) ?
 		m_dim.getHeight() : m_dim.getWidth(); // the weakest (ie. smallest) dimension
 	s32 num_mipmaps          = 1;
-	Array<Image *> * mipmaps = 0;
+	array<Image *> * mipmaps = 0;
 	while ((weakest_link >>= 1) > 0)
 		num_mipmaps++;
-	mipmaps = new Array<Image *>(num_mipmaps);
+	mipmaps = new array<Image *>(num_mipmaps);
 	mipmaps->push_back(new Image(*this));
 	for (s32 i = 1; i < num_mipmaps; i++)
 		mipmaps->push_back(mipmaps->at(i-1)->generateNextMipmap());

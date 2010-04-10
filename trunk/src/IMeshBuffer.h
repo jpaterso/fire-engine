@@ -11,9 +11,9 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "Array.h"
+#include "array.h"
 #include "Object.h"
-#include "AABoundingBox.h"
+#include "aabbox.h"
 
 namespace fire_engine
 {
@@ -83,7 +83,7 @@ public:
 
 	/** Get the indices, which can be used to access the vertices, in order
 	 to display proper polygons, as described by the getPolygonType() method */
-	virtual const Array<u32> * getIndices() const = 0;
+	virtual const array<u32> * getIndices() const = 0;
 
 	/** Get the single Texture used by the IMeshBuffer. The proper coordinates
 	 to the texture can be accessed via the getTextureCoordinates() method */
@@ -101,7 +101,7 @@ public:
 	//virtual s32 render(IRenderer * rd) = 0;
 
 	/** Returns a bounding box, that the IMeshBuffer is contained in. */
-	virtual const AABoundingBoxf& getBoundingBox() const = 0;
+	virtual const aabboxf& getBoundingBox() const = 0;
 };
 
 }

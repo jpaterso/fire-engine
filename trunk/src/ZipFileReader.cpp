@@ -144,7 +144,7 @@ bool ZipFileReader::contains(const string& filename, bool ignore_case, bool igno
 	return indexOf(filename, ignore_case, ignore_dirs) != -1;
 }
 
-const Array<ZipFileReader::ZipFileEntry> * ZipFileReader::getEntries() const
+const array<ZipFileReader::ZipFileEntry> * ZipFileReader::getEntries() const
 {
 	return &FileEntries;
 }

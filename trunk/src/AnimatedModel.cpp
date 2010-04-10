@@ -12,7 +12,7 @@
 #include "Vertex3.h"
 #include "SceneManager.h"
 #include "Camera.h"
-#include "AABoundingBox.h"
+#include "aabbox.h"
 
 namespace fire_engine
 {
@@ -114,7 +114,7 @@ s32 AnimatedModel::render(IRenderer * rd)
 					if (mShowDebugInformation)
 					{
 						polyCount += 12;
-						rd->drawAABoundingBox(imb->getBoundingBox(), Color32::YELLOW);
+						rd->drawaabbox(imb->getBoundingBox(), Color32::YELLOW);
 					}
 				}
 			}

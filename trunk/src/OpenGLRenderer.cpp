@@ -255,7 +255,7 @@ void OpenGLRenderer::draw3Dline(Color32 color, const vector3f& start, const vect
 	glEnd();
 }
 
-void OpenGLRenderer::drawAABoundingBox(const AABoundingBoxf& box, const Color32& color)
+void OpenGLRenderer::drawaabbox(const aabboxf& box, const Color32& color)
 {
 	vector3f min = box.getMinPoint();
 	vector3f max = box.getMaxPoint();

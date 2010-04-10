@@ -12,7 +12,7 @@
 #include "CompileConfig.h"
 #include "vector3.h"
 #include "plane3.h"
-#include "AABoundingBox.h"
+#include "aabbox.h"
 
 namespace fire_engine
 {
@@ -64,7 +64,7 @@ public:
 
 	/** Calculates the type of intersection between the frustum and a given axis-aligned
 	 bounding box. */
-	EFRUSTUM_INTERSECTION_TYPE calculateIntersection(const AABoundingBoxf& box) const;
+	EFRUSTUM_INTERSECTION_TYPE calculateIntersection(const aabboxf& box) const;
 
 protected:
 	plane3f  mPlanes[EFP_PLANECOUNT];

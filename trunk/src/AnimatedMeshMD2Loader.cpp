@@ -328,7 +328,7 @@ AnimatedMeshMD2 * AnimatedMeshMD2Loader::load(const string& filename, io::IFileP
 AnimatedMeshMD2 * AnimatedMeshMD2Loader::fromMD2Structures(MD2Header md2h, md2_skin_t * skins,
     md2_triangle_t * triangles, md2_tex_coords_t * tex_coords, md2_frame_t * frames) const
 {
-	Array<u32> * mesh_triangles  = new Array<u32>(md2h.num_triangles*3);
+	array<u32> * mesh_triangles  = new array<u32>(md2h.num_triangles*3);
 	Vertex3 * vertices           = new Vertex3[md2h.num_frames*md2h.num_vertices];
 	f32 v[3];
 	for (s32 i = 0; i < md2h.num_frames; i++)

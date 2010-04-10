@@ -77,7 +77,7 @@ public:
 
 	virtual void draw3Dline(Color32 color, const vector3f& start, const vector3f& finish);
 
-	virtual void drawAABoundingBox(const AABoundingBoxf& box, const Color32& color);
+	virtual void drawaabbox(const aabboxf& box, const Color32& color);
 
 	virtual void drawIndexedPrimitiveList(EPOLYGON_TYPE primitiveType,
 		s32 numIndices, const Vertex3 * vertices, const u32 * indices);

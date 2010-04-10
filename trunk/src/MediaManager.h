@@ -14,7 +14,7 @@
 #include "ILoader.h"
 #include "IWriter.h"
 #include "Logger.h"
-#include "Array.h"
+#include "array.h"
 #include "FileUtils.h"
 
 namespace fire_engine
@@ -38,8 +38,8 @@ struct _FIRE_ENGINE_API_ MediaHolder
 
 	virtual ~MediaHolder()
 	{
-		Array<ILoader<T>*> * loaders = m_loaders.values();
-		Array<IWriter<T>*> * writers = m_writers.values();
+		array<ILoader<T>*> * loaders = m_loaders.values();
+		array<IWriter<T>*> * writers = m_writers.values();
 		for (s32 i = 0; i < loaders->size(); i++)
 			delete loaders->at(i);
 //		for (s32 i = 0; i < writers->size(); i++)

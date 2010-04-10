@@ -12,15 +12,15 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "Counter.h"
-#include "Array.h"
+#include "counter.h"
+#include "array.h"
 
 namespace fire_engine
 {
 
 /** A map maps values from a certain domain onto values from another domain. */
 template <class Key, class Value>
-class _FIRE_ENGINE_API_ IMap : public Counter
+class _FIRE_ENGINE_API_ IMap : public counter
 {
 	public:
 		//! Destructor
@@ -42,12 +42,12 @@ class _FIRE_ENGINE_API_ IMap : public Counter
 		virtual bool isEmpty(void) const = 0;
 
 		//! Get the set of keys
-		virtual const Array<Key> * keys(void) const = 0;
-		virtual Array<Key> * keys(void) = 0;
+		virtual const array<Key> * keys(void) const = 0;
+		virtual array<Key> * keys(void) = 0;
 
 		//! Get all the values contained within the map
-		virtual const Array<Value> * values(void) const = 0;
-		virtual Array<Value> * values(void) = 0;
+		virtual const array<Value> * values(void) const = 0;
+		virtual array<Value> * values(void) = 0;
 
 		/** Returns the size (ie. number of actual elements) in the IMap */
 		virtual s32 size(void) const = 0;

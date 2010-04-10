@@ -16,10 +16,10 @@
 #include "matrix4.h"
 #include "vector3.h"
 #include "vector2.h"
-#include "Array.h"
+#include "array.h"
 #include "Object.h"
 #include "IMeshBuffer.h"
-#include "AABoundingBox.h"
+#include "aabbox.h"
 
 namespace fire_engine
 {
@@ -107,7 +107,7 @@ public:
 
 	/** Draw an Axis-Aligned Bounding Box in the scene. Can be useful for
 	 debugging. */
-	virtual void drawAABoundingBox(const AABoundingBoxf& box, const Color32& color) = 0;
+	virtual void drawaabbox(const aabboxf& box, const Color32& color) = 0;
 
 	/** Draw a list of indexed primitives, of type primitiveType. 
 	 \param primitiveType The type of primitive to draw.

@@ -12,8 +12,8 @@
 #include "CompileConfig.h"
 #include "Types.h"
 #include "string.h"
-#include "Counter.h"
-#include "Array.h"
+#include "counter.h"
+#include "array.h"
 #include <stdio.h>
 
 namespace fire_engine
@@ -28,7 +28,7 @@ namespace fire_engine
  class deriving Object is made.
  drop() is to be used instead of delete, and it will take care of deleting
  the Object, if there are exactly zero references to it. */
-class _FIRE_ENGINE_API_ Object : public virtual Counter
+class _FIRE_ENGINE_API_ Object : public virtual counter
 {
 public:
 	/** Constructor: initialize the reference count, and set the debug name if

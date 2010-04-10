@@ -16,7 +16,7 @@
 #include "Types.h"
 #include "CompileConfig.h"
 #include "dimension2.h"
-#include "Array.h"
+#include "array.h"
 #include "Object.h"
 #include "Color.h"
 #include "vector3.h"
@@ -81,8 +81,8 @@ class _FIRE_ENGINE_API_ SceneManager : public virtual Object
 		static SceneManager *    mInstance;
 		IRenderer *              mRenderer;
 		ISpaceNode *             mSpaceRoot;
-		Array<ISpaceNode*>       mLights;
-		Array<IModel*>           mSolidNodes;
+		array<ISpaceNode*>       mLights;
+		array<IModel*>           mSolidNodes;
 		Color32                  mAmbientLight;
 		Camera *                 mActiveCamera;
 		sys::HighResolutionTimer mTimer;

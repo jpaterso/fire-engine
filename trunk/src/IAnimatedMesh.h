@@ -11,7 +11,7 @@
 #include "Types.h"
 #include "CompileConfig.h"
 #include "vector3.h"
-#include "Array.h"
+#include "array.h"
 #include "IMesh.h"
 
 namespace fire_engine
@@ -62,7 +62,7 @@ public:
 	virtual IMesh * getMesh(s32 first, s32 second, f32 ipol) = 0;
 
 	/** Returns the bounding box for a given frame interpolation. */
-	virtual AABoundingBoxf getBoundingBox(s32 first, s32 second, f32 ipol) const = 0;
+	virtual aabboxf getBoundingBox(s32 first, s32 second, f32 ipol) const = 0;
 
 	/** Get the frames per second that should be rendered for a given frame
 	 interval.*/

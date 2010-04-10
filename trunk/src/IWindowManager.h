@@ -14,7 +14,7 @@
 #include "dimension2.h"
 #include "Object.h"
 #include "vector2.h"
-#include "List.h"
+#include "list.h"
 #include "IResizable.h"
 
 namespace fire_engine
@@ -97,7 +97,7 @@ class _FIRE_ENGINE_API_ IWindowManager : public virtual Object, public virtual I
 		bool removeResizable(IResizable * const resizable);
 
 		/** Returns the list of items that should be notified when the window is resized. */
-		const List<IResizable*>& _getResizableItems() const;
+		const list<IResizable*>& _getResizableItems() const;
 
 		static IWindowManager * Get();
 	protected:
@@ -106,7 +106,7 @@ class _FIRE_ENGINE_API_ IWindowManager : public virtual Object, public virtual I
 		dimension2i             mWindowSize;      //! The size of our window
 		bool                    m_is_running; //! Whether the IWIndowManager is still running or not
 		bool                    mIsFullScreen;
-		List<IResizable*>       mResizableItems;
+		list<IResizable*>       mResizableItems;
 
 		//! Constructor - made protected so it can't be called directly - singleton instance
 		IWindowManager(u32 dType, const dimension2i& wsize);

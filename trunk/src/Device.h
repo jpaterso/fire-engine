@@ -18,7 +18,7 @@
 #include "Object.h"
 #include "dimension2.h"
 #include "string.h"
-#include "Array.h"
+#include "array.h"
 #include "Color.h"
 #include "FPSCalculator.h"
 
@@ -124,7 +124,7 @@ class _FIRE_ENGINE_API_ Device : public virtual Object
 		SceneManager *         mSceneManager;  //! The SceneManager, which manages all displayable items
 		IWindowManager *       mWindowManager; //! The WindowManager, that creates and manages the window
 		IRenderer *            mRenderer;      //! The Renderer, in charge of writing into the window
-		Array<IEventReceiver*> mEvtReceivers;         //! The Event Receiver - should be custom
+		array<IEventReceiver*> mEvtReceivers;         //! The Event Receiver - should be custom
 		FPSCalculator *        mFPSCalculator;
 		io::FileSystem *       mFileSystem;
 
