@@ -168,7 +168,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\src\AABoundingBox.h"
+			RelativePath="..\src\aabbox.h"
 			>
 		</File>
 		<File
@@ -220,7 +220,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\src\Array.h"
+			RelativePath="..\src\array.h"
 			>
 		</File>
 		<File
@@ -252,6 +252,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\src\CMeshBuffer.h"
+			>
+		</File>
+		<File
 			RelativePath="..\src\Color.cpp"
 			>
 		</File>
@@ -269,10 +273,6 @@
 		</File>
 		<File
 			RelativePath="..\src\CompileConfig.h"
-			>
-		</File>
-		<File
-			RelativePath="..\src\Counter.h"
 			>
 		</File>
 		<File
@@ -520,10 +520,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\src\List.h"
-			>
-		</File>
-		<File
 			RelativePath="..\src\Logger.cpp"
 			>
 		</File>
@@ -577,10 +573,6 @@
 		</File>
 		<File
 			RelativePath="..\src\MemoryManager.h"
-			>
-		</File>
-		<File
-			RelativePath="..\src\MeshBuffer.h"
 			>
 		</File>
 		<File
