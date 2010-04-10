@@ -20,7 +20,7 @@ namespace fire_engine
 {
 
 /** A useful template for storing some type of Object. */
-template<class Obj>
+template<class T>
 class _FIRE_ENGINE_API_ array : public counter
 {
 public:
@@ -30,11 +30,11 @@ public:
 	array(s32 size = 128, s32 grow = 64)
 		: counter(), mSize(size), mGrowBy(grow), mFreeWhenDestroyed(true)
 	{
-		mArray = new Obj[size];
+		mArray = new T[size];
 	}
 
 	/** Construct an array with an initial array of objects. */
-	array(Obj * objects, s32 size, s32 grow = 64)
+	array(T * objects, s32 size, s32 grow = 64)
 		: counter(), mArray(objects), mSize(size), mGrowBy(grow), mFreeWhenDestroyed(true)
 	{
 	}
@@ -49,19 +49,19 @@ public:
 	}
 
 	/** Insert an object to the back of the Array. */
-	inline void push_back(const Obj& elem)
+	inline void push_back(const T& elem)
 	{
 		insert(elem, this->getCount());
 	}
 
 	/** Insert an object at the start of the Array. */
-	inline void push_front(const Obj& elem)
+	inline void push_front(const T& elem)
 	{
 		insert(elem, 0);
 	}
 
 	/** Returns whether the array contains a given object. */
-	bool contains(const Obj& object) const
+	bool contains(const T& object) const
 	{
 		for (s32 i = 0; i < this->getCount(); i++)
 		{
@@ -81,20 +81,20 @@ public:
 	}
 
 	/** Returns the element at position index in the array. */
-	inline Obj at(s32 index) const
+	inline T at(s32 index) const
 	{
 		return mArray[index];
 	}
 
 	/** Returns the element at position index in the array. */
-	inline Obj& at(s32 index)
+	inline T& at(s32 index)
 	{
 		return mArray[index];
 	}
 
 	/** Removes a given element from the array.
 	 \return true if the element was correctly removed, false otherwise. */
-	bool removeElement(const Obj& elem)
+	bool removeElement(const T& elem)
 	{
 		s32 i, j;
 		for (i = 0; i < this->getCount(); i++)
@@ -103,7 +103,7 @@ public:
 		if (i == this->getCount())
 			return false;
 		for (j = i; j < this->getCount()-1; j++)
-			memcpy((void*)&mArray[j], (const void*)&mArray[j+1], sizeof(Obj));
+			memcpy((void*)&mArray[j], (const void*)&mArray[j+1], sizeof(T));
 		this->decrementCount();
 		return true;
 	}
@@ -114,7 +114,7 @@ public:
 		if (index >= this->getCount())
 			return false;
 		for (s32 i = index; i < mSize - 1; i++)
-			memcpy((void*)&mArray[i], (const void*)&mArray[i+1], sizeof(Obj));
+			memcpy((void*)&mArray[i], (const void*)&mArray[i+1], sizeof(T));
 		this->decrementCount();
 		return true;
 	}
@@ -122,18 +122,18 @@ public:
 	/** Sort the Array, using some comparator function. */
 	void sort(s32 (*compfunc)(const void * obj1, const void * obj2))
 	{
-		return qsort(mArray, this->getCount(), sizeof(Obj), compfunc);
+		return qsort(mArray, this->getCount(), sizeof(T), compfunc);
 	}
 
 	/** Reverse the order of the elements in the Array. */
 	void reverse()
 	{
-		Obj temp;
+		T temp;
 		for (s32 i = 0; i < this->getCount()/2; i++)
 		{
-			memcpy((void*)&temp, (const void*)&mArray[i], sizeof(Obj));
-			memcpy((void*)&mArray[i], (const void*)&mArray[this->getCount()-1-i], sizeof(Obj));
-			memcpy((void*)&mArray[this->getCount()-i-1], (const void*)&temp, sizeof(Obj));
+			memcpy((void*)&temp, (const void*)&mArray[i], sizeof(T));
+			memcpy((void*)&mArray[i], (const void*)&mArray[this->getCount()-1-i], sizeof(T));
+			memcpy((void*)&mArray[this->getCount()-i-1], (const void*)&temp, sizeof(T));
 		}
 	}
 
@@ -143,8 +143,8 @@ public:
 	{
 		if (newsize < this->getCount())
 			return false;
-		Obj * tmp = new Obj[newsize];
-		memcpy((void*)tmp, (const void*)mArray, this->getCount()*sizeof(Obj));
+		T * tmp = new T[newsize];
+		memcpy((void*)tmp, (const void*)mArray, this->getCount()*sizeof(T));
 		if (mArray != 0)
 			delete [] mArray;
 		mSize = newsize;
@@ -159,42 +159,42 @@ public:
 	}
 
 	/** Returns a const pointer to the elements in the array. */
-	inline const Obj * const_pointer() const
+	inline const T * const_pointer() const
 	{
 		return mArray;
 	}
 
 	/** Returns a pointer to the elements in the array. */
-	inline Obj * pointer()
+	inline T * pointer()
 	{
 		return mArray;
 	}
 
 	/** Access the element at position index in the array. */
-	inline Obj& operator[](s32 index)
+	inline T& operator[](s32 index)
 	{
 		return mArray[index];
 	}
 
 	/** Access the element at position index in the array. */
-	inline Obj operator[](s32 index) const
+	inline T operator[](s32 index) const
 	{
 		return mArray[index];
 	}
 
 private:
-	Obj * mArray;
+	T *   mArray;
 	s32   mSize;
 	s32   mGrowBy;
 	bool  mFreeWhenDestroyed;
 
 	/** Inserts an element at a specified position in the array. */
-	void insert(const Obj& elem, s32 index)
+	void insert(const T& elem, s32 index)
 	{
 		if (this->getCount() == mSize)
 			resize(mSize + mGrowBy);
 		for (s32 i = this->getCount(); i > index; i--)
-			memcpy((void*)&mArray[i], (const void*)&mArray[i-1], sizeof(Obj));
+			memcpy((void*)&mArray[i], (const void*)&mArray[i-1], sizeof(T));
 		mArray[index] = elem;
 		this->incrementCount();
 	}
