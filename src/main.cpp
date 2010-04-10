@@ -52,36 +52,45 @@ int main(int argc, const char * argv[])
 	LightSpaceNode * lsn2 = sc->addDynamicLight(light2);
 	light2->drop();
 
-	FileSystem::Get()->addArchive("../media/md3/md3-kt_kubalwagon.pk3");
-	FileSystem::Get()->addArchive("../media/md3/quake3-model1.pk3");
-	FileSystem::Get()->addArchive("../media/md3/chicken.md3");
-	//FileSystem::Get()->addArchive("../media/bsp/map-20kdm2.zip");
+	FileSystem::Get()->addDirectory("../media");
+	FileSystem::Get()->addArchive("md3/md3-kt_kubalwagon.pk3");
+	io::IFileProvider* fp=FileSystem::Get()->addArchive("md3/quake3-model1.pk3");
+	FileSystem::Get()->addArchive("md3/chicken.pk3");
+	FileSystem::Get()->addArchive("md3/galvatron.pk3");
+	
 
-	AnimatedMeshMD3 * ammd3 = mm->load<AnimatedMeshMD3>("chicken_lower.md3");
-	model_lower = dynamic_cast<AnimatedModelMD3*>(sc->addAnimatedMesh(ammd3));
-	model_lower->setFrameLoop(0, 0, true);
-	model_lower->setRelativePosition(vector3f(0.0f, 0.0f, -70.0f));
-	model_lower->setShowDebugInformation(true);
-	ammd3->drop();
+	AnimatedMeshMD2 * mesh = mm->load<AnimatedMeshMD2>("md2/alien/tris.md2");
+	AnimatedModel * model = sc->addAnimatedMesh(mesh);
+	model->setFrameLoop(0, 40, true);
+	model->setShowDebugInformation(true);
+	model->setRelativePosition(vector3f(0.0f, 0.0f, -70.0f));
 
-	AnimatedMeshMD3 * ammd3_upper = mm->load<AnimatedMeshMD3>("chicken_upper.md3");
-	model_upper = dynamic_cast<AnimatedModelMD3*>(sc->addAnimatedMesh(ammd3_upper));
-	model_upper->setFrameLoop(0, 0, true);
-	model_upper->attach(model_lower, "tag_torso");
-	model_upper->setShowDebugInformation(true);
-	ammd3_upper->drop();
+	//Octree<f32> * octree = new Octree<f32>(nullptr, 265);
 
-	AnimatedMeshMD3 * ammd3_head = mm->load<AnimatedMeshMD3>("chicken_head.md3");
-	model_head = dynamic_cast<AnimatedModelMD3*>(sc->addAnimatedMesh(ammd3_head));
-	model_head->setFrameLoop(0, 0, true);
-	model_head->attach(model_upper, "tag_head");
-	model_head->setShowDebugInformation(true);
-	ammd3_head->drop();
+	//model_lower = dynamic_cast<AnimatedModelMD3*>(sc->addAnimatedMesh(ammd3));
+	//model_lower->setFrameLoop(0, 0, true);
+	//model_lower->setRelativePosition(vector3f(0.0f, 0.0f, -70.0f));
+	//model_lower->setShowDebugInformation(true);
+	//ammd3->drop();
 
-	//Q3Map * map = mm->load<Q3Map>("maps/20kdm2.bsp");
+	//AnimatedMeshMD3 * ammd3_upper = mm->load<AnimatedMeshMD3>("models/players/Galvatron/upper.md3");
+	//model_upper = dynamic_cast<AnimatedModelMD3*>(sc->addAnimatedMesh(ammd3_upper));
+	//model_upper->setFrameLoop(0, 0, true);
+	//model_upper->attach(model_lower, "tag_torso");
+	//model_upper->setShowDebugInformation(true);
+	//ammd3_upper->drop();
 
-	lsn->setParent(model_lower);
-	lsn2->setParent(model_lower);
+	//AnimatedMeshMD3 * ammd3_head = mm->load<AnimatedMeshMD3>("models/players/Galvatron/head.md3");
+	//model_head = dynamic_cast<AnimatedModelMD3*>(sc->addAnimatedMesh(ammd3_head));
+	//model_head->setFrameLoop(0, 0, true);
+	//model_head->attach(model_upper, "tag_head");
+	//model_head->setShowDebugInformation(true);
+	//ammd3_head->drop();
+
+	////Q3Map * map = mm->load<Q3Map>("maps/20kdm2.bsp");
+
+	//lsn->setParent(model_lower);
+	//lsn2->setParent(model_lower);
 	iwm->getCursor()->setCursorVisible(false);
 	myCamera = (CameraFPS*)sc->addCamera(vector3f(0.0f, 0.0f, 0.0f), vector3f(0.0f, 0.0f, -1.0f));
 	HashTable<KeyEvent::EKEY_CODE, EMOVEMENT_TYPE> * moveKeys = new HashTable<KeyEvent::EKEY_CODE, EMOVEMENT_TYPE>();
@@ -92,9 +101,9 @@ int main(int argc, const char * argv[])
 	moveKeys->insert(KeyEvent::KEY_SPACE, EMT_JUMP);
 	myCamera->setMoveKeys(moveKeys);
 
-	/*SkyBox * sk = */sc->addSkyBox("../media/sky/marty/sky_FR.bmp", "../media/sky/marty/sky_BK.bmp",
+	/*SkyBox * sk = sc->addSkyBox("../media/sky/marty/sky_FR.bmp", "../media/sky/marty/sky_BK.bmp",
 		"../media/sky/marty/sky_UP.bmp", "../media/sky/marty/sky_DN.bmp",
-		"../media/sky/marty/sky_LF.bmp", "../media/sky/marty/sky_RT.bmp");
+		"../media/sky/marty/sky_LF.bmp", "../media/sky/marty/sky_RT.bmp"); */
 
 	while (d->isRunning())
 	{
@@ -102,11 +111,13 @@ int main(int argc, const char * argv[])
 		iwm->run();
 		sc->draw();
 		iwm->setTitle(string("Running at ")+d->getFPS()+" frames per second. Drawing " + d->_getFPSCalculator()->getLastPolyCount() + " polygons");
+		//d->getRenderer()->showImage(*im, dimension2i(0, 0), dimension2f(1.0, 1.0));
 		d->getRenderer()->endScene();
 	}
 
 	d->drop();
 	delete receive;
 	delete mm;
+
 	return 0x00;
 }

@@ -47,7 +47,7 @@ FileSystem * FileSystem::Get()
 FileSystem::~FileSystem()
 {
 	Instance = 0;
-	for (List<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
+	for (list<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
 	{
 		it->drop();
 	}
@@ -66,7 +66,7 @@ IFile * FileSystem::openReadFile(const string& filename, bool ignoreCase, u32 fl
 		Logger::Get()->log(ES_DEBUG, "FileSystem", 
 			"Warning: Could not load %s in specified file provider", filenamePathFixed.c_str());
 	}
-	for (List<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
+	for (list<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
 	{
 		if (it->contains(filenamePathFixed, ignoreCase))
 		{
@@ -81,7 +81,7 @@ bool FileSystem::exists(const string& filename) const
 	string filenamePathFixed = filename;
 	FileUtils::ConvertPath(filenamePathFixed);
 	bool fileExists = false;
-	for (List<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
+	for (list<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
 	{
 		if (it->contains(filenamePathFixed, false))
 		{

@@ -10,9 +10,9 @@
 #include "Types.h"
 #include "CompileConfig.h"
 #include "Object.h"
-#include "Array.h"
+#include "array.h"
 #include "string.h"
-#include "List.h"
+#include "list.h"
 #include "IFile.h"
 #include "IFileProvider.h"
 #include <string.h>
@@ -92,7 +92,7 @@ public:
 
 private:
 	static FileSystem * Instance;
-	List<IFileProvider*> FileProviders;
+	list<IFileProvider*> FileProviders;
 
 	/** Constructor - made private to ensure only a singleton instance of the class is
 	 ever created. */

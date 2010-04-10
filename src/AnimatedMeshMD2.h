@@ -14,12 +14,12 @@
 #include "IMeshBuffer.h"
 #include "vector3.h"
 #include "vector2.h"
-#include "Array.h"
+#include "array.h"
 #include "Object.h"
 #include "Vertex3.h"
 #include "AnimatedModel.h"
 #include "Material.h"
-#include "AABoundingBox.h"
+#include "aabbox.h"
 
 namespace fire_engine
 {
@@ -70,7 +70,7 @@ public:
 	 \param indices    The indices to the vertices.
 	 \param texture    The texture to use for the model */
 	AnimatedMeshMD2(const string& name, s32 num_frames, s32 vertices_per_frame,
-		Vertex3 * vertices, Array<u32> * indices, ITexture * texture);
+		Vertex3 * vertices, array<u32> * indices, ITexture * texture);
 
 	//! Dtor
 	virtual ~AnimatedMeshMD2();
@@ -95,7 +95,7 @@ public:
 	virtual inline s32 _getOriginalVertexCount();
 	virtual inline const Vertex3 * getVertices() const;
 	virtual inline s32 getVertexCount() const;
-	virtual inline const Array<u32> * getIndices() const;
+	virtual inline const array<u32> * getIndices() const;
 	virtual inline const ITexture * getTexture() const;
 
 	/** Set the frame loop for an MD2 model. Use this instead of the other
@@ -115,9 +115,9 @@ public:
 	/** Returns the material used by this AnimatedMeshMD2. */
 	virtual inline Material getMaterial() const;
 
-	virtual const AABoundingBoxf& getBoundingBox() const;
+	virtual const aabboxf& getBoundingBox() const;
 
-	virtual AABoundingBoxf getBoundingBox(s32 first, s32 second, f32 ipol) const;
+	virtual aabboxf getBoundingBox(s32 first, s32 second, f32 ipol) const;
 
 private:
 	string                 m_mesh_name;
@@ -125,11 +125,11 @@ private:
 	s32                    mNumVerticesPerFrame;
 	Vertex3 *              mVertices;
 	Vertex3 *              mInterpolationBuffer;
-	Array<u32> *           mIndices;
+	array<u32> *           mIndices;
 	ITexture *             mTexture;
 	Material               mMaterial;
-	AABoundingBoxf *       mBoundingBoxes;
-	AABoundingBoxf         mCurrentBoundingBox;
+	aabboxf *       mBoundingBoxes;
+	aabboxf         mCurrentBoundingBox;
 
 	/** Update the interpolation buffer, based on the interpolation between two
 	 frames. */
@@ -191,7 +191,7 @@ inline EPOLYGON_TYPE AnimatedMeshMD2::getPolygonType() const
 	return EPT_TRIANGLES;
 }
 
-inline const Array<u32> * AnimatedMeshMD2::getIndices() const
+inline const array<u32> * AnimatedMeshMD2::getIndices() const
 {
 	return mIndices;
 }

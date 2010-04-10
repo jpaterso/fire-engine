@@ -15,7 +15,7 @@
 #include "Math.h"
 #include "string.h"
 #include "quaternion.h"
-#include "AABoundingBox.h"
+#include "aabbox.h"
 
 namespace fire_engine
 {
@@ -499,15 +499,15 @@ public:
 	}
 
 	/** Returns the transform of a given bounding box. */
-	AABoundingBox<Real> applyTransformation(const AABoundingBox<Real>& in) const
+	aabbox<Real> applyTransformation(const aabbox<Real>& in) const
 	{
-		AABoundingBox<Real> out = in;
+		aabbox<Real> out = in;
 		transform(out);
 		return out;
 	}
 
 	/** Transforms the given bounding box. */
-	void transform(AABoundingBox<Real>& in) const
+	void transform(aabbox<Real>& in) const
 	{
 		Real a, b;
 		Real AMin[3], AMax[3];

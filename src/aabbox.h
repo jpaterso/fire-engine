@@ -1,13 +1,13 @@
 /**
- * FILE:    AABoundingBox.h
+ * FILE:    aabbox.h
  * AUTHOR:  Joseph Paterson ( joseph dot paterson at gmail dot com )
- * RCS ID:  $Id: AABoundingBox.h 112 2007-09-25 23:37:26Z jpaterso $
+ * RCS ID:  $Id: aabbox.h 112 2007-09-25 23:37:26Z jpaterso $
  * PURPOSE: An Axis-Aligned Bounding Box, used for collision detection
  *          between objects.
 **/
 
-#ifndef AABOUNDINGBOX_H_INCLUDED
-#define AABOUNDINGBOX_H_INCLUDED
+#ifndef AABBOX_H_INCLUDED
+#define AABBOX_H_INCLUDED
 
 #include "Types.h"
 #include "CompileConfig.h"
@@ -20,24 +20,24 @@ namespace fire_engine
 /** An Axis-Aligned Bounding Box, useful for collision detection between
  objects. */
 template <class Real>
-class _FIRE_ENGINE_API_ AABoundingBox
+class _FIRE_ENGINE_API_ aabbox
 {
 public:
 	/** Default constructor. */
-	AABoundingBox()
+	aabbox()
 		: mMinPoint(0, 0, 0), mMaxPoint(0, 0, 0)
 	{
 	}
 
 	/** Construct an Axis-Aligned Bounding Box from it's minimum point and
 	 it's maximum point. */
-	AABoundingBox(const vector3<Real>& min, const vector3<Real>& max)
+	aabbox(const vector3<Real>& min, const vector3<Real>& max)
 		: mMinPoint(min), mMaxPoint(max)
 	{
 	}
 
 	/** Destructor. */
-	~AABoundingBox()
+	~aabbox()
 	{
 	}
 
@@ -61,19 +61,19 @@ public:
 	}
 
 	/** Add a new internal bounding box, and recompute the extremities. */
-	void addInternalBoundingBox(const AABoundingBox<Real>& box)
+	void addInternalBoundingBox(const aabbox<Real>& box)
 	{
 		addInternalPoint(box.getMinPoint());
 		addInternalPoint(box.getMaxPoint());
 	}
 
 	/** Returns whether this box intersects with another box. */
-	bool intersectsWith(const AABoundingBox<Real>& box) const;
+	bool intersectsWith(const aabbox<Real>& box) const;
 
 	/** Returns a textual representation of the box. */
 	string toString() const
 	{
-		return string("AABoundingBox[ ") + mMinPoint.toString() + "\n               " + mMaxPoint.toString() + " ]";
+		return string("aabbox[ ") + mMinPoint.toString() + "\n               " + mMaxPoint.toString() + " ]";
 	}
 
 	/** Returns the minimum point of the box. */
@@ -113,13 +113,13 @@ public:
 	}
 
 	/** Returns the result of linear interpolating this box with another box. */
-	AABoundingBox<Real> getInterpolate(const AABoundingBox<Real>& box, Real time) const
+	aabbox<Real> getInterpolate(const aabbox<Real>& box, Real time) const
 	{
-		return AABoundingBox<Real>(mMinPoint*(1-time)+box.getMinPoint()*time,
+		return aabbox<Real>(mMinPoint*(1-time)+box.getMinPoint()*time,
 			mMaxPoint*(1-time)+box.getMaxPoint()*time);
 	}
 
-	/** Resets the AABoundingBox, with the min and max points set to the given values.
+	/** Resets the aabbox, with the min and max points set to the given values.
 	 \param min The new minimum point.
 	 \param max The new maximum point. */
 	void reset(const vector3<Real>& min = vector3<Real>(0, 0, 0),
@@ -178,10 +178,10 @@ private:
 	vector3<Real> mMaxPoint;
 };
 
-typedef AABoundingBox<f32> AABoundingBoxf;
-typedef AABoundingBox<f64> AABoundingBoxd;
+typedef aabbox<f32> aabboxf;
+typedef aabbox<f64> aabboxd;
 
 
 }
 
-#endif // AABOUNDINGBOX_H_INCLUDED
+#endif // AABBOX_H_INCLUDED

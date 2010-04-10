@@ -50,7 +50,7 @@ ISpaceNodeAnimator * ISpaceNode::getAnimator()
 void ISpaceNode::preRender(f64 time)
 {
 	updateTransforms();
-	for (List<INode*>::iterator it = mChildren->begin(); it != mChildren->end(); it++)
+	for (list<INode*>::iterator it = mChildren->begin(); it != mChildren->end(); it++)
 		dynamic_cast<ISpaceNode*>(*it)->preRender(time);
 }
 

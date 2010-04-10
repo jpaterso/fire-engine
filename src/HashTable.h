@@ -136,18 +136,18 @@ public:
 	}
 
 	/** Returns an array containing all the keys of the hash table. */
-	virtual const Array<Key> * keys() const
+	virtual const array<Key> * keys() const
 	{
-		Array<Key> * k = new Array<Key>(this->getCount());
+		array<Key> * k = new array<Key>(this->getCount());
 		for (u32 i = 0; i < m_table_size; i++)
 			if (m_table[i] != 0)
 				k->push_back(m_table[i]->key);
 		return k;
 	}
 
-	virtual Array<Key> * keys()
+	virtual array<Key> * keys()
 	{
-		Array<Key> * k = new Array<Key>(this->getCount());
+		array<Key> * k = new array<Key>(this->getCount());
 		for (u32 i = 0; i < m_table_size; i++)
 			if (m_table[i] != 0)
 				k->push_back(m_table[i]->key);
@@ -155,18 +155,18 @@ public:
 	}
 
 	/** Returns an array containing all the values of the hash table. */
-	virtual const Array<Value> * values() const
+	virtual const array<Value> * values() const
 	{
-		Array<Value> * v = new Array<Value>(this->getCount());
+		array<Value> * v = new array<Value>(this->getCount());
 		for (u32 i = 0; i < m_table_size; i++)
 			if (m_table[i] != 0)
 				v->push_back(m_table[i]->value);
 		return v;
 	}
 
-	virtual Array<Value> * values()
+	virtual array<Value> * values()
 	{
-		Array<Value> * v = new Array<Value>(this->getCount());
+		array<Value> * v = new array<Value>(this->getCount());
 		for (u32 i = 0; i < m_table_size; i++)
 			if (m_table[i] != 0)
 				v->push_back(m_table[i]->value);

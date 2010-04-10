@@ -270,7 +270,7 @@ LRESULT CALLBACK WindowManagerWin32::WndProc(HWND hWnd, UINT Msg, WPARAM wParam,
 				r.right++;
 			if ((r.bottom%2) != 0)
 				r.bottom++;
-			for (List<IResizable*>::iterator it = mInstance->_getResizableItems().begin();
+			for (list<IResizable*>::iterator it = mInstance->_getResizableItems().begin();
 				it != mInstance->_getResizableItems().end(); it++)
 			{
 				(*it)->onResize(dimension2i(r.right, r.bottom));

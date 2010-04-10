@@ -11,7 +11,7 @@
 #include "Types.h"
 #include "CompileConfig.h"
 #include "ISpaceNode.h"
-#include "AABoundingBox.h"
+#include "aabbox.h"
 #include "Vertex3.h"
 #include "Material.h"
 #include "SceneManager.h"

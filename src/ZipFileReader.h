@@ -9,7 +9,7 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "Array.h"
+#include "array.h"
 #include "IFileProvider.h"
 
 namespace fire_engine
@@ -91,7 +91,7 @@ public:
 
 	/** Returns an Array containing information about all the files contained within
 	 the .ZIP archive. */
-	const Array<ZipFileEntry> * getEntries() const;
+	const array<ZipFileEntry> * getEntries() const;
 
 	virtual IFile * openFile(const string& filename, bool ignoreCase, u32 flags);
 
@@ -101,7 +101,7 @@ public:
 
 private:
 	IFile *             ZipArchive;
-	Array<ZipFileEntry> FileEntries;
+	array<ZipFileEntry> FileEntries;
 
 	/** Look for the next local file header, read it, and insert it into the list of files.
 	 \return true if a local file header was found, false otherwise. */

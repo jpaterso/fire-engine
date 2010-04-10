@@ -36,7 +36,7 @@ ViewFrustum::~ViewFrustum()
 {
 }
 
-EFRUSTUM_INTERSECTION_TYPE ViewFrustum::calculateIntersection(const AABoundingBoxf& box) const
+EFRUSTUM_INTERSECTION_TYPE ViewFrustum::calculateIntersection(const aabboxf& box) const
 {
 	s32 totalInCount = 0;
 	s32 inCount, allPointsIn;

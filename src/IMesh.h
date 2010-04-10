@@ -13,7 +13,7 @@
 #include "CompileConfig.h"
 #include "ISpaceNode.h"
 #include "Object.h"
-#include "AABoundingBox.h"
+#include "aabbox.h"
 
 namespace fire_engine
 {
@@ -43,7 +43,7 @@ public:
 	inline void setName(const string& name);
 
 	/** Returns a bounding box, encompassing the entire IMesh. */
-	virtual const AABoundingBoxf& getBoundingBox() const = 0;
+	virtual const aabboxf& getBoundingBox() const = 0;
 
 protected:
 	string mMeshName;

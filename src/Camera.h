@@ -18,7 +18,7 @@
 #include "dimension2.h"
 #include "ViewFrustum.h"
 #include "IResizable.h"
-#include "AABoundingBox.h"
+#include "aabbox.h"
 
 namespace fire_engine
 {
@@ -112,7 +112,7 @@ public:
 	/** Returns the bounding volume for the camera.
 	 The bounding volume for a camera depicts the 'volume' that the camera occupies. Its only
 	 purpose is to be used so that, for example, the camera is blocked by walls and solid items. */
-	virtual const AABoundingBoxf& getBoundingVolume() const;
+	virtual const aabboxf& getBoundingVolume() const;
 
 protected:
 	/** The near clip plane, and the far clip plane. Anything with a distance not within

@@ -11,9 +11,9 @@
 #include "vector2.h"
 #include "Vertex3.h"
 #include "IMesh.h"
-#include "AABoundingBox.h"
+#include "aabbox.h"
 #include "quake3.h"
-#include "Array.h"
+#include "array.h"
 #include "plane3.h"
 #include "IMeshBuffer.h"
 
@@ -71,8 +71,8 @@ public:
 	}
 private:
 	Q3Vertex3 * mVertices;
-	Array<u32> * mIndices;
-	AABoundingBoxf mBoundingBox;
+	array<u32> * mIndices;
+	aabboxf mBoundingBox;
 	ITexture * mTexture;
 	ITexture * mLightmap;
 };
@@ -81,26 +81,26 @@ private:
 class _FIRE_ENGINE_API_ Q3Map : public IMesh
 {
 public:
-	Q3Map(const string& name, Array<Q3Vertex3> * vertices, Array<q3::bsp_face_t> * faces,
-		Array<q3::bsp_model_t> * models, q3::bsp_mesh_vertex_t * mesh_vertices,
-		plane3f * planes, Array<q3::bsp_node_t> * nodes, q3::bsp_leaf_t * leafs);
+	Q3Map(const string& name, array<Q3Vertex3> * vertices, array<q3::bsp_face_t> * faces,
+		array<q3::bsp_model_t> * models, q3::bsp_mesh_vertex_t * mesh_vertices,
+		plane3f * planes, array<q3::bsp_node_t> * nodes, q3::bsp_leaf_t * leafs);
 
 	virtual ~Q3Map();
 
 	//! methods inherited from IMesh
 	virtual IMeshBuffer * getMeshBuffer(s32 offset);
 	virtual s32 getMeshBufferCount() const;
-	virtual const AABoundingBoxf& getBoundingBox() const;
+	virtual const aabboxf& getBoundingBox() const;
 
 private:
-	Array<Q3Vertex3> * mVertices;
-	Array<q3::bsp_face_t> * mFaces;
-	Array<q3::bsp_model_t> * mModels;
+	array<Q3Vertex3> * mVertices;
+	array<q3::bsp_face_t> * mFaces;
+	array<q3::bsp_model_t> * mModels;
 	q3::bsp_mesh_vertex_t * mMeshVertices;
 	plane3f * mPlanes;
-	Array<q3::bsp_node_t> * mNodes;
+	array<q3::bsp_node_t> * mNodes;
 	q3::bsp_leaf_t * mLeafs;
-	AABoundingBoxf mBoundingBox;
+	aabboxf mBoundingBox;
 };
 
 }

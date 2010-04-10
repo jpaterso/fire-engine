@@ -9,9 +9,9 @@
 namespace fire_engine
 {
 
-Q3Map::Q3Map(const string& name, Array<Q3Vertex3> * vertices, Array<q3::bsp_face_t> * faces,
-             Array<q3::bsp_model_t> * models, q3::bsp_mesh_vertex_t * mesh_vertices,
-			 plane3f * planes, Array<q3::bsp_node_t> * nodes, q3::bsp_leaf_t * leafs)
+Q3Map::Q3Map(const string& name, array<Q3Vertex3> * vertices, array<q3::bsp_face_t> * faces,
+             array<q3::bsp_model_t> * models, q3::bsp_mesh_vertex_t * mesh_vertices,
+			 plane3f * planes, array<q3::bsp_node_t> * nodes, q3::bsp_leaf_t * leafs)
 	: mVertices(vertices), mFaces(faces), mModels(models), mMeshVertices(mesh_vertices),
 	  mPlanes(planes), mNodes(nodes), mLeafs(leafs)
 {
@@ -50,7 +50,7 @@ s32 Q3Map::getMeshBufferCount() const
 	return mModels->size();
 }
 
-const AABoundingBoxf& Q3Map::getBoundingBox() const
+const aabboxf& Q3Map::getBoundingBox() const
 {
 	return mBoundingBox;
 }

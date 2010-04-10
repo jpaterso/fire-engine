@@ -12,7 +12,7 @@
 #include "Types.h"
 #include "CompileConfig.h"
 #include "ISpaceNode.h"
-#include "AABoundingBox.h"
+#include "aabbox.h"
 
 namespace fire_engine
 {
@@ -27,19 +27,19 @@ public:
 	 model. Note that this will return a bounding box aligned to the *model*
 	 coordinate axis, that will most likely not be aligned to the world coordinate.
 	 For the box aligned to world coordinates, call getTransformedBoundingVolume() instead. */
-	virtual const AABoundingBoxf& getBoundingVolume() const
+	virtual const aabboxf& getBoundingVolume() const
 	{
 		return mBoundingBox;
 	}
 
 	/** Returns a bounding box for the model that is aligned to the world coordinates. */
-	virtual AABoundingBoxf getTransformedBoundingVolume() const
+	virtual aabboxf getTransformedBoundingVolume() const
 	{
 		return mWorldTransform.applyTransformation(mBoundingBox);
 	}
 
 protected:
-	AABoundingBoxf mBoundingBox;
+	aabboxf mBoundingBox;
 
 	/** Constructor - made protected so that it can't be accessed directly. */
 	IModel(INode * parent) : ISpaceNode(parent)
