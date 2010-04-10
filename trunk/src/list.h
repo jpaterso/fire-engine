@@ -15,7 +15,7 @@
 namespace fire_engine
 {
 
-template <class Obj>
+template <class T>
 class _FIRE_ENGINE_API_ list : public counter
 {
 private:
@@ -23,7 +23,7 @@ private:
 	 goes after it. */
 	typedef struct _linked_list_entry_t
 	{
-		Obj object;
+		T object;
 		_linked_list_entry_t * next;
 		_linked_list_entry_t * prev;
 	} linked_list_entry_t;
@@ -63,17 +63,17 @@ public:
 			return tmp;
 		}
 
-		virtual Obj& operator*()
+		virtual T& operator*()
 		{
 			return m_current->object;
 		}
 
-		virtual Obj& operator->()
+		virtual T& operator->()
 		{
 			return m_current->object;
 		}
 
-		virtual Obj& operator()()
+		virtual T& operator()()
 		{
 			return m_current->object;
 		}
@@ -95,7 +95,7 @@ public:
 		}
 	private:
 		// list<Object> needs to access the private constructor, so make it a friend!
-		friend class list<Obj>;
+		friend class list<T>;
 
 		// The current position in the list
 		linked_list_entry_t * m_current;
@@ -117,7 +117,7 @@ public:
 	}
 
 	/** Add an element to the front of the list. */
-	void push_front(const Obj& object)
+	void push_front(const T& object)
 	{
 		linked_list_entry_t * new_entry = new linked_list_entry_t;
 		new_entry->next = m_head;
@@ -131,7 +131,7 @@ public:
 	}
 
 	/** Add an element to the back of the list. */
-	void push_back(const Obj& object)
+	void push_back(const T& object)
 	{
 		if (m_head != 0)
 		{
@@ -154,7 +154,7 @@ public:
 	}
 
 	//! Remove an object from the list, and return true if the removal was successful
-	bool removeElement(const Obj& object)
+	bool removeElement(const T& object)
 	{
 		linked_list_entry_t * cur = m_head;
 		linked_list_entry_t * prev = 0;
@@ -195,7 +195,7 @@ public:
 	}
 
 	//! Returns whether an object exists in the list
-	bool contains(const Obj& object) const
+	bool contains(const T& object) const
 	{
 		linked_list_entry_t * it = m_head;
 		while (it != 0)
