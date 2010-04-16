@@ -14,10 +14,10 @@
 namespace fire_engine
 {
 template <class Obj>
-class _FIRE_ENGINE_API_ Stack : public IStack<Obj>, public counter
+class _FIRE_ENGINE_API_ Stack : public IStack<Obj>, public Counter
 {
 public:
-	Stack() : counter()
+	Stack() : Counter()
 	{
 		this->m_root = 0;
 	}
