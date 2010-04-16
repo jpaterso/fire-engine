@@ -10,7 +10,7 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "string.h"
+#include "String.h"
 #include "IFile.h"
 
 namespace fire_engine
@@ -26,7 +26,7 @@ public:
 	File();
 
 	//! Open a file with a given set of flags
-	File(const string& filename, u32 flags);
+	File(const String& filename, u32 flags);
 
 	//! Destructor - closes the file if it is open
 	virtual ~File();
@@ -45,7 +45,7 @@ public:
 
 	virtual bool close(void);
 
-	virtual string toString(void) const;
+	virtual String toString(void) const;
 
 private:
 	s32    mFD;        // The file descriptor for the file

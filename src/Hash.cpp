@@ -5,10 +5,10 @@
  * PURPOSE: Template specializations for quite a few types.
 **/
 
-#include "Hash.h"
-#include "string.h"
+#include "HashTable.h"
+#include "String.h"
 #include "KeyEvent.h"
-#include <string.h>
+#include <String.h>
 #include <ctype.h>
 #include <stdio.h>
 
@@ -28,65 +28,68 @@ static u32 default_hash(s32 key)
 	return h;
 }
 
-static u32 hash_string(const c8 * str)
+static u32 hash_string(const String& str)
 {
-	u32 h = 0;
-	for (u32 i = 0; i < strlen(str); i++)
-		h += str[i];
-	return h;
+	u32 hashVal = 5381;
+	for (const c8 * c = str.c_str(); *c != '\0'; c++)
+	{
+		// djb2
+		hashVal = ((hashVal << 5) + hashVal) + *c;
+	}
+	return hashVal;
 }
 
-template <> u32 Hash<u8>::hash(const u8& key)
-{
-	return default_hash(key);
-}
-
-template <> u32 Hash<s8>::hash(const s8& key)
+template <> u32 Hash<u8>::hash_function(const u8& key)
 {
 	return default_hash(key);
 }
 
-template <> u32 Hash<c8>::hash(const c8& key)
+template <> u32 Hash<s8>::hash_function(const s8& key)
 {
 	return default_hash(key);
 }
 
-template <> u32 Hash<u16>::hash(const u16& key)
+template <> u32 Hash<c8>::hash_function(const c8& key)
 {
 	return default_hash(key);
 }
 
-template <> u32 Hash<s16>::hash(const s16& key)
+template <> u32 Hash<u16>::hash_function(const u16& key)
 {
 	return default_hash(key);
 }
 
-template <> u32 Hash<u32>::hash(const u32& key)
+template <> u32 Hash<s16>::hash_function(const s16& key)
 {
 	return default_hash(key);
 }
 
-template <> u32 Hash<s32>::hash(const s32& key)
+template <> u32 Hash<u32>::hash_function(const u32& key)
 {
 	return default_hash(key);
 }
 
-template <> u32 Hash<f32>::hash(const f32& key)
+template <> u32 Hash<s32>::hash_function(const s32& key)
+{
+	return default_hash(key);
+}
+
+template <> u32 Hash<f32>::hash_function(const f32& key)
 {
 	return default_hash(static_cast<s32>(key));
 }
 
-template <> u32 Hash<f64>::hash(const f64& key)
+template <> u32 Hash<f64>::hash_function(const f64& key)
 {
 	return default_hash(static_cast<s32>(key));
 }
 
-template <> u32 Hash<KeyEvent::EKEY_CODE>::hash(const KeyEvent::EKEY_CODE& key)
+template <> u32 Hash<KeyEvent::EKEY_CODE>::hash_function(const KeyEvent::EKEY_CODE& key)
 {
 	return default_hash(static_cast<s32>(key));
 }
 
-template <> u32 Hash<void*>::hash(void* const& key)
+template <> u32 Hash<void*>::hash_function(void* const& key)
 {
 	return default_hash((s32)key);
 }
@@ -136,7 +139,7 @@ template <> bool Hash<f64>::equal(const f64& a, const f64& b)
 	return a == b;
 }
 
-template <> bool Hash<string>::equal(const string& a, const string& b)
+template <> bool Hash<String>::equal(const String& a, const String& b)
 {
 	return a == b;
 }
@@ -151,20 +154,23 @@ template <> bool Hash<void*>::equal(void* const& a, void* const& b)
 	return a == b;
 }
 
-template <> u32 Hash<string>::hash(const string& key)
+template <> u32 Hash<String>::hash_function(const String& key)
 {
-	return hash_string(key.c_str());
+	return hash_string(key);
 }
 
-u32 StringHashIgnoreCase::hash(const string& key)
+u32 StringHashIgnoreCase::hash_function(const String& key)
 {
-	u32 h = 0;
-	for (s32 i = 0; i < key.length(); i++)
-		h = h+tolower(key.c_str()[i]);
+	u32 h = 5381;
+	for (const c8 * c = key.c_str(); *c != '\0'; c++)
+	{
+		// djb2
+		h = ((h << 5) + h) + tolower(*c);
+	}
 	return h;
 }
 
-bool StringHashIgnoreCase::equal(const string& a, const string& b)
+bool StringHashIgnoreCase::equal(const String& a, const String& b)
 {
 	return a.equalsIgnoreCase(b);
 }

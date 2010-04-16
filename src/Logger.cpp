@@ -37,7 +37,7 @@ Logger * Logger::Get()
     return m_instance;
 }
 //------------------------------------------------------------------------------
-void Logger::log(ESEVERITY es, const string& src, const string fmt, ...) const
+void Logger::log(ESEVERITY es, const String& src, const String fmt, ...) const
 {
 	FILE * fd = getFd(es);
 	va_list list;

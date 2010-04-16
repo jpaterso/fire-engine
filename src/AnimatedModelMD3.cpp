@@ -31,7 +31,7 @@ const AnimatedMeshMD3 * AnimatedModelMD3::getMD3Mesh() const
 	return dynamic_cast<AnimatedMeshMD3*>(mMesh);
 }
 
-bool AnimatedModelMD3::attach(AnimatedModelMD3 * parent, const string& tagname)
+bool AnimatedModelMD3::attach(AnimatedModelMD3 * parent, const String& tagname)
 {
 	if (parent)
 	{

@@ -16,7 +16,7 @@ namespace fire_engine
 {
 
 class AnimatedMeshMD3;
-class string;
+class String;
 
 namespace io
 {
@@ -109,7 +109,7 @@ public:
 	virtual ~AnimatedMeshMD3Loader();
 
 	/** Load and create an AnimatedMeshMD3 from an .MD3 file */
-	virtual AnimatedMeshMD3 * load(const string& filename, io::IFileProvider * fileProvider) const;
+	virtual AnimatedMeshMD3 * load(const String& filename, io::IFileProvider * fileProvider) const;
 
 protected:
 };

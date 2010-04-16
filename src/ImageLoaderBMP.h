@@ -14,7 +14,7 @@
 #include "CompileConfig.h"
 #include "ILoader.h"
 #include "IWriter.h"
-#include "string.h"
+#include "String.h"
 
 namespace fire_engine
 {
@@ -66,9 +66,9 @@ public:
 	virtual ~ImageLoaderBMP(void);
 
 	//! Implementation for ILoader
-	virtual Image * load(const string& filename, io::IFileProvider * fileProvider) const;
+	virtual Image * load(const String& filename, io::IFileProvider * fileProvider) const;
 
-	virtual bool write(const string& filename, const Image * image) const;
+	virtual bool write(const String& filename, const Image * image) const;
 
 protected:
 };

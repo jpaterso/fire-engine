@@ -44,7 +44,7 @@ public:
 
 	virtual bool close();
 
-	virtual string toString() const;
+	virtual String toString() const;
 
 private:
 	void * mData;

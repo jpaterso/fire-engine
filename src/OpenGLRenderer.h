@@ -98,7 +98,7 @@ public:
 
 	virtual void setMaterial(const Material& mat);
 
-	virtual ITexture * createTexture(const string& filename, io::IFileProvider * fileProvider) const;
+	virtual ITexture * createTexture(const String& filename, io::IFileProvider * fileProvider) const;
 
 private:
 	/** A list of extensions that are used. */

@@ -19,7 +19,7 @@ namespace fire_engine
 namespace io
 {
 
-DirectoryFileProvider::DirectoryFileProvider(const string& directory)
+DirectoryFileProvider::DirectoryFileProvider(const String& directory)
 	: DirectoryName(directory)
 {
 #if defined(_FIRE_ENGINE_DEBUG_OBJECT_)
@@ -31,7 +31,7 @@ DirectoryFileProvider::~DirectoryFileProvider()
 {
 }
 
-IFile * DirectoryFileProvider::openFile(const string& filename, bool ignoreCase, u32 flags)
+IFile * DirectoryFileProvider::openFile(const String& filename, bool ignoreCase, u32 flags)
 {
 	c8 currentDirectory[FILENAME_MAX];
 	_getcwd(currentDirectory, sizeof(currentDirectory));
@@ -50,7 +50,7 @@ IFile * DirectoryFileProvider::openFile(const string& filename, bool ignoreCase,
 	return file;
 }
 
-bool DirectoryFileProvider::contains(const string& filename, bool ignoreCase)
+bool DirectoryFileProvider::contains(const String& filename, bool ignoreCase)
 {
 	bool fileExists = false;
 	c8 currentDirectory[FILENAME_MAX];

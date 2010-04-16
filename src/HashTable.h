@@ -14,11 +14,37 @@
 
 #include "IMap.h"
 #include "CompileConfig.h"
-#include "Hash.h"
-#include <string.h>
+#include <String.h>
 
 namespace fire_engine
 {
+
+class String;
+
+/** A simple template used to hash some value. Used by the HashTable class. */
+template <class Key>
+class _FIRE_ENGINE_API_ Hash
+{
+public:
+	/** Returns the hash of some key. */
+	static u32 hash_function(const Key& key);
+
+	/** Returns whether two keys are equal. */
+	static bool equal(const Key& a, const Key& b);
+};
+
+/** Custom hash function, so that strings that differ only by case return the
+ same hash value */
+class _FIRE_ENGINE_API_ StringHashIgnoreCase
+{
+public:
+	/** Hash function for strings, ignoring case so that two strings that differ only
+	 on case will have the same hash value. */
+	static u32 hash_function(const String& key);
+
+	/** Returns whether two strings are equal, ignoring case. */
+	static bool equal(const String& a, const String& b);
+};
 
 /** An implementation of a Hash table, which stores key-pair values using a hash on the
  key. A 'load' factor determines the values/storage factor, and when it reaches a
@@ -30,16 +56,10 @@ class _FIRE_ENGINE_API_ HashTable : public IMap<Key, Value>
 {
 private:
 	//! An entry in the HashTable
-	struct _HTEntry
+	struct ht_entry_t
 	{
 		Key   key;
 		Value value;
-
-		//! Constructor
-		_HTEntry(Key k, Value v)
-			: key(k), value(v)
-		{
-		}
 	};
 
 public:
@@ -49,8 +69,8 @@ public:
 		m_max_load(load),
 		m_current_load(0.0f)
 	{
-		m_table = new struct _HTEntry*[m_table_size];
-		memset((void *)m_table, 0, m_table_size * sizeof(struct _HTEntry *));
+		m_table = new ht_entry_t*[m_table_size];
+		memset((void *)m_table, 0, m_table_size * sizeof(ht_entry_t*));
 	}
 
 	/** Destructor. */
@@ -91,7 +111,9 @@ public:
 				return false;
 			h = (h+1)%(m_table_size-1);
 		}
-		m_table[h] = new _HTEntry(key, val);
+		m_table[h] = new ht_entry_t;
+		m_table[h]->key = key;
+		m_table[h]->value = val;
 		return true;
 	}
 
@@ -129,6 +151,11 @@ public:
 		return 0;
 	}
 
+	Value& operator[](const Key& key)
+	{
+		return insert(key);
+	}
+
 	/** Returns whether the hash table is empty. */
 	virtual bool isEmpty() const
 	{
@@ -136,18 +163,18 @@ public:
 	}
 
 	/** Returns an array containing all the keys of the hash table. */
-	virtual const array<Key> * keys() const
+	virtual const Array<Key> * keys() const
 	{
-		array<Key> * k = new array<Key>(this->getCount());
+		Array<Key> * k = new Array<Key>(this->getCount());
 		for (u32 i = 0; i < m_table_size; i++)
 			if (m_table[i] != 0)
 				k->push_back(m_table[i]->key);
 		return k;
 	}
 
-	virtual array<Key> * keys()
+	virtual Array<Key> * keys()
 	{
-		array<Key> * k = new array<Key>(this->getCount());
+		Array<Key> * k = new Array<Key>(this->getCount());
 		for (u32 i = 0; i < m_table_size; i++)
 			if (m_table[i] != 0)
 				k->push_back(m_table[i]->key);
@@ -155,18 +182,18 @@ public:
 	}
 
 	/** Returns an array containing all the values of the hash table. */
-	virtual const array<Value> * values() const
+	virtual const Array<Value> * values() const
 	{
-		array<Value> * v = new array<Value>(this->getCount());
+		Array<Value> * v = new Array<Value>(this->getCount());
 		for (u32 i = 0; i < m_table_size; i++)
 			if (m_table[i] != 0)
 				v->push_back(m_table[i]->value);
 		return v;
 	}
 
-	virtual array<Value> * values()
+	virtual Array<Value> * values()
 	{
-		array<Value> * v = new array<Value>(this->getCount());
+		Array<Value> * v = new Array<Value>(this->getCount());
 		for (u32 i = 0; i < m_table_size; i++)
 			if (m_table[i] != 0)
 				v->push_back(m_table[i]->value);
@@ -180,22 +207,22 @@ public:
 	}
 
 private:
-	struct _HTEntry ** m_table;
-	u32                m_table_size;
-	f32                m_max_load;
-	f32                m_current_load;
+	ht_entry_t ** m_table;
+	u32           m_table_size;
+	f32           m_max_load;
+	f32           m_current_load;
 
 	//! Hash function - implements the Jenkin-one-at-a-time JOAAT algorithm
 	static u32 hash(const Key& key, s32 tbl_size)
 	{
-		return HashClass::hash(key) % tbl_size;
+		return HashClass::hash_function(key) % tbl_size;
 	}
 
 	//! Re-hash the table
 	void re_hash()
 	{
-		struct _HTEntry ** new_table = new struct _HTEntry*[2 * m_table_size];
-		memset((void *)new_table, 0, 2*m_table_size*sizeof(struct _HTEntry)); // set them to 0 just in case
+		ht_entry_t ** new_table = new ht_entry_t*[2 * m_table_size];
+		memset((void *)new_table, 0, 2*m_table_size*sizeof(ht_entry_t)); // set them to 0 just in case
 		s32 last = 2*m_table_size-1;
 		u32 h;
 		for (u32 i = 0; i < m_table_size; i++)
@@ -212,6 +239,30 @@ private:
 		m_table        = new_table;
 		m_table_size   = last+1;
 		m_current_load = (f32)this->getCount() / m_table_size;
+	}
+
+	Value& insert(const Key& key)
+	{
+		u32 h = hash(key, m_table_size);
+		
+		while (m_table[h] != nullptr)
+		{
+			if (CompareClass::equal(m_table[h]->key, key))
+			{
+				return m_table[h]->value;
+			}
+			h = (h+1)%(m_table_size-1);
+		}
+		m_table[h] = new ht_entry_t;
+		m_table[h]->key = key;
+		incrementCount();
+		m_current_load = (f32)this->getCount() / m_table_size;
+		if (m_current_load > m_max_load)
+		{
+			re_hash();
+		}
+
+		return m_table[h]->value;
 	}
 };
 

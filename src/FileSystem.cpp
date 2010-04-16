@@ -47,15 +47,15 @@ FileSystem * FileSystem::Get()
 FileSystem::~FileSystem()
 {
 	Instance = 0;
-	for (list<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
+	for (List<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
 	{
 		it->drop();
 	}
 }
 
-IFile * FileSystem::openReadFile(const string& filename, bool ignoreCase, u32 flags, IFileProvider * preferedFileProvider)
+IFile * FileSystem::openReadFile(const String& filename, bool ignoreCase, u32 flags, IFileProvider * preferedFileProvider)
 {
-	string filenamePathFixed = filename;
+	String filenamePathFixed = filename;
 	FileUtils::ConvertPath(filenamePathFixed);
 	if (preferedFileProvider != nullptr)
 	{
@@ -66,7 +66,7 @@ IFile * FileSystem::openReadFile(const string& filename, bool ignoreCase, u32 fl
 		Logger::Get()->log(ES_DEBUG, "FileSystem", 
 			"Warning: Could not load %s in specified file provider", filenamePathFixed.c_str());
 	}
-	for (list<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
+	for (List<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
 	{
 		if (it->contains(filenamePathFixed, ignoreCase))
 		{
@@ -76,12 +76,12 @@ IFile * FileSystem::openReadFile(const string& filename, bool ignoreCase, u32 fl
 	return nullptr;
 }
 
-bool FileSystem::exists(const string& filename) const
+bool FileSystem::exists(const String& filename) const
 {
-	string filenamePathFixed = filename;
+	String filenamePathFixed = filename;
 	FileUtils::ConvertPath(filenamePathFixed);
 	bool fileExists = false;
-	for (list<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
+	for (List<IFileProvider*>::iterator it = FileProviders.begin(); it != FileProviders.end(); it++)
 	{
 		if (it->contains(filenamePathFixed, false))
 		{
@@ -92,7 +92,7 @@ bool FileSystem::exists(const string& filename) const
 	return fileExists;
 }
 
-IFileProvider * FileSystem::addArchive(const string& filename)
+IFileProvider * FileSystem::addArchive(const String& filename)
 {
 	IFileProvider * zip_reader = new ZipFileReader(filename);
 	if (!zip_reader->isReady())
@@ -106,7 +106,7 @@ IFileProvider * FileSystem::addArchive(const string& filename)
 	return zip_reader;
 }
 
-IFileProvider * FileSystem::addDirectory(const string& directoryName)
+IFileProvider * FileSystem::addDirectory(const String& directoryName)
 {
 	IFileProvider * directoryReader = new DirectoryFileProvider(directoryName);
 	FileProviders.push_back(directoryReader);

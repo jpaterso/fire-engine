@@ -11,7 +11,7 @@
 #include "Types.h"
 #include "CompileConfig.h"
 #include "vector3.h"
-#include "array.h"
+#include "Array.h"
 #include "IMesh.h"
 
 namespace fire_engine
@@ -23,7 +23,7 @@ enum EANIMATED_MESH_TYPE
 	EAMT_MD3
 };
 
-class string;
+class String;
 class ITexture;
 
 /** A Mesh that has multiple frames, and possibly multiple textures. */

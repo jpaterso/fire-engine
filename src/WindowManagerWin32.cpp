@@ -10,7 +10,7 @@
 #include "IRenderer.h"
 #include "InputEvent.h"
 #include "MouseEvent.h"
-#include "string.h"
+#include "String.h"
 #include "IResizable.h"
 
 #define _WINDOW_CLASS_NAME	"__FireEngineWin32ClassName"
@@ -23,7 +23,7 @@ HashTable<UINT, MouseEvent::MouseButton> *    WindowManagerWin32::m_msg_to_mbutt
 HashTable<UINT, MouseEvent::MouseEventType> * WindowManagerWin32::m_msg_to_mevent_type = 0;
 HashTable<UINT, s32> *                        WindowManagerWin32::m_msg_to_click_count = 0;
 
-WindowManagerWin32::WindowManagerWin32(u32 dType, const dimension2i& wSize, const string& title)
+WindowManagerWin32::WindowManagerWin32(u32 dType, const dimension2i& wSize, const String& title)
 	: IWindowManager(dType, wSize)
 {
 #if defined(_FIRE_ENGINE_DEBUG_OBJECT_)
@@ -55,8 +55,8 @@ WindowManagerWin32::WindowManagerWin32(u32 dType, const dimension2i& wSize, cons
 
 		if (! RegisterClassEx(&mHWndClass))
 			Logger::Get()->log(ES_CRITICAL,
-				string("WindowManagerWin32"),
-				string("Could not register class"));
+				String("WindowManagerWin32"),
+				String("Could not register class"));
 	}
 
 	// Create our window
@@ -75,8 +75,8 @@ WindowManagerWin32::WindowManagerWin32(u32 dType, const dimension2i& wSize, cons
 
 	if (!mHwnd)
 		Logger::Get()->log(ES_CRITICAL,
-			string("WindowManagerWin32"),
-			string("Failed to create window"));
+			String("WindowManagerWin32"),
+			String("Failed to create window"));
 
 	mHDC = GetDC(mHwnd);
 	setPixelFormat();
@@ -91,7 +91,7 @@ WindowManagerWin32::WindowManagerWin32(u32 dType, const dimension2i& wSize, cons
 #endif
 }
 
-WindowManagerWin32::~WindowManagerWin32(void)
+WindowManagerWin32::~WindowManagerWin32()
 {
 #if defined(_FIRE_ENGINE_COMPILE_WITH_OPENGL_)
 	if (mHGLRC != NULL)
@@ -169,7 +169,7 @@ void WindowManagerWin32::releaseOpenGLContext(void)
 }
 #endif
 
-void WindowManagerWin32::setTitle(const string& newTitle)
+void WindowManagerWin32::setTitle(const String& newTitle)
 {
 	if (!mHwnd)
 		return;
@@ -183,7 +183,7 @@ void WindowManagerWin32::onResize(const dimension2i& newSize)
 }
 
 IWindowManager *
-WindowManagerWin32::Create(EDRIVER_TYPE dType, const dimension2i& wSize, const string& title)
+WindowManagerWin32::Create(EDRIVER_TYPE dType, const dimension2i& wSize, const String& title)
 {
 	if (mInstance == 0)
 		mInstance = new WindowManagerWin32(dType, wSize, title);
@@ -270,7 +270,7 @@ LRESULT CALLBACK WindowManagerWin32::WndProc(HWND hWnd, UINT Msg, WPARAM wParam,
 				r.right++;
 			if ((r.bottom%2) != 0)
 				r.bottom++;
-			for (list<IResizable*>::iterator it = mInstance->_getResizableItems().begin();
+			for (List<IResizable*>::iterator it = mInstance->_getResizableItems().begin();
 				it != mInstance->_getResizableItems().end(); it++)
 			{
 				(*it)->onResize(dimension2i(r.right, r.bottom));

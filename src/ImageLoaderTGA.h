@@ -13,7 +13,7 @@
 #include "Types.h"
 #include "CompileConfig.h"
 #include "dimension2.h"
-#include "string.h"
+#include "String.h"
 #include "ILoader.h"
 #include "IWriter.h"
 
@@ -78,10 +78,10 @@ public:
 	virtual ~ImageLoaderTGA();
 
 	//! Implementation for ILoader
-	virtual Image * load(const string& filename, io::IFileProvider * fileProvider) const;
+	virtual Image * load(const String& filename, io::IFileProvider * fileProvider) const;
 
 	//! Implementations for IWriter
-	virtual bool write(const string& filename, const Image * image) const;
+	virtual bool write(const String& filename, const Image * image) const;
 
 private:
 	/** Decompress the RLE data found in the .TGA file. */

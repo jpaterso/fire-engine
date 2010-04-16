@@ -16,7 +16,7 @@
 #include "Types.h"
 #include "CompileConfig.h"
 #include "dimension2.h"
-#include "array.h"
+#include "Array.h"
 #include "Object.h"
 #include "Color.h"
 #include "vector3.h"
@@ -57,8 +57,8 @@ class _FIRE_ENGINE_API_ SceneManager : public virtual Object
 		Camera * addCamera(const vector3f& position, const vector3f& target);
 
 		/** Adds a SkyBox to the scene. */
-		SkyBox * addSkyBox(const string& ft, const string& bk, const string& up,
-			const string& dn, const string& lt, const string& rt);
+		SkyBox * addSkyBox(const String& ft, const String& bk, const String& up,
+			const String& dn, const String& lt, const String& rt);
 
 		/** Returns the (currently) active camera. */
 		const Camera * getActiveCamera() const;
@@ -73,7 +73,7 @@ class _FIRE_ENGINE_API_ SceneManager : public virtual Object
 		 it this way, and not just call IRenderer::screenshot(), as we must make
 		 sure that the entire scene is drawn before taking it. It will be taken
 		 as soon as the entire scene is drawn. */
-		void registerScreenShotDemand(const string& filename);
+		void registerScreenShotDemand(const String& filename);
 
 		ISpaceNode * getRoot();
 
@@ -81,8 +81,8 @@ class _FIRE_ENGINE_API_ SceneManager : public virtual Object
 		static SceneManager *    mInstance;
 		IRenderer *              mRenderer;
 		ISpaceNode *             mSpaceRoot;
-		array<ISpaceNode*>       mLights;
-		array<IModel*>           mSolidNodes;
+		Array<ISpaceNode*>       mLights;
+		Array<IModel*>           mSolidNodes;
 		Color32                  mAmbientLight;
 		Camera *                 mActiveCamera;
 		sys::HighResolutionTimer mTimer;
@@ -91,7 +91,7 @@ class _FIRE_ENGINE_API_ SceneManager : public virtual Object
 		typedef struct
 		{
 			bool   mWantScreenshot;
-			string mScreenshotFilename;
+			String mScreenshotFilename;
 		} screenshot_demand_t;
 
 		screenshot_demand_t mScreenshotInfo;

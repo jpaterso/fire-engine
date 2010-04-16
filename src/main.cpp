@@ -58,7 +58,6 @@ int main(int argc, const char * argv[])
 	FileSystem::Get()->addArchive("md3/chicken.pk3");
 	FileSystem::Get()->addArchive("md3/galvatron.pk3");
 	
-
 	AnimatedMeshMD2 * mesh = mm->load<AnimatedMeshMD2>("md2/alien/tris.md2");
 	AnimatedModel * model = sc->addAnimatedMesh(mesh);
 	model->setFrameLoop(0, 40, true);
@@ -110,7 +109,7 @@ int main(int argc, const char * argv[])
 		d->getRenderer()->startScene(Color32(0.0f, 0.0f, 0.0f, 1.0f));
 		iwm->run();
 		sc->draw();
-		iwm->setTitle(string("Running at ")+d->getFPS()+" frames per second. Drawing " + d->_getFPSCalculator()->getLastPolyCount() + " polygons");
+		iwm->setTitle(String("Running at ")+d->getFPS()+" frames per second. Drawing " + d->_getFPSCalculator()->getLastPolyCount() + " polygons");
 		//d->getRenderer()->showImage(*im, dimension2i(0, 0), dimension2f(1.0, 1.0));
 		d->getRenderer()->endScene();
 	}

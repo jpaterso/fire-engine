@@ -12,7 +12,7 @@
 namespace fire_engine
 {
 
-MeshBufferMD3::MeshBufferMD3(Vertex3 * vertices, array<u32> * indices, ITexture * texture,
+MeshBufferMD3::MeshBufferMD3(Vertex3 * vertices, Array<u32> * indices, ITexture * texture,
 	s32 verts_per_frame, s32 num_frames)
 	: mVertices(vertices), mIndices(indices), mTexture(texture),
 	  mVerticesPerFrame(verts_per_frame), mNumFrames(num_frames)
@@ -54,7 +54,7 @@ s32 MeshBufferMD3::getVertexCount() const
 	return mVerticesPerFrame;
 }
 
-const array<u32> * MeshBufferMD3::getIndices() const
+const Array<u32> * MeshBufferMD3::getIndices() const
 {
 	return mIndices;
 }
@@ -106,7 +106,7 @@ void MeshBufferMD3::calculateBoundingBoxes()
 }
 
 AnimatedMeshMD3::AnimatedMeshMD3(MeshBufferMD3 ** buffers, s32 mbuffer_count, s32 frame_count,
-	array<MD3QuaternionTag*> * tags)
+	Array<MD3QuaternionTag*> * tags)
 	: mBuffers(buffers), mBufferCount(mbuffer_count), mFrameCount(frame_count),
 	  mTags(tags)
 {
@@ -173,7 +173,7 @@ s32 AnimatedMeshMD3::getNumTags() const
 	return mTags->size();
 }
 
-s32 AnimatedMeshMD3::getTagIndex(const string& tagname) const
+s32 AnimatedMeshMD3::getTagIndex(const String& tagname) const
 {
 	for (s32 i = 0; i < mTags->size(); i++)
 		if (mTags->at(i)[0].Name == tagname)

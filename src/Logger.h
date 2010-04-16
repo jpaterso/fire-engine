@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include "string.h"
+#include "String.h"
 #include "Object.h"
 
 namespace fire_engine
@@ -81,7 +81,7 @@ class _FIRE_ENGINE_API_ Logger : public Object
          * @param src The source (ie class / file) where the error occured
          * @param fmt The actual text describing the error, can contain formats
         **/
-        void log(ESEVERITY es, const string& src, const string fmt, ...) const;
+        void log(ESEVERITY es, const String& src, const String fmt, ...) const;
 
     private:
 		static Logger * m_instance; //! The singleton instance of the Logger

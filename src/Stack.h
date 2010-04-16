@@ -9,7 +9,7 @@
 
 #include "IStack.h"
 #include "CompileConfig.h"
-#include "counter.h"
+#include "Counter.h"
 
 namespace fire_engine
 {

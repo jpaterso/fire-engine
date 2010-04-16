@@ -13,7 +13,7 @@
 #include "matrix4.h"
 #include "vector3.h"
 #include "Math.h"
-#include <string.h>
+#include <String.h>
 
 namespace fire_engine
 {

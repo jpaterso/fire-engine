@@ -7,14 +7,14 @@
 
 #include "ImageLoaderPCX.h"
 #include "Image.h"
-#include "string.h"
+#include "String.h"
 #include "Logger.h"
 #include "ColorConverter.h"
 #include "ByteConverter.h"
 #include "IFile.h"
 #include "File.h"
 #include "FileSystem.h"
-#include <string.h>
+#include <String.h>
 
 #define PCX_MAGIC_NUMBER 0x0A // the first byte of every PCX File
 #define PCX_RLE_ENCODED  0xC0 // an encoded RLE packet
@@ -30,7 +30,7 @@ ImageLoaderPCX::~ImageLoaderPCX()
 {
 }
 
-Image * ImageLoaderPCX::load(const string& filename, io::IFileProvider * fileProvider) const
+Image * ImageLoaderPCX::load(const String& filename, io::IFileProvider * fileProvider) const
 {
 	u8 *        texel_data = nullptr;
 	u8 *        color_map  = nullptr;
@@ -201,7 +201,7 @@ ImageLoaderPCX::pcx_rle_data_t ImageLoaderPCX::compressRLE(const u8 * data, s32 
 	return rle;
 }
 
-bool ImageLoaderPCX::write(const string& filename, const Image * image) const
+bool ImageLoaderPCX::write(const String& filename, const Image * image) const
 {
 	PCXHeader pcxh;
 	pcx_rle_data_t rle;

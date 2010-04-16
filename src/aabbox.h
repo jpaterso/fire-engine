@@ -12,7 +12,7 @@
 #include "Types.h"
 #include "CompileConfig.h"
 #include "vector3.h"
-#include "string.h"
+#include "String.h"
 
 namespace fire_engine
 {
@@ -71,9 +71,9 @@ public:
 	bool intersectsWith(const aabbox<Real>& box) const;
 
 	/** Returns a textual representation of the box. */
-	string toString() const
+	String toString() const
 	{
-		return string("aabbox[ ") + mMinPoint.toString() + "\n               " + mMaxPoint.toString() + " ]";
+		return String("aabbox[ ") + mMinPoint.toString() + "\n               " + mMaxPoint.toString() + " ]";
 	}
 
 	/** Returns the minimum point of the box. */

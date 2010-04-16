@@ -16,7 +16,7 @@
 namespace fire_engine
 {
 
-class string;
+class String;
 
 /** A MouseEvent describes some input from the mouse. They should automatically
  be generated from the window manager, and sent off to be processed. */
@@ -61,7 +61,7 @@ class _FIRE_ENGINE_API_ MouseEvent : public InputEvent
 		void setPoint(const dimension2i& pt);
 		dimension2i getPoint(void) const;
 
-		virtual string toString(void) const;
+		virtual String toString(void) const;
 
 	private:
 		MouseEventType m_type;

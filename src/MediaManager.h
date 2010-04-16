@@ -14,7 +14,7 @@
 #include "ILoader.h"
 #include "IWriter.h"
 #include "Logger.h"
-#include "array.h"
+#include "Array.h"
 #include "FileUtils.h"
 
 namespace fire_engine
@@ -33,13 +33,13 @@ class IFileProvider;
 template <class T>
 struct _FIRE_ENGINE_API_ MediaHolder
 {
-	HashTable<string, ILoader<T> *, StringHashIgnoreCase, StringHashIgnoreCase> m_loaders;
-	HashTable<string, IWriter<T> *, StringHashIgnoreCase, StringHashIgnoreCase> m_writers;
+	HashTable<String, ILoader<T> *, StringHashIgnoreCase, StringHashIgnoreCase> m_loaders;
+	HashTable<String, IWriter<T> *, StringHashIgnoreCase, StringHashIgnoreCase> m_writers;
 
 	virtual ~MediaHolder()
 	{
-		array<ILoader<T>*> * loaders = m_loaders.values();
-		array<IWriter<T>*> * writers = m_writers.values();
+		Array<ILoader<T>*> * loaders = m_loaders.values();
+		Array<IWriter<T>*> * writers = m_writers.values();
 		for (s32 i = 0; i < loaders->size(); i++)
 			delete loaders->at(i);
 //		for (s32 i = 0; i < writers->size(); i++)
@@ -65,19 +65,19 @@ public:
 	virtual ~MediaManager();
 
 	template <class Object>
-	void addLoader(const string& extension, ILoader<Object> * loader)
+	void addLoader(const String& extension, ILoader<Object> * loader)
 	{
 		MediaHolder<Object>::m_loaders.insert(extension, loader);
 	}
 
 	template <class Object>
-	void addWriter(const string& extension, IWriter<Object> * writer)
+	void addWriter(const String& extension, IWriter<Object> * writer)
 	{
 		MediaHolder<Object>::m_writers.insert(extension, writer);
 	}
 
 	template <class Object>
-	Object * load(const string& filename, io::IFileProvider * fileProvider = nullptr) const
+	Object * load(const String& filename, io::IFileProvider * fileProvider = nullptr) const
 	{
 		ILoader<Object> ** loader = MediaHolder<Object>::m_loaders.find(io::FileUtils::GetFileExtension(filename));
 		if (loader != 0)
@@ -91,7 +91,7 @@ public:
 	}
 
 	template <class Object>
-	bool write(const string& filename, const Object * object) const
+	bool write(const String& filename, const Object * object) const
 	{
 		IWriter<Object> ** writer = MediaHolder<Object>::m_writers.find(io::FileUtils::GetFileExtension(filename));
 		if (writer != 0)

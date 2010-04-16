@@ -10,12 +10,12 @@
 #include "Types.h"
 #include "CompileConfig.h"
 #include "Object.h"
-#include "array.h"
-#include "string.h"
-#include "list.h"
+#include "Array.h"
+#include "String.h"
+#include "List.h"
 #include "IFile.h"
 #include "IFileProvider.h"
-#include <string.h>
+#include <String.h>
 #include <stdio.h>
 
 namespace fire_engine
@@ -34,13 +34,13 @@ struct _FIRE_ENGINE_API_ FileInfo
 	}
 
 	/** Construct a FileInfo structure from all its components. */
-	FileInfo(const string& fullname, const string& path, s32 size, bool is_dir)
+	FileInfo(const String& fullname, const String& path, s32 size, bool is_dir)
 		: FullName(fullname), Path(path), Size(size), IsDirectory(is_dir)
 	{
 	}
 
-	string FullName;
-	string Path;
+	String FullName;
+	String Path;
 	s32    Size;
 	bool   IsDirectory;
 };
@@ -72,7 +72,7 @@ public:
 	 \param preferedFileProvider This file provider will be used first when looking for the file.
 	 \return            An IFile pointer to either a file found in the virtual file system
 	                    if it exists, or an IFile pointing to a file on the OS's file system. */
-	IFile * openReadFile(const string& filename, 
+	IFile * openReadFile(const String& filename, 
 		bool ignoreCase = false, 
 		u32 flags = EFOF_READ|EFOF_BINARY, 
 		IFileProvider * preferedFileProvider = nullptr);
@@ -80,19 +80,19 @@ public:
     /** Checks whether a file exists within the file system.
      \param filename The name of the file to look for.
      \return true if the file exists somewhere in the file system, false otherwise. */
-    bool exists(const string& filename) const;
+    bool exists(const String& filename) const;
 
 	/** Adds a .ZIP archive to the file system.
 	 \return A pointer to the IFileProvider created for the .ZIP file. */
-	IFileProvider * addArchive(const string& filename);
+	IFileProvider * addArchive(const String& filename);
 
 	/** Adds a directory to the file system.
 	 \return A pointer to the IFileProvider created for the directory. */
-	IFileProvider * addDirectory(const string& directoryName);
+	IFileProvider * addDirectory(const String& directoryName);
 
 private:
 	static FileSystem * Instance;
-	list<IFileProvider*> FileProviders;
+	List<IFileProvider*> FileProviders;
 
 	/** Constructor - made private to ensure only a singleton instance of the class is
 	 ever created. */

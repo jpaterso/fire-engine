@@ -16,7 +16,7 @@
 namespace fire_engine
 {
 
-class string;
+class String;
 
 class _FIRE_ENGINE_API_ InputEvent
 {
@@ -58,14 +58,14 @@ class _FIRE_ENGINE_API_ InputEvent
 		//! Check whether the event has been consumed yet
 		bool isConsumed(void) const;
 
-		virtual string toString(void) const;
+		virtual String toString(void) const;
 
 	private:
 		u8  m_mask;
 		bool m_is_consumed;
 
 	protected:
-		string getMasks(void) const;
+		String getMasks(void) const;
 };
 
 } // namespace fire_engine

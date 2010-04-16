@@ -15,7 +15,7 @@
 #include "Logger.h"
 #include "plane3.h"
 #include "Q3Map.h"
-#include "string.h"
+#include "String.h"
 
 #define Q3_MAGIC_ID      0x50534249 // "IBSP" in little endian
 #define Q3_MAGIC_VERSION 0x2E       // 46
@@ -27,7 +27,7 @@ Q3MapLoader::~Q3MapLoader()
 {
 }
 
-Q3Map * Q3MapLoader::load(const string& filename, io::IFileProvider * fileProvider) const
+Q3Map * Q3MapLoader::load(const String& filename, io::IFileProvider * fileProvider) const
 {
 	q3::bsp_header_t header;
 	q3::bsp_lump_t lumps[q3::EBL_LUMP_COUNT];
@@ -377,7 +377,7 @@ ITexture ** Q3MapLoader::loadTextures(const q3::bsp_texture_t *q3textures, s32 n
 	IRenderer * renderer = Device::Get()->getRenderer();
 	for (s32 i = 0; i < num_textures; i++)
 	{
-		string filename = io::FileUtils::StripExtension(q3textures[i].name);
+		String filename = io::FileUtils::StripExtension(q3textures[i].name);
 		if (io::FileSystem::Get()->exists(filename + ".jpg"))
 		{
 			textures[i] = renderer->createTexture(filename + ".jpg", fileProvider);

@@ -11,7 +11,7 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "string.h"
+#include "String.h"
 
 namespace fire_engine
 {
@@ -36,10 +36,10 @@ public:
 	 Classes can implement this interface in order to register themselves
 	 with the MediaManager class, to provide seamless loading of objects
 	 from disk using a single entry point.
-	 \param filename A string object containing the name of the file to load.
+	 \param filename A String object containing the name of the file to load.
 	 \param fileProvider A file provider to use first. Useful if loading from within some archive.
 	 \return A pointer to the object created. */
-	virtual Obj * load(const string& filename, io::IFileProvider * fileProvider) const = 0;
+	virtual Obj * load(const String& filename, io::IFileProvider * fileProvider) const = 0;
 };
 
 }

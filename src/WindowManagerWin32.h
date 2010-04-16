@@ -23,7 +23,7 @@
 namespace fire_engine
 {
 
-class string;
+class String;
 class IRenderer;
 
 class _FIRE_ENGINE_API_ WindowManagerWin32 : public IWindowManager, public virtual Object
@@ -52,7 +52,7 @@ class _FIRE_ENGINE_API_ WindowManagerWin32 : public IWindowManager, public virtu
 		/** Destructor. */
 		virtual ~WindowManagerWin32(void);
 
-		virtual void setTitle(const string& newTitle);
+		virtual void setTitle(const String& newTitle);
 
 		virtual void onResize(const dimension2i& newSize);
 
@@ -82,7 +82,7 @@ class _FIRE_ENGINE_API_ WindowManagerWin32 : public IWindowManager, public virtu
 		**/
 		static IWindowManager * Create(EDRIVER_TYPE dType,
 			const dimension2i& wSize,
-			const string& title);
+			const String& title);
 
 	private:
 		HINSTANCE                   mHinstance; //! The instance of our program
@@ -118,7 +118,7 @@ class _FIRE_ENGINE_API_ WindowManagerWin32 : public IWindowManager, public virtu
 		**/
 		WindowManagerWin32(u32 dType,
 			const dimension2i& wSize,
-			const string& title);
+			const String& title);
 
 		/**
 		 *	Set the pixel format for the newly created window

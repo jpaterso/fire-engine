@@ -19,7 +19,7 @@ namespace fire_engine
 {
 
 class IMeshBuffer;
-class string;
+class String;
 
 /** An interface for a mesh: a collection of mesh buffers, each with their own 
  set of vertices, polygons as well as a single material. */
@@ -37,24 +37,24 @@ public:
 	virtual s32 getMeshBufferCount() const = 0;
 
 	/** Get the name associated with the given IMesh */
-	inline const string& getName() const;
+	inline const String& getName() const;
 
 	/** Sets the name of the IMesh. */
-	inline void setName(const string& name);
+	inline void setName(const String& name);
 
 	/** Returns a bounding box, encompassing the entire IMesh. */
 	virtual const aabboxf& getBoundingBox() const = 0;
 
 protected:
-	string mMeshName;
+	String mMeshName;
 };
 
-inline const string& IMesh::getName() const
+inline const String& IMesh::getName() const
 {
 	return mMeshName;
 }
 
-inline void IMesh::setName(const string& name)
+inline void IMesh::setName(const String& name)
 {
 	mMeshName = name;
 }

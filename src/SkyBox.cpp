@@ -8,7 +8,7 @@
 #include "SkyBox.h"
 #include "IRenderer.h"
 #include "ITexture.h"
-#include "string.h"
+#include "String.h"
 #include "Logger.h"
 #include "Camera.h"
 
@@ -23,8 +23,8 @@ SkyBox::SkyBox()
 #endif
 }
 
-SkyBox::SkyBox(const IRenderer * renderer, const string& ft, const string& bk, const string& up,
-	const string& dn, const string& lt, const string& rt)
+SkyBox::SkyBox(const IRenderer * renderer, const String& ft, const String& bk, const String& up,
+	const String& dn, const String& lt, const String& rt)
 	: mTexturesLoaded(true)
 {
 #if defined(_FIRE_ENGINE_DEBUG_OBJECT_)

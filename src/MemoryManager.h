@@ -11,7 +11,7 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include <string.h>
+#include <String.h>
 #include <stdlib.h>
 
 namespace fire_engine

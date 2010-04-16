@@ -11,7 +11,7 @@
 
 #include "CompileConfig.h"
 #include "Object.h"
-#include "string.h"
+#include "String.h"
 
 namespace fire_engine
 {
@@ -33,13 +33,13 @@ public:
 	 \param filename The full path of the file. 
 	 \param ignoreCase Whether to ignore case when searching for the file.
 	 \return A pointer to the file if it exists, nullptr otherwise. */
-	virtual IFile * openFile(const string& filename, bool ignoreCase, u32 flags) = 0;
+	virtual IFile * openFile(const String& filename, bool ignoreCase, u32 flags) = 0;
 
 	/** Checks whether a file is available within the IFileProvider.
 	 \param filename The full path of the file. 
 	 \param ignoreCase Whether to ignore case when searching for the file.
 	 \return Whether the IFileProvider contains access to the file. */
-	virtual bool contains(const string& filename, bool ignoreCase) = 0;
+	virtual bool contains(const String& filename, bool ignoreCase) = 0;
 
 	/** Checks whether the file provider is 'ready' to provide files.
 	 This usually involves checking whether a directory was correctly opened,

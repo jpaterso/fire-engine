@@ -17,8 +17,8 @@
 #include "CompileConfig.h"
 #include "Object.h"
 #include "dimension2.h"
-#include "string.h"
-#include "array.h"
+#include "String.h"
+#include "Array.h"
 #include "Color.h"
 #include "FPSCalculator.h"
 
@@ -76,7 +76,7 @@ class _FIRE_ENGINE_API_ Device : public virtual Object
 		**/
 		static Device * Create(EDRIVER_TYPE dType = EDT_OPENGL,
 			const dimension2i& size      = dimension2i(640, 480),
-			const string& title          = "Default FireEngine Application",
+			const String& title          = "Default FireEngine Application",
 			const c8 * lang              = "en");
 
 		/**
@@ -124,7 +124,7 @@ class _FIRE_ENGINE_API_ Device : public virtual Object
 		SceneManager *         mSceneManager;  //! The SceneManager, which manages all displayable items
 		IWindowManager *       mWindowManager; //! The WindowManager, that creates and manages the window
 		IRenderer *            mRenderer;      //! The Renderer, in charge of writing into the window
-		array<IEventReceiver*> mEvtReceivers;         //! The Event Receiver - should be custom
+		Array<IEventReceiver*> mEvtReceivers;         //! The Event Receiver - should be custom
 		FPSCalculator *        mFPSCalculator;
 		io::FileSystem *       mFileSystem;
 
@@ -138,7 +138,7 @@ class _FIRE_ENGINE_API_ Device : public virtual Object
 		 *	@param	title	The title of the window to create
 		 *	@param	lang	The language to use, for localised text
 		**/
-		Device(EDRIVER_TYPE dType, const dimension2i& size, const string& title, const c8 * lang);
+		Device(EDRIVER_TYPE dType, const dimension2i& size, const String& title, const c8 * lang);
 };
 
 } // namespace fire_engine

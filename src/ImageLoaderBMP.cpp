@@ -14,7 +14,7 @@
 #include "IFile.h"
 #include "File.h"
 #include "FileSystem.h"
-#include <string.h>
+#include <String.h>
 
 #define BMP_MAGIC_NUMBER 0x4D42
 
@@ -29,7 +29,7 @@ ImageLoaderBMP::~ImageLoaderBMP()
 {
 }
 
-Image * ImageLoaderBMP::load(const string& filename, io::IFileProvider * fileProvider) const
+Image * ImageLoaderBMP::load(const String& filename, io::IFileProvider * fileProvider) const
 {
 	Image * image   = nullptr;
 	u8 *    data    = nullptr;
@@ -117,8 +117,8 @@ Image * ImageLoaderBMP::load(const string& filename, io::IFileProvider * filePro
 		case 2:
 		case 4:
 			Logger::Get()->log(ES_HIGH,
-				string("ImageLoaderBMP"),
-				string("") + bmih.biBitCount + string("bit bitmaps not supported"));
+				String("ImageLoaderBMP"),
+				String("") + bmih.biBitCount + String("bit bitmaps not supported"));
 			return nullptr;
 
 		case 8:
@@ -171,7 +171,7 @@ Image * ImageLoaderBMP::load(const string& filename, io::IFileProvider * filePro
 	return image;
 }
 
-bool ImageLoaderBMP::write(const string& filename, const Image * image) const
+bool ImageLoaderBMP::write(const String& filename, const Image * image) const
 {
 	BitmapFileHeader bfh;
 	BitmapInfoHeader bih;

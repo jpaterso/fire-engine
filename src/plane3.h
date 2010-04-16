@@ -13,7 +13,7 @@
 #include "CompileConfig.h"
 #include "line3.h"
 #include "vector3.h"
-#include "string.h"
+#include "String.h"
 #include "Math.h"
 
 namespace fire_engine
@@ -192,9 +192,9 @@ public:
 		}
 	}
 
-	string toString(void) const
+	String toString(void) const
 	{
-		return string("plane3[ ") + mPoint.toString() + ",\n        " +
+		return String("plane3[ ") + mPoint.toString() + ",\n        " +
 			mNormal.toString() + " ]";
 	}
 

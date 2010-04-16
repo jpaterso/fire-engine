@@ -12,7 +12,7 @@
 #include "Types.h"
 #include "CompileConfig.h"
 #include "dimension2.h"
-#include "array.h"
+#include "Array.h"
 #include "Object.h"
 
 namespace fire_engine
@@ -124,7 +124,7 @@ public:
 	 Array will be the original Image, and each subsequent Image will have
 	 both its dimensions divided by two. The last Image will have at least
 	 one of its dimensions equal to 1 */
-	array<Image *> * generateMipmaps() const;
+	Array<Image *> * generateMipmaps() const;
 
 	bool isPowerOfTwo() const;
 

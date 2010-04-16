@@ -10,7 +10,7 @@
 #endif
 
 #include "File.h"
-#include "string.h"
+#include "String.h"
 #include <sys/types.h>
 #include <io.h>
 
@@ -27,7 +27,7 @@ File::File(void)
 	ErrorOccured = false;
 }
 
-File::File(const string& filename, u32 flags)
+File::File(const String& filename, u32 flags)
 {
 	Filename = filename;
 	// Open the file, and if created, allow read/write access
@@ -110,9 +110,9 @@ bool File::close(void)
 	return _close(fd) >= 0;
 }
 
-string File::toString() const
+String File::toString() const
 {
-	return string("File[ \"") + Filename + "\" size = " + static_cast<f32>(mSize)/1024 + "kb ]";
+	return String("File[ \"") + Filename + "\" size = " + static_cast<f32>(mSize)/1024 + "kb ]";
 }
 
 }

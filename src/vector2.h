@@ -10,8 +10,8 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "string.h"
-#include <string.h>
+#include "String.h"
+#include <String.h>
 
 namespace fire_engine
 {
@@ -129,9 +129,9 @@ public:
 	}
 
 	/** Returns a human-readable version of this vector. */
-	string toString() const
+	String toString() const
 	{
-		return string("vector2[ ") + mX + ", " + mY + " ]";
+		return String("vector2[ ") + mX + ", " + mY + " ]";
 	};
 
 private:

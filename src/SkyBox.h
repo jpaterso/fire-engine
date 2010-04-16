@@ -21,7 +21,7 @@ namespace fire_engine
 
 class IRenderer;
 class ITexture;
-class string;
+class String;
 
 /** A SkyBox: a cube surrounding the entire world, with optional internal textures that
  can simulate a world beyond the scene. */
@@ -32,8 +32,8 @@ public:
 	SkyBox();
 
 	/** Construct a sky box with 6 textures. */
-	SkyBox(const IRenderer * renderer, const string& ft, const string& bk, const string& up,
-		const string& dn, const string& lt, const string& rt);
+	SkyBox(const IRenderer * renderer, const String& ft, const String& bk, const String& up,
+		const String& dn, const String& lt, const String& rt);
 
 	/** Destructor. */
 	virtual ~SkyBox();

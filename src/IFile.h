@@ -11,7 +11,7 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "string.h"
+#include "String.h"
 #include <stdio.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -19,7 +19,7 @@
 namespace fire_engine
 {
 
-class string;
+class String;
 
 namespace io
 {
@@ -55,7 +55,7 @@ public:
 	}
 
 	/** Returns the name of the file. */
-	inline const string& getFilename() const
+	inline const String& getFilename() const
 	{
 		return Filename;
 	}
@@ -101,11 +101,11 @@ public:
 	virtual bool close() = 0;
 
 	/** Returns a textual representation of the file. */
-	virtual string toString() const = 0;
+	virtual String toString() const = 0;
 
 protected:
 	bool ErrorOccured;
-	string Filename;
+	String Filename;
 };
 
 } // namespace io

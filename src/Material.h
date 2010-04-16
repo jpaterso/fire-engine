@@ -11,7 +11,7 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "string.h"
+#include "String.h"
 #include "Color.h"
 
 #define MATERIAL_MAX_NUM_TEXTURES 0x04
@@ -50,7 +50,7 @@ class _FIRE_ENGINE_API_ Material
 {
 public:
 	/** Create a Material with a name. */
-	Material(const string& name = "");
+	Material(const String& name = "");
 
 	/** Material constructor from another Material. */
 	Material(const Material& other);
@@ -74,7 +74,7 @@ public:
 	inline f32	getShininess(void) const;
 
 	/** Returns the name of the Material */
-	inline const string& getName(void) const;
+	inline const String& getName(void) const;
 
 	/** Sets the ambient color. */
 	inline void setAmbient(const Color32& ambient);
@@ -107,7 +107,7 @@ public:
 	const Material& operator=(const Material& other);
 
 private:
-	string  m_name;
+	String  m_name;
 	Color32 m_ambient;
 	Color32 m_diffuse;
 	Color32 m_specular;
@@ -152,7 +152,7 @@ inline f32	Material::getShininess(void) const
 	return m_shininess;
 }
 
-inline const string& Material::getName(void) const
+inline const String& Material::getName(void) const
 {
 	return m_name;
 }
