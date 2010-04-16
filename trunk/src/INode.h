@@ -9,7 +9,7 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "list.h"
+#include "List.h"
 #include "Object.h"
 
 namespace fire_engine
@@ -51,7 +51,7 @@ public:
 
 protected:
 	INode *         mParent;
-	list<INode*> *  mChildren;
+	List<INode*> *  mChildren;
 
 	//! Constructor made private to ensure it stays an interface
 	INode(INode * parent = 0);

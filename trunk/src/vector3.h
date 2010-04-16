@@ -12,8 +12,8 @@
 #include "CompileConfig.h"
 #include "Math.h"
 #include "dimension2.h"
-#include "string.h"
-#include <string.h>
+#include "String.h"
+#include <String.h>
 
 namespace fire_engine
 {
@@ -400,9 +400,9 @@ public:
 	}
 
 	/** Returns a textual representation of the vector3. */
-	string toString(void) const
+	String toString(void) const
 	{
-		return string("vector3[ ") + mX + ", " + mY + ", " + mZ + " ]";
+		return String("vector3[ ") + mX + ", " + mY + ", " + mZ + " ]";
 	}
 
 	/** Calculates some hash value for the vector3. */

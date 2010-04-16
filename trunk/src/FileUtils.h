@@ -11,7 +11,7 @@
 namespace fire_engine
 {
 
-class string;
+class String;
 
 namespace io
 {
@@ -25,22 +25,22 @@ public:
 	 delimiting conventions.
 	 \param filename The full name of the file to be stripped.
 	 \return         The stripped name of the file. */
-	static string StripDirectory(const string& filename);
+	static String StripDirectory(const String& filename);
 
 	/** Returns the name of a file without it's ending extension.
 	 \param filename The name of the file to cut the extension off.
 	 \return         The filename stripped of it's extension. */
-	static string StripExtension(const string& filename);
+	static String StripExtension(const String& filename);
 
 	/** Returns the extension of a file, without the leading dot.
 	 \param filename The full name of the file.
-	 \return         The extension of the file, or an empty string if the file has
+	 \return         The extension of the file, or an empty String if the file has
 	                 no extension. */ 
-	static string GetFileExtension(const string& filename);
+	static String GetFileExtension(const String& filename);
 
 	/** Fixes a given path so that directory delimiters are consistent.
 	 \param path The path to modify. This will be done in place. */
-	static void ConvertPath(string& path);
+	static void ConvertPath(String& path);
 };
 
 } //namespace io

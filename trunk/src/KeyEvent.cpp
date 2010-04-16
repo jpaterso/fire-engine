@@ -6,7 +6,7 @@
 **/
 
 #include "KeyEvent.h"
-#include "string.h"
+#include "String.h"
 
 namespace fire_engine
 {
@@ -65,8 +65,8 @@ void KeyEvent::setChar(void)
 	}
 }
 
-string KeyEvent::toString(void) const
+String KeyEvent::toString(void) const
 {
-	return string("KeyEvent:") + getMasks() + " " + m_corr_char;
+	return String("KeyEvent:") + getMasks() + " " + m_corr_char;
 }
 }

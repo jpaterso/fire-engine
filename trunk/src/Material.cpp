@@ -13,7 +13,7 @@
 namespace fire_engine
 {
 
-Material::Material(const string& name)
+Material::Material(const String& name)
 	: m_name(name), m_ambient(0.4f, 0.4f, 0.4f, 1.0f), m_diffuse(0.8f, 0.8f, 0.8f, 1.0f),
 	  m_specular(0.0f, 0.0f, 0.0f, 1.0f), m_emissive(0.0f, 0.0f, 0.0f, 1.0f),
 	  m_shininess(0.0f), mUseAlphaBlending(true), mLightingEnabled(true),

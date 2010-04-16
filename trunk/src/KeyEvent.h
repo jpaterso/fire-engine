@@ -15,7 +15,7 @@
 namespace fire_engine
 {
 
-class string;
+class String;
 
 class _FIRE_ENGINE_API_ KeyEvent : public InputEvent
 {
@@ -109,7 +109,7 @@ class _FIRE_ENGINE_API_ KeyEvent : public InputEvent
 		void setKey(EKEY_CODE key);
 		EKEY_CODE getKey(void) const;
 
-		virtual string toString(void) const;
+		virtual String toString(void) const;
 
 	private:
 		EKEY_CODE m_key_pressed; //! The Virtual key code of the pressed key

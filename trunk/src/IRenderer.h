@@ -16,7 +16,7 @@
 #include "matrix4.h"
 #include "vector3.h"
 #include "vector2.h"
-#include "array.h"
+#include "Array.h"
 #include "Object.h"
 #include "IMeshBuffer.h"
 #include "aabbox.h"
@@ -146,7 +146,7 @@ public:
 	virtual void setMaterial(const Material& mat) = 0;
 
 	/** Asks the IRenderer to create a texture from a given file. */
-	virtual ITexture * createTexture(const string& filename, io::IFileProvider * fileProvider) const = 0;
+	virtual ITexture * createTexture(const String& filename, io::IFileProvider * fileProvider) const = 0;
 
 protected:
 	static IRenderer * mInstance; //! Singleton instance of the IRenderer

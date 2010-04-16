@@ -6,8 +6,8 @@
 **/
 
 #include "MemoryFile.h"
-#include "string.h"
-#include <string.h>
+#include "String.h"
+#include <String.h>
 
 namespace fire_engine
 {
@@ -101,9 +101,9 @@ bool MemoryFile::close()
 	return true;
 }
 
-string MemoryFile::toString() const
+String MemoryFile::toString() const
 {
-	return string("MemoryFile[ size = ") + mDataSize + " ]";
+	return String("MemoryFile[ size = ") + mDataSize + " ]";
 }
 
 }

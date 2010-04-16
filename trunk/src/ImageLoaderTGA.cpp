@@ -14,7 +14,7 @@
 #include "IFile.h"
 #include "File.h"
 #include "FileSystem.h"
-#include <string.h>
+#include <String.h>
 
 namespace fire_engine
 {
@@ -27,7 +27,7 @@ ImageLoaderTGA::~ImageLoaderTGA()
 {
 }
 
-Image * ImageLoaderTGA::load(const string& filename, io::IFileProvider * fileProvider) const
+Image * ImageLoaderTGA::load(const String& filename, io::IFileProvider * fileProvider) const
 {
 	Image * image    = nullptr;
 	c8 *    id       = nullptr;
@@ -153,7 +153,7 @@ Image * ImageLoaderTGA::load(const string& filename, io::IFileProvider * filePro
 	return image;
 }
 
-bool ImageLoaderTGA::write(const string& filename, const Image * image) const
+bool ImageLoaderTGA::write(const String& filename, const Image * image) const
 {
 	tga_header_t header;
 	io::File f(filename.c_str(), io::EFOF_CREATE|io::EFOF_WRITE|io::EFOF_TRUNCATE|io::EFOF_BINARY);
@@ -162,8 +162,8 @@ bool ImageLoaderTGA::write(const string& filename, const Image * image) const
 
 	if (f.fail())
 	{
-		Logger::Get()->log(ES_HIGH, string("ImageLoaderTGA"),
-			string("Could not open %s for writing. Aborting screenshot"), filename.c_str());
+		Logger::Get()->log(ES_HIGH, String("ImageLoaderTGA"),
+			String("Could not open %s for writing. Aborting screenshot"), filename.c_str());
 		delete [] data;
 		return false;
 	}

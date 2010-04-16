@@ -7,7 +7,7 @@
 
 #include "IAnimatedMesh.h"
 #include "ITexture.h"
-#include "string.h"
+#include "String.h"
 
 namespace fire_engine
 {

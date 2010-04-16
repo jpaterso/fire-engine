@@ -9,7 +9,7 @@
 #include "Math.h"
 #include "Color.h"
 #include "ColorConverter.h"
-#include <string.h>
+#include <String.h>
 
 namespace fire_engine
 {
@@ -238,15 +238,15 @@ void Image::setTexelSize(void)
 	}
 }
 
-array<Image *> * Image::generateMipmaps(void) const
+Array<Image *> * Image::generateMipmaps() const
 {
 	s32 weakest_link         = (m_dim.getWidth() > m_dim.getHeight()) ?
 		m_dim.getHeight() : m_dim.getWidth(); // the weakest (ie. smallest) dimension
 	s32 num_mipmaps          = 1;
-	array<Image *> * mipmaps = 0;
+	Array<Image *> * mipmaps = 0;
 	while ((weakest_link >>= 1) > 0)
 		num_mipmaps++;
-	mipmaps = new array<Image *>(num_mipmaps);
+	mipmaps = new Array<Image *>(num_mipmaps);
 	mipmaps->push_back(new Image(*this));
 	for (s32 i = 1; i < num_mipmaps; i++)
 		mipmaps->push_back(mipmaps->at(i-1)->generateNextMipmap());
@@ -254,7 +254,7 @@ array<Image *> * Image::generateMipmaps(void) const
 	return mipmaps;
 }
 
-Image * Image::generateNextMipmap(void) const
+Image * Image::generateNextMipmap() const
 {
 	Image * newimage = new Image(*this);
 	newimage->resize(dimension2i(m_dim.getWidth()/2, m_dim.getHeight()/2),
@@ -262,7 +262,7 @@ Image * Image::generateNextMipmap(void) const
 	return newimage;
 }
 
-bool Image::isPowerOfTwo(void) const
+bool Image::isPowerOfTwo() const
 {
 	s32 d;
 	for (d = 1; d < m_dim.getHeight(); d *= 2)

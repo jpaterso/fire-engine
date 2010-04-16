@@ -46,7 +46,7 @@ static const md2_animation_t md2_animation_list[EMAT_MAX_ANIMATIONS] =
     {198, 198,  5},   // BOOM
 };
 
-static const string md2_frame_names[EMAT_MAX_ANIMATIONS] =
+static const String md2_frame_names[EMAT_MAX_ANIMATIONS] =
 {
 	"stand", "run", "attack", "pain_A", "pain_B", "pain_C",
 	"jump", "flip", "salute", "fallback", "wave", "point",
@@ -66,8 +66,8 @@ AnimatedMeshMD2::AnimatedMeshMD2()
 	m_mesh_name = "";
 }
 
-AnimatedMeshMD2::AnimatedMeshMD2(const string& name, s32 num_frames, s32 vertices_per_frame,
-	Vertex3 * vertices, array<u32> * indices, ITexture * texture)
+AnimatedMeshMD2::AnimatedMeshMD2(const String& name, s32 num_frames, s32 vertices_per_frame,
+	Vertex3 * vertices, Array<u32> * indices, ITexture * texture)
 	: mNumFrames(num_frames), mNumVerticesPerFrame(vertices_per_frame),
 	  mVertices(vertices), mInterpolationBuffer(0), mIndices(indices),
 	  mTexture(texture), mBoundingBoxes(0)

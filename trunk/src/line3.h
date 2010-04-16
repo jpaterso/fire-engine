@@ -12,7 +12,7 @@
 #include "Types.h"
 #include "CompileConfig.h"
 #include "vector3.h"
-#include "string.h"
+#include "String.h"
 
 namespace fire_engine
 {
@@ -148,9 +148,9 @@ public:
 		return (*this);
 	}
 
-	string toString(void) const
+	String toString(void) const
 	{
-		return string("line3[ ") + m_pt.toString() + ",\n       " +
+		return String("line3[ ") + m_pt.toString() + ",\n       " +
 			m_dir.toString() + " ]";
 	}
 

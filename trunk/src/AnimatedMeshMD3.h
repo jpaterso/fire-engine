@@ -14,11 +14,11 @@
 #include "IMeshBuffer.h"
 #include "aabbox.h"
 #include "Vertex3.h"
-#include "array.h"
+#include "Array.h"
 #include "matrix4.h"
 #include "quaternion.h"
 #include "Material.h"
-#include "list.h"
+#include "List.h"
 
 namespace fire_engine
 {
@@ -29,7 +29,7 @@ class IRenderer;
 
 struct _FIRE_ENGINE_API_ MD3QuaternionTag
 {
-	string      Name;
+	String      Name;
 	quaternionf Rotation;
 	vector3f    Position;
 
@@ -50,7 +50,7 @@ class _FIRE_ENGINE_API_ MeshBufferMD3 : public IMeshBuffer
 {
 public:
 	/** Constructor. */
-	MeshBufferMD3(Vertex3 * vertices, array<u32> * indices, ITexture * texture,
+	MeshBufferMD3(Vertex3 * vertices, Array<u32> * indices, ITexture * texture,
 		s32 verts_per_frame, s32 num_frames);
 
 	/** Destructor. */
@@ -66,7 +66,7 @@ public:
 
 	virtual s32 getVertexCount() const;
 
-	virtual const array<u32> * getIndices() const;
+	virtual const Array<u32> * getIndices() const;
 
 	virtual const ITexture * getTexture() const;
 
@@ -79,7 +79,7 @@ public:
 
 private:
 	Vertex3 *         mVertices;
-	array<u32> *      mIndices;
+	Array<u32> *      mIndices;
 	ITexture *        mTexture;
 	Material          mMaterial;
 	aabboxf *  mBoundingBoxes;
@@ -110,7 +110,7 @@ class AnimatedMeshMD3 : public IAnimatedMesh
 public:
 	/** Constructor. */
 	AnimatedMeshMD3(MeshBufferMD3 ** buffers, s32 mbuffer_count, s32 frame_count,
-		array<MD3QuaternionTag*> * tags);
+		Array<MD3QuaternionTag*> * tags);
 
 	/** Destructor. */
 	virtual ~AnimatedMeshMD3();
@@ -137,7 +137,7 @@ public:
 	s32 getNumTags() const;
 
 	/** Returns the index of the tag in the tag Array, or -1 if it doesn't exist. */
-	s32 getTagIndex(const string& tagname) const;
+	s32 getTagIndex(const String& tagname) const;
 
 	/** Returns the interpolated quaternion transform for a given tag, between two given frames.
 	 \param tagIndex The Index of the tag, as returned by getTagIndex().
@@ -150,7 +150,7 @@ private:
 	MeshBufferMD3 **           mBuffers;
 	s32                        mBufferCount;
 	s32                        mFrameCount;
-	array<MD3QuaternionTag*> * mTags;
+	Array<MD3QuaternionTag*> * mTags;
 
 	aabboxf  mInterpolationBoundingBox;
 };

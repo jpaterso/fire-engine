@@ -7,7 +7,7 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "string.h"
+#include "String.h"
 #include "IFileProvider.h"
 
 namespace fire_engine
@@ -23,18 +23,18 @@ class _FIRE_ENGINE_API_ DirectoryFileProvider : public IFileProvider
 public:
 	/** Construct a file provider from a given directory name, which 
 	 can be either a full path or a relative path. */
-	DirectoryFileProvider(const string& directory);
+	DirectoryFileProvider(const String& directory);
 
 	virtual ~DirectoryFileProvider();
 
-	virtual IFile * openFile(const string& filename, bool ignoreCase, u32 flags);
+	virtual IFile * openFile(const String& filename, bool ignoreCase, u32 flags);
 
-	virtual bool contains(const string& filename, bool ignoreCase);
+	virtual bool contains(const String& filename, bool ignoreCase);
 
 	virtual bool isReady() const;
 
 private:
-	string DirectoryName;
+	String DirectoryName;
 };
 
 

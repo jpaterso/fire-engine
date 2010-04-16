@@ -14,7 +14,7 @@
 #include "IMeshBuffer.h"
 #include "vector3.h"
 #include "vector2.h"
-#include "array.h"
+#include "Array.h"
 #include "Object.h"
 #include "Vertex3.h"
 #include "AnimatedModel.h"
@@ -69,8 +69,8 @@ public:
 	 \param vertices   The vertices.
 	 \param indices    The indices to the vertices.
 	 \param texture    The texture to use for the model */
-	AnimatedMeshMD2(const string& name, s32 num_frames, s32 vertices_per_frame,
-		Vertex3 * vertices, array<u32> * indices, ITexture * texture);
+	AnimatedMeshMD2(const String& name, s32 num_frames, s32 vertices_per_frame,
+		Vertex3 * vertices, Array<u32> * indices, ITexture * texture);
 
 	//! Dtor
 	virtual ~AnimatedMeshMD2();
@@ -95,7 +95,7 @@ public:
 	virtual inline s32 _getOriginalVertexCount();
 	virtual inline const Vertex3 * getVertices() const;
 	virtual inline s32 getVertexCount() const;
-	virtual inline const array<u32> * getIndices() const;
+	virtual inline const Array<u32> * getIndices() const;
 	virtual inline const ITexture * getTexture() const;
 
 	/** Set the frame loop for an MD2 model. Use this instead of the other
@@ -120,12 +120,12 @@ public:
 	virtual aabboxf getBoundingBox(s32 first, s32 second, f32 ipol) const;
 
 private:
-	string                 m_mesh_name;
+	String                 m_mesh_name;
 	s32                    mNumFrames;
 	s32                    mNumVerticesPerFrame;
 	Vertex3 *              mVertices;
 	Vertex3 *              mInterpolationBuffer;
-	array<u32> *           mIndices;
+	Array<u32> *           mIndices;
 	ITexture *             mTexture;
 	Material               mMaterial;
 	aabboxf *       mBoundingBoxes;
@@ -191,7 +191,7 @@ inline EPOLYGON_TYPE AnimatedMeshMD2::getPolygonType() const
 	return EPT_TRIANGLES;
 }
 
-inline const array<u32> * AnimatedMeshMD2::getIndices() const
+inline const Array<u32> * AnimatedMeshMD2::getIndices() const
 {
 	return mIndices;
 }

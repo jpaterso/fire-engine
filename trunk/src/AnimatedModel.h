@@ -12,7 +12,7 @@
 #include "Types.h"
 #include "CompileConfig.h"
 #include "IModel.h"
-#include "array.h"
+#include "Array.h"
 #include "Material.h"
 
 namespace fire_engine
@@ -60,7 +60,7 @@ public:
 
 protected:
 	IAnimatedMesh *  mMesh;
-	array<Material>  mMaterials;
+	Array<Material>  mMaterials;
 
 	/** Contains information about the current rendering state of the model. */
 	typedef struct

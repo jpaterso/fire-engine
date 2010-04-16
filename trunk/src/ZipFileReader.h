@@ -9,13 +9,13 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "array.h"
+#include "Array.h"
 #include "IFileProvider.h"
 
 namespace fire_engine
 {
 
-class string;
+class String;
 
 namespace io
 {
@@ -54,8 +54,8 @@ public:
 public:
 	struct ZipFileEntry
 	{
-		string Name;
-		string FullName;
+		String Name;
+		String FullName;
 		s32    Offset;
 		zip_local_file_header_t ZipHeader;
 	};
@@ -63,7 +63,7 @@ public:
 public:
 	ZipFileReader();
 
-	ZipFileReader(const string& filename);
+	ZipFileReader(const String& filename);
 
 	virtual ~ZipFileReader();
 
@@ -72,7 +72,7 @@ public:
 	 \param ignore_case Set this to true if the name is case-insensitive.
 	 \param ignore_dirs Set this to true if the directory should be ignored when searching, ie.
 	                    that the file can be anywhere in the archive. */
-	IFile * getFile(const string& filename, bool ignore_case = true, bool ignore_dirs = false);
+	IFile * getFile(const String& filename, bool ignore_case = true, bool ignore_dirs = false);
 
 	/** Returns a pointer to file at position index in the list of files. */
 	IFile * getFile(s32 index);
@@ -84,24 +84,24 @@ public:
 	                    or not. Note that if this is true, filename can still contain
 						directory information which will be ignored during the search.
 	 \return            The index of the file in the archive, or -1 if it's not there. */
-	s32 indexOf(const string& filename, bool ignore_case = false, bool ignore_dirs = false);
+	s32 indexOf(const String& filename, bool ignore_case = false, bool ignore_dirs = false);
 
 	/** Returns true if the archive contains the file specified by filename, false otherwise. */
-	bool contains(const string& filename, bool ignore_case = false, bool ignore_dirs = false);
+	bool contains(const String& filename, bool ignore_case = false, bool ignore_dirs = false);
 
 	/** Returns an Array containing information about all the files contained within
 	 the .ZIP archive. */
-	const array<ZipFileEntry> * getEntries() const;
+	const Array<ZipFileEntry> * getEntries() const;
 
-	virtual IFile * openFile(const string& filename, bool ignoreCase, u32 flags);
+	virtual IFile * openFile(const String& filename, bool ignoreCase, u32 flags);
 
-	virtual bool contains(const string& filename, bool ignoreCase);
+	virtual bool contains(const String& filename, bool ignoreCase);
 
 	virtual bool isReady() const;
 
 private:
 	IFile *             ZipArchive;
-	array<ZipFileEntry> FileEntries;
+	Array<ZipFileEntry> FileEntries;
 
 	/** Look for the next local file header, read it, and insert it into the list of files.
 	 \return true if a local file header was found, false otherwise. */

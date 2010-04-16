@@ -10,7 +10,7 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "string.h"
+#include "String.h"
 
 namespace fire_engine{
 
@@ -137,9 +137,9 @@ public:
 		return dimension2<T>(static_cast<T>(mWidth*val), static_cast<T>(mHeight*val));
 	}
 
-	string toString(void) const
+	String toString() const
 	{
-		return string("dimension2[ ") + mWidth + " x " + mHeight + " ]";
+		return String("dimension2[ ") + mWidth + " x " + mHeight + " ]";
 	}
 
 private:

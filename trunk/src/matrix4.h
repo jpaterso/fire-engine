@@ -13,7 +13,7 @@
 #include "CompileConfig.h"
 #include "vector3.h"
 #include "Math.h"
-#include "string.h"
+#include "String.h"
 #include "quaternion.h"
 #include "aabbox.h"
 
@@ -792,9 +792,9 @@ public:
 	}
 
 	/** Returns a textual representation of the matrix. */
-	string toString(void) const
+	String toString() const
 	{
-		string mt("matrix4[ ");
+		String mt("matrix4[ ");
 		for (s32 i = 0; i < 16; i++)
 		{
 			if (i > 0 && i % 4 == 0)

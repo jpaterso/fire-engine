@@ -10,8 +10,8 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "string.h"
-#include <string.h>
+#include "String.h"
+#include <String.h>
 
 namespace fire_engine
 {
@@ -156,9 +156,9 @@ public:
 		return *this;
 	}
 
-	string toString() const
+	String toString() const
 	{
-		return string("Color[ ") + mRed + ", " + mGreen + ", " + mBlue
+		return String("Color[ ") + mRed + ", " + mGreen + ", " + mBlue
 		+ ", " + mAlpha + " ]";
 	}
 

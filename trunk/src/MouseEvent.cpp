@@ -6,7 +6,7 @@
 **/
 
 #include "MouseEvent.h"
-#include "string.h"
+#include "String.h"
 
 namespace fire_engine
 {
@@ -72,10 +72,10 @@ dimension2i MouseEvent::getPoint(void) const
 	return m_point;
 }
 
-string MouseEvent::toString(void) const
+String MouseEvent::toString(void) const
 {
-	string button;
-	string type;
+	String button;
+	String type;
 	switch (m_button)
 	{
 		case MBUTTON1:   button = "BUTTON 1";   break;
@@ -94,7 +94,7 @@ string MouseEvent::toString(void) const
 		case MOUSE_DRAGGED:  type = "DRAGGED";  break;
 #endif
 	}
-	return string("MouseEvent:")+getMasks()+" "+button+ " "+type+m_click_count+" CLICKS AT "+
+	return String("MouseEvent:")+getMasks()+" "+button+ " "+type+m_click_count+" CLICKS AT "+
 		m_point.toString();
 }
 

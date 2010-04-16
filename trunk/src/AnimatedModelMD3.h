@@ -44,7 +44,7 @@ public:
 	 \param tagname The tag to attach itself to.
 	 \return        true if the mode was correctly attached to its parent (ie. if tagname was a
 	                valid tag), false otherwise. */
-	bool attach(AnimatedModelMD3 * parent, const string& tagname);
+	bool attach(AnimatedModelMD3 * parent, const String& tagname);
 
 	/** Returns a pointer to the MD3 mesh. */
 	const AnimatedMeshMD3 * getMD3Mesh() const;

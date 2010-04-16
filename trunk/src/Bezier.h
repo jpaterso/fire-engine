@@ -10,7 +10,7 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "array.h"
+#include "Array.h"
 #include "vector3.h"
 
 namespace fire_engine
@@ -26,8 +26,8 @@ class _FIRE_ENGINE_API_ Bezier
 		 * @return          An Array containing numpoints, interpolated from the control points.
 		**/
 		template <class T>
-		static array< vector3<T> > *
-		GenerateBezierCurve(const array< vector3<T> >& cpoints, s32 numpoints);
+		static Array< vector3<T> > *
+		GenerateBezierCurve(const Array< vector3<T> >& cpoints, s32 numpoints);
 
 	private:
 		/**
@@ -39,14 +39,14 @@ class _FIRE_ENGINE_API_ Bezier
 		**/
 		template <class T>
 		static vector3<T>
-		PointOnCurve(const array< vector3<T> >& cpoints, T time);
+		PointOnCurve(const Array< vector3<T> >& cpoints, T time);
 };
 
 template <class T>
-array< vector3<T> > *
-Bezier::GenerateBezierCurve(const array< vector3<T> >& cpoints, s32 numpoints)
+Array< vector3<T> > *
+Bezier::GenerateBezierCurve(const Array< vector3<T> >& cpoints, s32 numpoints)
 {
-	array< vector3<T> > * points = new array< vector3<T> >(numpoints);
+	Array< vector3<T> > * points = new Array< vector3<T> >(numpoints);
 	T time = 0.0;
 	T time_increment = 1.0 / numpoints;
 	while (time < 1.0)
@@ -59,7 +59,7 @@ Bezier::GenerateBezierCurve(const array< vector3<T> >& cpoints, s32 numpoints)
 
 template <class T>
 vector3<T>
-Bezier::PointOnCurve(const array< vector3<T> >& cpoints, T time)
+Bezier::PointOnCurve(const Array< vector3<T> >& cpoints, T time)
 {
 	vector3<T> point(0.0, 0.0, 0.0);
 	T factor = Math<T>::PowInt(1.0-time, cpoints.size());;

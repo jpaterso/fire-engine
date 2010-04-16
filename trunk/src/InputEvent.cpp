@@ -6,7 +6,7 @@
 **/
 
 #include "InputEvent.h"
-#include "string.h"
+#include "String.h"
 
 namespace fire_engine
 {
@@ -52,14 +52,14 @@ bool InputEvent::isConsumed(void) const
 	return m_is_consumed;
 }
 
-string InputEvent::toString(void) const
+String InputEvent::toString(void) const
 {
-	return string("InputEvent:") + getMasks();
+	return String("InputEvent:") + getMasks();
 }
 
-string InputEvent::getMasks(void) const
+String InputEvent::getMasks(void) const
 {
-	string masks;
+	String masks;
 	if (m_mask == 0x00)
 		masks += " NO MASKS";
 	else

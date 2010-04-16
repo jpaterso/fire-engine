@@ -8,7 +8,7 @@
 #include "IMesh.h"
 #include "IMeshBuffer.h"
 #include "Vertex3.h"
-#include "array.h"
+#include "Array.h"
 
 namespace fire_engine
 {

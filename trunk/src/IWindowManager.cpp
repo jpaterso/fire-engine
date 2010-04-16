@@ -59,7 +59,7 @@ bool IWindowManager::removeResizable(IResizable * const resizable)
 	return mResizableItems.removeElement(resizable);
 }
 
-const list<IResizable*>& IWindowManager::_getResizableItems() const
+const List<IResizable*>& IWindowManager::_getResizableItems() const
 {
 	return mResizableItems;
 }

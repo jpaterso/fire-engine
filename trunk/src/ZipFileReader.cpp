@@ -28,7 +28,7 @@ ZipFileReader::ZipFileReader()
 #endif
 }
 
-ZipFileReader::ZipFileReader(const string& filename)
+ZipFileReader::ZipFileReader(const String& filename)
 {
 #if defined(_FIRE_ENGINE_DEBUG_OBJECT_)
 	setDebugName("fire_engine::io::ZipFileReader");
@@ -62,17 +62,17 @@ bool ZipFileReader::isReady() const
 	return ZipArchive != nullptr;
 }
 
-IFile * ZipFileReader::getFile(const string& filename, bool ignore_case, bool ignore_dirs)
+IFile * ZipFileReader::getFile(const String& filename, bool ignore_case, bool ignore_dirs)
 {
 	return getFile(indexOf(filename, ignore_case, ignore_dirs));
 }
 
-IFile * ZipFileReader::openFile(const string& filename, bool ignoreCase, u32 flags)
+IFile * ZipFileReader::openFile(const String& filename, bool ignoreCase, u32 flags)
 {
 	return getFile(indexOf(filename, ignoreCase, false));
 }
 
-bool ZipFileReader::contains(const string& filename, bool ignoreCase)
+bool ZipFileReader::contains(const String& filename, bool ignoreCase)
 {
 	return indexOf(filename, ignoreCase, false) != -1;
 }
@@ -105,17 +105,17 @@ IFile * ZipFileReader::getFile(s32 index)
 	return retval;
 }
 
-s32 ZipFileReader::indexOf(const string& filename, bool ignore_case, bool ignore_dirs)
+s32 ZipFileReader::indexOf(const String& filename, bool ignore_case, bool ignore_dirs)
 {
 	s32 index = -1;
-	bool (*equals)(const string&, const string&) = string::equals;
+	bool (*equals)(const String&, const String&) = String::equals;
 	if (ignore_case)
 	{
-		equals = string::equalsIgnoreCase;
+		equals = String::equalsIgnoreCase;
 	}
 	if (ignore_dirs)
 	{
-		string filename_dirsIgnored = FileUtils::StripDirectory(filename);
+		String filename_dirsIgnored = FileUtils::StripDirectory(filename);
 		for (s32 i = 0; i < FileEntries.size(); i++)
 		{
 			if (equals(filename_dirsIgnored, FileEntries[i].Name))
@@ -139,12 +139,12 @@ s32 ZipFileReader::indexOf(const string& filename, bool ignore_case, bool ignore
 	return index;
 }
 
-bool ZipFileReader::contains(const string& filename, bool ignore_case, bool ignore_dirs)
+bool ZipFileReader::contains(const String& filename, bool ignore_case, bool ignore_dirs)
 {
 	return indexOf(filename, ignore_case, ignore_dirs) != -1;
 }
 
-const array<ZipFileReader::ZipFileEntry> * ZipFileReader::getEntries() const
+const Array<ZipFileReader::ZipFileEntry> * ZipFileReader::getEntries() const
 {
 	return &FileEntries;
 }
@@ -177,7 +177,7 @@ bool ZipFileReader::scanLocalFileHeader()
 	name = new c8[entry.ZipHeader.FilenameLen+1];
 	name[entry.ZipHeader.FilenameLen] = '\0';
 	ZipArchive->read(name, entry.ZipHeader.FilenameLen);
-	entry.FullName = string(name);
+	entry.FullName = String(name);
 	FileUtils::ConvertPath(entry.FullName);
 	entry.Name = FileUtils::StripDirectory(entry.FullName);
 	delete [] name;

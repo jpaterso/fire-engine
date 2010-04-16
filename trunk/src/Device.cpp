@@ -29,7 +29,7 @@ namespace fire_engine
 
 Device * Device::mInstance = 0;
 
-Device::Device(EDRIVER_TYPE dType, const dimension2i& size, const string& title, const c8 * lang)
+Device::Device(EDRIVER_TYPE dType, const dimension2i& size, const String& title, const c8 * lang)
 	: Object(), mIsRunning(true)
 {
 #if defined(_FIRE_ENGINE_DEBUG_OBJECT_)
@@ -49,15 +49,15 @@ Device::Device(EDRIVER_TYPE dType, const dimension2i& size, const string& title,
 		mRenderer = OpenGLRenderer::Create();
 #else
 	Logger::Get()->log(ES_CRITICAL,
-		string("Device"),
-		string("Only OpenGL is currently supported"));
+		String("Device"),
+		String("Only OpenGL is currently supported"));
 #endif
 #if defined(_FIRE_ENGINE_WIN32_)
 	mWindowManager = WindowManagerWin32::Create(dType, size, title);
 #else
 	Logger::Get()->log(ES_CRITICAL,
-		string("Device"),
-		string("Only Win32 systems are currently supported"));
+		String("Device"),
+		String("Only Win32 systems are currently supported"));
 #endif
 
 	mSceneManager = SceneManager::Create(mRenderer);
@@ -66,7 +66,7 @@ Device::Device(EDRIVER_TYPE dType, const dimension2i& size, const string& title,
 	mRenderer->onResize(mWindowManager->getWindowSize());
 }
 
-Device * Device::Create(EDRIVER_TYPE dType, const dimension2i& size, const string& title, const c8 * lang)
+Device * Device::Create(EDRIVER_TYPE dType, const dimension2i& size, const String& title, const c8 * lang)
 {
 	if (mInstance == 0)
 		mInstance = new Device(dType, size, title, lang);

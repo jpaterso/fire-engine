@@ -19,7 +19,7 @@ namespace fire_engine
 {
 
 class Q3Map;
-class string;
+class String;
 class ITexture;
 
 namespace io
@@ -35,7 +35,7 @@ public:
 	virtual ~Q3MapLoader();
 
 	//! Implementations for ILoader
-	virtual Q3Map * load(const string& filename, io::IFileProvider * fileProvider) const;
+	virtual Q3Map * load(const String& filename, io::IFileProvider * fileProvider) const;
 
 private:
 	/** Swizzle a Quake III vector: set Y to Z, and set Z to -Y. */

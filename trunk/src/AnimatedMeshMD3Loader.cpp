@@ -9,10 +9,10 @@
 #include "AnimatedMeshMD3.h"
 #include "Logger.h"
 #include "ByteConverter.h"
-#include "string.h"
+#include "String.h"
 #include "IFile.h"
 #include "FileSystem.h"
-#include "array.h"
+#include "Array.h"
 #include "Vertex3.h"
 #include "Device.h"
 #include "IRenderer.h"
@@ -34,14 +34,14 @@ AnimatedMeshMD3Loader::~AnimatedMeshMD3Loader()
 {
 }
 
-AnimatedMeshMD3 * AnimatedMeshMD3Loader::load(const string& filename, io::IFileProvider * fileProvider) const
+AnimatedMeshMD3 * AnimatedMeshMD3Loader::load(const String& filename, io::IFileProvider * fileProvider) const
 {
 	md3_header_t header;
 	md3_bone_frame_t * bone_frames = nullptr;
 	md3_tag_t * tags = nullptr;
 	md3_mesh_header_t * mesh_headers =nullptr;
 	MeshBufferMD3 ** meshes = nullptr;
-	array<MD3QuaternionTag*> * tagArray = nullptr;
+	Array<MD3QuaternionTag*> * tagArray = nullptr;
 	AnimatedMeshMD3 * mesh = nullptr;
 	io::IFile * file = io::FileSystem::Get()->openReadFile(filename, false, io::EFOF_READ|io::EFOF_BINARY, fileProvider);
 
@@ -128,7 +128,7 @@ AnimatedMeshMD3 * AnimatedMeshMD3Loader::load(const string& filename, io::IFileP
 	/* Create the tags
 	 They are stored sorted on KEYFRAME, not on the tag name, so for tags A, B, C,
 	 it will look like A1 B1 C1 A2 B2 C2 ... */
-	tagArray = new array<MD3QuaternionTag*>(header.num_tags);
+	tagArray = new Array<MD3QuaternionTag*>(header.num_tags);
 	for (s32 i = 0; i < header.num_tags; i++)
 	{
 		MD3QuaternionTag * tags_for_frames = new MD3QuaternionTag[header.num_bone_frames];
@@ -144,7 +144,7 @@ AnimatedMeshMD3 * AnimatedMeshMD3Loader::load(const string& filename, io::IFileP
 
 	meshes = new MeshBufferMD3*[header.num_meshes];
 	Vertex3 * vertices = nullptr;
-	array<u32> * indices = nullptr;
+	Array<u32> * indices = nullptr;
 	md3_vertex_t * frame_vertices = nullptr;
 	md3_triangle_t * triangles = nullptr;
 	md3_tex_coords_t * tex_coords = nullptr;
@@ -228,7 +228,7 @@ AnimatedMeshMD3 * AnimatedMeshMD3Loader::load(const string& filename, io::IFileP
 				tex_coords[j%mesh_headers[i].num_verts][1]);
 		}
 
-		indices = new array<u32>(mesh_headers[i].num_triangles*3);
+		indices = new Array<u32>(mesh_headers[i].num_triangles*3);
 		for (s32 j = 0; j < mesh_headers[i].num_triangles; j++)
 		{
 			// MD3 uses clock-wise triangles, so invert them

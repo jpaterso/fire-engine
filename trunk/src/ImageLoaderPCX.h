@@ -19,7 +19,7 @@ namespace fire_engine
 {
 
 class Image;
-class string;
+class String;
 
 namespace io
 {
@@ -60,10 +60,10 @@ public:
 	virtual ~ImageLoaderPCX();
 
 	//! Implementation for ILoader
-	virtual Image * load(const string& filename, io::IFileProvider * fileProvider) const;
+	virtual Image * load(const String& filename, io::IFileProvider * fileProvider) const;
 
 	//! Implementations for IWriter
-	virtual bool write(const string& filename, const Image * image) const;
+	virtual bool write(const String& filename, const Image * image) const;
 
 private:
 	u8 * decompressRLE(PCXHeader pcxh, io::IFile * file) const;

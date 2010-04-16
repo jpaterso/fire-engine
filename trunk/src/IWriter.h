@@ -11,7 +11,7 @@
 
 #include "Types.h"
 #include "CompileConfig.h"
-#include "string.h"
+#include "String.h"
 
 namespace fire_engine
 {
@@ -28,7 +28,7 @@ public:
 	}
 
 	//! Write an object to disk
-	virtual bool write(const string& filename, const Obj * object) const = 0;
+	virtual bool write(const String& filename, const Obj * object) const = 0;
 };
 
 }

@@ -19,7 +19,7 @@
 namespace fire_engine
 {
 
-class string;
+class String;
 
 namespace io
 {
@@ -93,7 +93,7 @@ public:
 	virtual ~AnimatedMeshMD2Loader();
 
 	//! Implementation for ILoader
-	virtual AnimatedMeshMD2 * load(const string& filename, io::IFileProvider * fileProvider) const;
+	virtual AnimatedMeshMD2 * load(const String& filename, io::IFileProvider * fileProvider) const;
 
 private:
 	static vector3f m_normal_list[__FIRE_ENGINE_MAX_MD2_NORMALS];

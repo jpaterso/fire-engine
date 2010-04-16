@@ -127,8 +127,8 @@ LightSpaceNode * SceneManager::addDynamicLight(Light * light)
 	return lsn;
 }
 
-SkyBox * SceneManager::addSkyBox(const string& ft, const string& bk, const string& up,
-	const string& dn, const string& lt, const string& rt)
+SkyBox * SceneManager::addSkyBox(const String& ft, const String& bk, const String& up,
+	const String& dn, const String& lt, const String& rt)
 {
 	SkyBox * sk = new SkyBox(mRenderer, ft, bk, up, dn, lt, rt);
 	if (mSkyBox != 0)
@@ -159,7 +159,7 @@ const Camera * SceneManager::getActiveCamera() const
 	return mActiveCamera;
 }
 
-void SceneManager::registerScreenShotDemand(const string& filename)
+void SceneManager::registerScreenShotDemand(const String& filename)
 {
 	mScreenshotInfo.mWantScreenshot     = true;
 	mScreenshotInfo.mScreenshotFilename = filename;
