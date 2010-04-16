@@ -220,7 +220,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\src\array.h"
+			RelativePath="..\src\Array.h"
 			>
 		</File>
 		<File
@@ -273,6 +273,10 @@
 		</File>
 		<File
 			RelativePath="..\src\CompileConfig.h"
+			>
+		</File>
+		<File
+			RelativePath="..\src\Counter.h"
 			>
 		</File>
 		<File
@@ -333,10 +337,6 @@
 		</File>
 		<File
 			RelativePath="..\src\Hash.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\src\Hash.h"
 			>
 		</File>
 		<File
@@ -520,7 +520,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\src\list.h"
+			RelativePath="..\src\List.h"
 			>
 		</File>
 		<File
@@ -672,11 +672,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\src\string.cpp"
+			RelativePath="..\src\String.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\string.h"
+			RelativePath="..\src\String.h"
 			>
 		</File>
 		<File

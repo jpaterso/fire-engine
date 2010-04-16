@@ -25,6 +25,7 @@
 #include "CameraFPS.h"
 #include "color.h"
 #include "ColorConverter.h"
+#include "Counter.h"
 #include "Device.h"
 #include "dimension2.h"
 #include "DirectoryFileProvider.h"
