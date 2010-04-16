@@ -50,7 +50,7 @@ class _FIRE_ENGINE_API_ Material
 {
 public:
 	/** Create a Material with a name. */
-	Material(const String& name = "");
+	Material(const String& name = String("Default Material Name"));
 
 	/** Material constructor from another Material. */
 	Material(const Material& other);
@@ -59,22 +59,22 @@ public:
 	virtual ~Material();
 
 	/** Returns the ambient color. */
-	inline const Color32& getAmbient(void) const;
+	inline const Color32& getAmbient() const;
 
 	/** Returns the diffuse color. */
-	inline const Color32& getDiffuse(void) const;
+	inline const Color32& getDiffuse() const;
 
 	/** Returns the specular color. */
-	inline const Color32& getSpecular(void) const;
+	inline const Color32& getSpecular() const;
 
 	/** Returns the shininess color. */
-	inline const Color32& getEmissive(void) const;
+	inline const Color32& getEmissive() const;
 
 	/** Returns the shininess factor. */
-	inline f32	getShininess(void) const;
+	inline f32	getShininess() const;
 
 	/** Returns the name of the Material */
-	inline const String& getName(void) const;
+	inline const String& getName() const;
 
 	/** Sets the ambient color. */
 	inline void setAmbient(const Color32& ambient);
@@ -127,32 +127,32 @@ private:
 
 };
 
-inline const Color32& Material::getAmbient(void) const
+inline const Color32& Material::getAmbient() const
 {
 	return m_ambient;
 }
 
-inline const Color32& Material::getDiffuse(void) const
+inline const Color32& Material::getDiffuse() const
 {
 	return m_diffuse;
 }
 
-inline const Color32& Material::getSpecular(void) const
+inline const Color32& Material::getSpecular() const
 {
 	return m_specular;
 }
 
-inline const Color32& Material::getEmissive(void) const
+inline const Color32& Material::getEmissive() const
 {
 	return m_emissive;
 }
 
-inline f32	Material::getShininess(void) const
+inline f32	Material::getShininess() const
 {
 	return m_shininess;
 }
 
-inline const String& Material::getName(void) const
+inline const String& Material::getName() const
 {
 	return m_name;
 }

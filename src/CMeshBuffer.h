@@ -11,8 +11,10 @@ namespace fire_engine
 class _FIRE_ENGINE_API_ CMeshBuffer : public virtual IMeshBuffer
 {
 public:
-	CMeshBuffer(Vertex3 * vertices, s32 vertexCount, array<u32> * indices, EPOLYGON_TYPE polygonType, Material mat)
-		: Vertices(vertices), Indices(indices), PolygonType(polygonType), VertexCount(vertexCount), Material(mat)
+	CMeshBuffer(Vertex3 * vertices, s32 vertexCount, Array<u32> * indices, 
+		EPOLYGON_TYPE polygonType, Material mat)
+		: Vertices(vertices), Indices(indices), PolygonType(polygonType), 
+		  VertexCount(vertexCount), Mat(mat)
 	{
 	}
 
@@ -49,7 +51,7 @@ public:
 		return VertexCount;
 	}
 
-	virtual const array<u32> * getIndices() const
+	virtual const Array<u32> * getIndices() const
 	{
 		return Indices;
 	}
@@ -81,14 +83,15 @@ public:
 	{
 		return BoundingBox;
 	}
-private:
-	Vertex3 *      Vertices;
-	s32            VertexCount;
-	array<u32> *   Indices;
-	EPOLYGON_TYPE  PolygonType;
-	ITexture *     Texture;
-	Material       Mat;
-	aabboxf BoundingBox;
+
+protected:
+	Vertex3 *     Vertices;
+	s32           VertexCount;
+	Array<u32> *  Indices;
+	EPOLYGON_TYPE PolygonType;
+	ITexture *    Texture;
+	Material      Mat;
+	aabboxf       BoundingBox;
 };
 
 

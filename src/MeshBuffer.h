@@ -40,8 +40,6 @@ public:
 
 	virtual inline Material getMaterial() const;
 
-	virtual s32 render(IRenderer * rd);
-
 	virtual inline const AABoundingBoxf& getBoundingBox() const;
 
 private:

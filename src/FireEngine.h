@@ -67,7 +67,7 @@
 #include "MemoryFile.h"
 #include "MeshModifier.h"
 #include "MouseEvent.h"
-//#include "Octree.h"
+#include "Octree.h"
 #include "plane3.h"
 #include "quaternion.h"
 #include "Q3Map.h"
