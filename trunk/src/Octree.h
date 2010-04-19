@@ -59,15 +59,15 @@ public:
 private:
 	void buildTree()
 	{
-		TreeRoot = new OctreeNode(Mesh, 0, MaxPolyCount);
+		TreeRoot = new OctreeNode(this, 0, MaxPolyCount, nullptr, true);
 	}
 
-	/** A piece of a Mesh Buffer stored in a leaf node of the Octree. */
+	/** A piece of a Mesh Buffer stored in a leaf node of the Octree.
 	class _FIRE_ENGINE_API_ OctreeMeshBufferChunk : public CMeshBuffer
 	{
 	public:
 		OctreeMeshBufferChunk(Vertex3 * vertices, s32 vertexCount, 
-			Array<u32> * indices, EPOLYGON_TYPE polygonType, Material Mat)
+			Array<u32> * indices, EPOLYGON_TYPE polygonType, Material mat)
 			: CMeshBuffer(vertices, vertexCount, indices, polygonType, mat)
 		{
 		}
@@ -75,107 +75,25 @@ private:
 		virtual ~OctreeMeshBufferChunk()
 		{
 		}
-	};
+	}; */
 
 	/** A node in the Octree. */
     class _FIRE_ENGINE_API_ OctreeNode
     {
     public:
-        OctreeNode(IMesh * mesh, u32 depth, u32 maxPolyCount, bool shareVertices = true)
-			: Depth(depth), ShareVertices(shareVertices)
+        OctreeNode(Octree * tree, u32 depth, u32 maxPolyCount, Array<u32> ** indices, bool shareVertices)
+			: Depth(depth)
         {
-			if (ShareVertices && Depth = 0)
+			/*if (ShareVertices && Depth = 0)
 			{
-				Vertices = new Vertex3*[mesh->getMeshBufferCount()];
-				for (u32 i = 0; i < mesh->getMeshBufferCount(); i++)
+				//Vertices = new Vertex3*[mesh->getMeshBufferCount()];
+				for (u32 i = 0; i < tree->Mesh->getMeshBufferCount(); i++)
 				{
-					Vertices[i] = mesh->getMeshBuffer(i)->getVertices();
+					//Vertices[i] = mesh->getMeshBuffer(i)->getVertices();
 				}
-			}
+			}*/
 
-			u32 polyCount = 0;
-			for (u32 i = 0; i < mesh->getMeshBufferCount; i++)
-			{
-				IMeshBuffer * mb = mesh->getMeshBuffer(i);
-				const Vertex3 * verts = mb->getVertices();
-				for (u32 j = 0; j < mb->getVertexCount(); j++)
-				{
-					Box.addInternalPoint(verts[j].getPosition());
-				}
-
-				polyCount += mb->getPolygonCount();
-			}
-
-			if (polyCount > maxPolyCount)
-			{
-				IsLeaf = false;
-				aabbox<T> childBox[8];
-				calculateChildBoundingBoxes(childBox);
-
-				for (u32 i = 0; i < mesh->getMeshBufferCount(); i++)
-				{
-					IMeshBuffer * mb = mesh->getMeshBuffer(i);
-					const Vertex3 * meshVertices = mb->getVertices();
-					const Array<u32> * meshIndices =  mb->getIndices();
-					for (u32 j = 0; j < 8; j++)
-					{
-						IMeshBuffer * chunk = nullptr;
-						Array<s32> indices;
-						switch (mb->getPolygonType())
-						{
-						case EPT_POINTS:
-							break;
-						case EPT_LINES:
-							break;
-						case EPT_TRIANGLES:
-							for (u32 k = 0; k < meshIndices->size(); k+=3)
-							{
-								if (childBox[j].contains(meshVertices[k].getPosition()) ||
-									childBox[j].contains(meshVertices[k+1].getPosition()) ||
-									childBox[j].contains(meshVertices[k+2].getPosition()))
-								{
-									indices.push_back(k);
-									indices.push_back(k+1);
-									indices.push_back(k+2);
-								}
-							}
-							break;
-						case EPT_QUADS:
-							for (u32 k = 0; k < meshIndices->size(); k+=4)
-							{
-								if (childBox[j].contains(meshVertices[k].getPosition()) ||
-									childBox[j].contains(meshVertices[k+1].getPosition()) ||
-									childBox[j].contains(meshVertices[k+2].getPosition()) ||
-									childBox[j].contains(meshVertices[k+3].getPosition()))
-								{
-									indices.push_back(k);
-									indices.push_back(k+1);
-									indices.push_back(k+2);
-									indices.push_back(k+3);
-								}
-							}
-							break;
-						case EPT_TRIANGLE_STRIP:
-							break;
-						case EPT_TRIANGLE_FAN:
-							break;
-						}
-
-						if (indices.size() > 0)
-						{
-							Children[i] = new OctreeNode(null, depth+1, maxPolyCount);
-						}
-						else
-						{
-							Children[i] = nullptr;
-						}
-					}
-				}
-			}
-			else
-			{
-				IsLeaf = true;
-			}
+			buildNode(tree, maxPolyCount, nullptr);
         }
 
         virtual ~OctreeNode()
@@ -190,18 +108,6 @@ private:
 					}
 				}
             }
-
-			if (Vertices != nullptr)
-			{
-				if (ShareVertices && Depth == 0)
-				{
-					//delete [] Vertices;
-				}
-				else if (!ShareVertices)
-				{
-					//delete [] Vertices;
-				}
-			}
         }
 
         inline bool isLeaf() const
@@ -211,12 +117,152 @@ private:
 
     private:
 		u32                     Depth;
-		bool                    ShareVertices;
 		bool                    IsLeaf;
-		OctreeMeshBufferChunk * Chunks;
+		IMesh *                 OriginalMesh;
+		Octree *                Tree;
         OctreeNode *            Children[8];
-        const Vertex3 **        Vertices;
         aabbox<T>               Box;
+
+		void buildNode(Octree * tree, u32 maxPolyCount, Array<u32> ** indices)
+		{
+			u32 polyCount = 0;
+			s32 meshBufferCount = tree->Mesh->getMeshBufferCount(); 
+
+			if (indices == nullptr)
+			{
+				for (s32 i = 0; i < meshBufferCount; i++)
+				{
+					IMeshBuffer * mb = tree->Mesh->getMeshBuffer(i);
+					const Vertex3 * verts = mb->getVertices();
+					for (s32 j = 0; j < mb->getVertexCount(); j++)
+					{
+						Box.addInternalPoint(verts[j].getPosition());
+					}
+
+					polyCount += mb->getPolygonCount();
+				}
+			}
+			else
+			{
+				for (s32 i = 0; i < meshBufferCount; i++)
+				{
+					if (indices[i] != nullptr)
+					{
+						IMeshBuffer * mb = tree->Mesh->getMeshBuffer(i);
+						const Vertex3 * verts = mb->getVertices();
+						for (s32 j = 0; j < indices[i]->size(); j++)
+						{
+							Box.addInternalPoint(verts[indices[i]->at(j)].getPosition());
+						}
+						polyCount += indices[i]->size();
+					}
+				}
+			}
+
+			Array<u32> ** newIndices = nullptr;
+			if (polyCount > maxPolyCount)
+			{
+				IsLeaf = false;
+				aabbox<T> childBox[8];
+				calculateChildBoundingBoxes(childBox);
+
+				for (u32 i = 0; i < 8; i++)
+				{
+					newIndices = new Array<u32>*[meshBufferCount];
+					bool childContainsVertices = false;
+					for (s32 j = 0; j < meshBufferCount; j++)
+					{
+						IMeshBuffer * mb = tree->Mesh->getMeshBuffer(i);
+						const Vertex3 * meshVertices = mb->getVertices();
+						const Array<u32> * nodeMBIndices = (indices != nullptr) ? indices[i] : mb->getIndices();
+						Array<u32> * childIndices = nullptr;
+						if (nodeMBIndices != nullptr)
+						{
+							Array<s32> indices;
+							switch (mb->getPolygonType())
+							{
+							case EPT_POINTS:
+								break;
+							case EPT_LINES:
+								break;
+							case EPT_TRIANGLES:
+								for (s32 k = 0; k < nodeMBIndices->size(); k+=3)
+								{
+									if (childBox[i].contains(meshVertices[nodeMBIndices->at(k)].getPosition()) ||
+										childBox[i].contains(meshVertices[nodeMBIndices->at(k+1)].getPosition()) ||
+										childBox[i].contains(meshVertices[nodeMBIndices->at(k+2)].getPosition()))
+									{
+										if (childIndices == nullptr)
+										{
+											childIndices = new Array<u32>();
+											childContainsVertices = true;
+										}
+										childIndices->push_back(nodeMBIndices->at(k));
+										childIndices->push_back(nodeMBIndices->at(k+1));
+										childIndices->push_back(nodeMBIndices->at(k+2));
+									}
+								}
+								break;
+							case EPT_QUADS:
+								for (s32 k = 0; k < nodeMBIndices->size(); k+=4)
+								{
+									if (childBox[i].contains(meshVertices[nodeMBIndices->at(k)].getPosition()) ||
+										childBox[i].contains(meshVertices[nodeMBIndices->at(k+1)].getPosition()) ||
+										childBox[i].contains(meshVertices[nodeMBIndices->at(k+2)].getPosition()) ||
+										childBox[i].contains(meshVertices[nodeMBIndices->at(k+3)].getPosition()))
+									{
+										if (childIndices == nullptr)
+										{
+											childIndices = new Array<u32>();
+											childContainsVertices = true;
+										}
+										childIndices->push_back(nodeMBIndices->at(k));
+										childIndices->push_back(nodeMBIndices->at(k+1));
+										childIndices->push_back(nodeMBIndices->at(k+2));
+										childIndices->push_back(nodeMBIndices->at(k+3));
+									}
+								}
+								break;
+							case EPT_TRIANGLE_STRIP:
+								break;
+							case EPT_TRIANGLE_FAN:
+								break;
+							} // switch (mb->getPolygonType())
+
+							newIndices[j] = childIndices;
+
+						} // Indices available for mesh buffer?
+
+					} // Loop through mesh buffers
+
+					if (childContainsVertices)
+					{
+						Children[i] = new OctreeNode(tree, Depth+1, maxPolyCount, newIndices, true);
+						if (!Children[i]->isLeaf())
+						{
+							// If it's not a leaf we can safely delete the indices as they will have been re-partitioned
+							for (s32 j = 0; j < meshBufferCount; j++)
+							{
+								if (newIndices[j] != nullptr)
+								{
+									delete newIndices[j];
+								}
+							}
+							delete [] newIndices;
+						}
+					}
+					else
+					{
+						Children[i] = nullptr;
+					}
+
+				} // Loop through child boxes
+			}
+			else
+			{
+				IsLeaf = true;
+			}
+		}
 
 		/** Populate the eight child axis-aligned bounding boxes.\
 		 \param childBox A place to store the boxes. */
@@ -255,8 +301,7 @@ private:
 	int MaxPolyCount;
 };
 
-template class _FIRE_ENGINE_API_ vector3<f32>;
-template class _FIRE_ENGINE_API_ vector3<f64>;
+template class _FIRE_ENGINE_API_ Octree<f32>;
 
 }
 
