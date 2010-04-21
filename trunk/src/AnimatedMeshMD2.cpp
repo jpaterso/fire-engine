@@ -57,7 +57,7 @@ static const String md2_frame_names[EMAT_MAX_ANIMATIONS] =
 
 AnimatedMeshMD2::AnimatedMeshMD2()
 	: mNumFrames(0), mNumVerticesPerFrame(0),
-	  mVertices(0), mInterpolationBuffer(0), mIndices(0), mTexture(0),
+	  mVertices(0), mInterpolationBuffer(0), mIndices(0),
 	  mBoundingBoxes(0)
 {
 #if defined(_FIRE_ENGINE_DEBUG_OBJECT_)
@@ -70,7 +70,7 @@ AnimatedMeshMD2::AnimatedMeshMD2(const String& name, s32 num_frames, s32 vertice
 	Vertex3 * vertices, Array<u32> * indices, ITexture * texture)
 	: mNumFrames(num_frames), mNumVerticesPerFrame(vertices_per_frame),
 	  mVertices(vertices), mInterpolationBuffer(0), mIndices(indices),
-	  mTexture(texture), mBoundingBoxes(0)
+	  mBoundingBoxes(0)
 {
 #if defined(_FIRE_ENGINE_DEBUG_OBJECT_)
 	setDebugName("fire_engine::AnimatedMeshMD2");
@@ -86,6 +86,7 @@ AnimatedMeshMD2::AnimatedMeshMD2(const String& name, s32 num_frames, s32 vertice
 		for (s32 j = 0; j < vertices_per_frame; j++)
 			mBoundingBoxes[i].addInternalPoint(frameVertices[j].getPosition());
 	}
+	Mat.setTexture(0, texture);
 }
 
 AnimatedMeshMD2::~AnimatedMeshMD2()
@@ -96,8 +97,6 @@ AnimatedMeshMD2::~AnimatedMeshMD2()
 		delete [] mInterpolationBuffer;
 	if (mIndices)
 		delete mIndices;
-	if (mTexture)
-		mTexture->drop();
 }
 
 void AnimatedMeshMD2::animate(s32 first, s32 second, f32 ipol)
@@ -125,14 +124,6 @@ IMesh * AnimatedMeshMD2::getMesh(s32 first, s32 second, f32 ipol)
 {
 	animate(first, second, ipol);
 	return this;
-}
-
-void AnimatedMeshMD2::setTexture(ITexture * texture)
-{
-	if (mTexture)
-		mTexture->drop();
-	mTexture = texture;
-	mTexture->grab();
 }
 
 s32 AnimatedMeshMD2::getFPS(s32 frameStart, s32 frameEnd) const

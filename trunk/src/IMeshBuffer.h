@@ -85,14 +85,6 @@ public:
 	 to display proper polygons, as described by the getPolygonType() method */
 	virtual const Array<u32> * getIndices() const = 0;
 
-	/** Get the single Texture used by the IMeshBuffer. The proper coordinates
-	 to the texture can be accessed via the getTextureCoordinates() method */
-	//TODO: Could extend this to create a Material class, that contains a single texture
-	virtual const ITexture * getTexture() const = 0;
-
-	/** Set the ITexture to be used by this IMeshBuffer */
-	virtual void setTexture(ITexture * texture) = 0;
-
 	/** Returns the Material that the IMeshBuffer was created with. */
 	virtual Material getMaterial() const = 0;
 

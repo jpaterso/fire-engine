@@ -96,15 +96,11 @@ public:
 	virtual inline const Vertex3 * getVertices() const;
 	virtual inline s32 getVertexCount() const;
 	virtual inline const Array<u32> * getIndices() const;
-	virtual inline const ITexture * getTexture() const;
 
 	/** Set the frame loop for an MD2 model. Use this instead of the other
 	 setFrameLoop() function, as the frame start and ends are pre-defined
 	 for these models. */
 	void setFrameLoop(EMD2_ANIMATION_TYPE animation_type, bool loop = true); // done
-
-	/** Set the texture to use. */
-	virtual void setTexture(ITexture * texture);
 
 	/** Get the frames per second that should be rendered for a given frame
 	 interval. In this case, since the fps changes for the different types
@@ -126,10 +122,10 @@ private:
 	Vertex3 *              mVertices;
 	Vertex3 *              mInterpolationBuffer;
 	Array<u32> *           mIndices;
-	ITexture *             mTexture;
 	Material               mMaterial;
 	aabboxf *       mBoundingBoxes;
 	aabboxf         mCurrentBoundingBox;
+	Material Mat;
 
 	/** Update the interpolation buffer, based on the interpolation between two
 	 frames. */
@@ -194,11 +190,6 @@ inline EPOLYGON_TYPE AnimatedMeshMD2::getPolygonType() const
 inline const Array<u32> * AnimatedMeshMD2::getIndices() const
 {
 	return mIndices;
-}
-
-inline const ITexture * AnimatedMeshMD2::getTexture() const
-{
-	return mTexture;
 }
 
 inline Material AnimatedMeshMD2::getMaterial() const

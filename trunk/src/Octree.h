@@ -6,9 +6,10 @@
 #include "Object.h"
 #include "aabbox.h"
 #include "IMesh.h"
-#include "CMeshBuffer.h"
 #include "Vertex3.h"
 #include "Array.h"
+#include "ViewFrustum.h"
+#include "IMeshBuffer.h"
 
 namespace fire_engine
 {
@@ -39,6 +40,19 @@ public:
 		{
 			delete TreeRoot;
 		}
+	}
+
+	Array<const IMeshBuffer*> getVisibleNodes(const aabbox<T>& box) const
+	{
+		Array<const IMeshBuffer*> visibleNodes;
+		return visibleNodes;
+	}
+
+	Array<const IMeshBuffer*> getVisibleNodes(const ViewFrustum& frustum) const
+	{
+		Array<const IMeshBuffer*> visibleNodes;
+		TreeRoot->addVisibleNodes(visibleNodes, frustum);
+		return visibleNodes;
 	}
 
 	/** Sets the Mesh to use when constructing the Octree.
@@ -95,6 +109,26 @@ private:
 
 			buildNode(tree, maxPolyCount, nullptr);
         }
+
+		void addVisibleNodes(Array<const IMeshBuffer*>& nodeArray, const ViewFrustum& frustum)
+		{
+			if (!IsLeaf)
+			{
+				for (u32 i = 0; i < 8; i++)
+				{
+					if (Children[i] != nullptr)
+					{
+						Children[i]->addVisibleNodes(nodeArray, frustum);
+					}
+				}
+			}
+			else
+			{
+				if (frustum.calculateIntersection(Box) != EFIT_OUTSIDE)
+				{
+				}
+			}
+		}
 
         virtual ~OctreeNode()
         {
