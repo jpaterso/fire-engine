@@ -340,10 +340,10 @@ void OpenGLRenderer::drawIndexedPrimitiveList(EPOLYGON_TYPE primitiveType,
 void OpenGLRenderer::drawMeshBuffer(const IMeshBuffer * mb)
 {
 	setMaterial(mb->getMaterial());
-	if (mb->getTexture() != nullptr)
+	/*if (mb->getTexture() != nullptr)
 	{
 		setTexture(0, mb->getTexture());
-	}
+	}*/
 	drawIndexedPrimitiveList(mb->getPolygonType(), mb->getIndices()->getCount(), 
 		mb->getVertices(), mb->getIndices()->const_pointer());
 	setTexture(0, nullptr);

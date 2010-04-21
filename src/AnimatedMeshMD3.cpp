@@ -14,17 +14,16 @@ namespace fire_engine
 
 MeshBufferMD3::MeshBufferMD3(Vertex3 * vertices, Array<u32> * indices, ITexture * texture,
 	s32 verts_per_frame, s32 num_frames)
-	: mVertices(vertices), mIndices(indices), mTexture(texture),
+	: mVertices(vertices), mIndices(indices),
 	  mVerticesPerFrame(verts_per_frame), mNumFrames(num_frames)
 {
 #if defined(_FIRE_ENGINE_DEBUG_OBJECT_)
 	setDebugName("fire_engine::MeshBufferMD3");
 #endif
-	if (mTexture)
-		mTexture->grab();
 	mBoundingBoxes = new aabboxf[mNumFrames];
 	calculateBoundingBoxes();
 	mInterpolationBuffer = new Vertex3[verts_per_frame];
+	Mat.setTexture(0, texture);
 }
 
 MeshBufferMD3::~MeshBufferMD3()
@@ -33,8 +32,6 @@ MeshBufferMD3::~MeshBufferMD3()
 		delete [] mVertices;
 	if (mIndices)
 		delete mIndices;
-	if (mTexture)
-		mTexture->drop();
 	delete [] mInterpolationBuffer;
 	delete [] mBoundingBoxes;
 }
@@ -59,19 +56,9 @@ const Array<u32> * MeshBufferMD3::getIndices() const
 	return mIndices;
 }
 
-const ITexture * MeshBufferMD3::getTexture() const
-{
-	return mTexture;
-}
-
-void MeshBufferMD3::setTexture(ITexture * texture)
-{
-	mTexture = texture;
-}
-
 Material MeshBufferMD3::getMaterial() const
 {
-	return mMaterial;
+	return Mat;
 }
 
 const aabboxf& MeshBufferMD3::getBoundingBox() const

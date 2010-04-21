@@ -28,14 +28,14 @@ public:
 	 \param size The initial size of the array.
 	 \param grow The number to grow by, when the array needs resizing. */
 	Array(s32 size = 128, s32 grow = 64)
-		: Counter(), mSize(size), mGrowBy(grow), mFreeWhenDestroyed(true)
+		: Counter(0), mSize(size), mGrowBy(grow), mFreeWhenDestroyed(true)
 	{
 		mArray = new T[size];
 	}
 
 	/** Construct an array with an initial array of objects. */
 	Array(T * objects, s32 size, s32 grow = 64)
-		: Counter(), mArray(objects), mSize(size), mGrowBy(grow), mFreeWhenDestroyed(true)
+		: Counter(size), mArray(objects), mSize(size), mGrowBy(grow), mFreeWhenDestroyed(true)
 	{
 	}
 
@@ -152,6 +152,19 @@ public:
 		return true;
 	}
 
+	/** Sets the size of the Array. 
+	 \param size The new size of the Array. */
+	void setSize(s32 size)
+	{
+		if (mArray != nullptr)
+		{
+			delete [] mArray;
+		}
+		mArray = new T[size];
+		mSize = size;
+		mCount = 0;
+	}
+
 	/** Returns the number of elements currently stored in the array. */
 	inline s32 size() const
 	{
@@ -168,6 +181,13 @@ public:
 	inline T * pointer()
 	{
 		return mArray;
+	}
+
+	/** Set whether the elements should be freed when the Array is destroyed. Default is true.
+	 \param fwd Whether the elements should be freed when Array is destroyed. */
+	inline bool setFreeWhenDestroyed(bool fwd)
+	{
+		mFreeWhenDestroyed = fwd;
 	}
 
 	/** Access the element at position index in the array. */

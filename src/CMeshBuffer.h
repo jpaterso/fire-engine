@@ -3,6 +3,7 @@
 #include "CompileConfig.h"
 #include "IMeshBuffer.h"
 #include "aabbox.h"
+#include "Material.h"
 
 namespace fire_engine
 {
@@ -11,19 +12,22 @@ namespace fire_engine
 class _FIRE_ENGINE_API_ CMeshBuffer : public virtual IMeshBuffer
 {
 public:
-	CMeshBuffer(Vertex3 * vertices, s32 vertexCount, Array<u32> * indices, 
-		EPOLYGON_TYPE polygonType, Material mat)
-		: Vertices(vertices), Indices(indices), PolygonType(polygonType), 
-		  VertexCount(vertexCount), Mat(mat)
+	CMeshBuffer(Vertex3 * vertices, s32 vertexCount, u32 * indices, s32 indexCount, 
+		EPOLYGON_TYPE polygonType, Material mat, bool sharedVertexData)
+		: Vertices(vertices, vertexCount), 
+		  Indices(indices, indexCount), 
+		  PolygonType(polygonType),
+		  Mat(mat), 
+		  SharedVertexData(sharedVertexData)
 	{
+		if (SharedVertexData)
+		{
+			Vertices.setFreeWhenDestroyed(false);
+		}
 	}
 
 	virtual ~CMeshBuffer()
 	{
-		if (Indices != nullptr)
-		{
-			delete Indices;
-		}
 	}
 
 	virtual EPOLYGON_TYPE getPolygonType()
@@ -33,45 +37,27 @@ public:
 
 	virtual Vertex3 * _getOriginalVertices()
 	{
-		return Vertices;
+		return Vertices.pointer();
 	}
 
 	virtual s32 _getOriginalVertexCount()
 	{
-		return VertexCount;
+		return Vertices.getCount();
 	}
 
 	virtual const Vertex3 * getVertices() const
 	{
-		return Vertices;
+		return Vertices.const_pointer();
 	}
 
 	virtual s32 getVertexCount() const
 	{
-		return VertexCount;
+		return Vertices.getCount();
 	}
 
 	virtual const Array<u32> * getIndices() const
 	{
-		return Indices;
-	}
-
-	virtual const ITexture * getTexture() const
-	{
-		return Texture;
-	}
-
-	virtual void setTexture(ITexture * texture)
-	{
-		if (Texture != nullptr)
-		{
-			Texture->drop();
-		}
-		Texture = texture;
-		if (Texture != nullptr)
-		{
-			Texture->grab();
-		}
+		return &Indices;
 	}
 
 	virtual Material getMaterial() const
@@ -85,13 +71,12 @@ public:
 	}
 
 protected:
-	Vertex3 *     Vertices;
-	s32           VertexCount;
-	Array<u32> *  Indices;
-	EPOLYGON_TYPE PolygonType;
-	ITexture *    Texture;
-	Material      Mat;
-	aabboxf       BoundingBox;
+	Array<Vertex3> Vertices;
+	Array<u32>     Indices;
+	EPOLYGON_TYPE  PolygonType;
+	Material       Mat;
+	aabboxf        BoundingBox;
+	bool           SharedVertexData;
 };
 
 

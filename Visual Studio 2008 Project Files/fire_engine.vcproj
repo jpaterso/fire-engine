@@ -604,6 +604,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\src\OctreeSceneNode.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\src\OctreeSceneNode.h"
+			>
+		</File>
+		<File
 			RelativePath="..\src\OpenGLRenderer.cpp"
 			>
 		</File>

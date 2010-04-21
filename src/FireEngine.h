@@ -23,6 +23,7 @@
 #include "ByteConverter.h"
 #include "Camera.h"
 #include "CameraFPS.h"
+#include "CMeshBuffer.h"
 #include "color.h"
 #include "ColorConverter.h"
 #include "Counter.h"

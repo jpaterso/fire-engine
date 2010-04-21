@@ -15,40 +15,40 @@ class _FIRE_ENGINE_API_ Counter
 {
 public:
 	//! Default ctor
-	Counter()
-		: mCount(0)
+	Counter(s32 initialCount = 0)
+		: _Count(initialCount)
 	{
 	}
 
 	//! Get the number of elements
 	inline s32 getCount() const
 	{
-		return mCount;
+		return _Count;
 	}
 
 	inline void incrementCount()
 	{
-		mCount++;
+		_Count++;
 	}
 
 	inline void decrementCount()
 	{
-		mCount--;
+		_Count--;
 	}
 
 	inline void resetCount()
 	{
-		mCount = 0;
+		_Count = 0;
 	}
 
 	inline bool isEmpty() const
 	{
-		return mCount == 0;
+		return _Count == 0;
 	}
 
 private:
 	//! The number of elements
-	s32 mCount;
+	s32 _Count;
 
 };
 }

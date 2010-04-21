@@ -68,10 +68,6 @@ public:
 
 	virtual const Array<u32> * getIndices() const;
 
-	virtual const ITexture * getTexture() const;
-
-	virtual void setTexture(ITexture * texture);
-
 	virtual Material getMaterial() const;
 
 	/** Returns the BoundingBox for the current interpolation. */
@@ -80,8 +76,7 @@ public:
 private:
 	Vertex3 *         mVertices;
 	Array<u32> *      mIndices;
-	ITexture *        mTexture;
-	Material          mMaterial;
+	Material          Mat;
 	aabboxf *  mBoundingBoxes;
 	s32               mVerticesPerFrame;
 	s32               mNumFrames;
