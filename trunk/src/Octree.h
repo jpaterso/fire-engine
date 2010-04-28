@@ -1,3 +1,10 @@
+/**
+ * FILE:    Octree.h
+ * AUTHOR:  Joseph Paterson ( joseph dot paterson at gmail dot com )
+ * RCS ID:  $Id$
+ * PURPOSE: An Octree - used to partition a static mesh to speed up rendering.
+**/
+
 #ifndef OCTREE_H_INCLUDED
 #define OCTREE_H_INCLUDED
 
@@ -9,7 +16,7 @@
 #include "Vertex3.h"
 #include "Array.h"
 #include "ViewFrustum.h"
-#include "IMeshBuffer.h"
+#include "CMeshBuffer.h"
 
 namespace fire_engine
 {
@@ -18,12 +25,49 @@ template <class T>
 class _FIRE_ENGINE_API_ Octree : public virtual Object
 {
 public:
-	/** Construct an Octree from some Mesh. The mesh should not be animated.
+	/** A piece of a Mesh Buffer stored in a leaf node of the Octree. */
+	struct _FIRE_ENGINE_API_ MeshBufferChunk
+	{
+		IMeshBuffer * Buffer;
+		Array<u32> * Indices;
+
+		MeshBufferChunk() 
+			: Buffer(nullptr), Indices(nullptr) 
+		{
+		}
+
+		MeshBufferChunk(IMeshBuffer * buffer, Array<u32> * indices)
+			: Buffer(buffer), Indices(indices)
+		{
+			if (Buffer != nullptr)
+			{
+				Buffer->grab();
+			}
+		}
+
+		~MeshBufferChunk()
+		{
+			if (Buffer != nullptr)
+			{
+				Buffer->drop();
+			}
+
+			if (Indices != nullptr)
+			{
+				delete Indices;
+			}
+		}
+	};
+
+	/** Construct an Octree from a Mesh. The mesh should not be animated.
 	 \param mesh The mesh to construct the Octree from. 
 	 \param maxPolyCount The maximum number of polygons per child Octant. */
 	Octree(IMesh * mesh, int maxPolygonCount = 256) 
 		: Mesh(mesh), MaxPolyCount(maxPolygonCount)
 	{
+#if defined(_FIRE_ENGINE_DEBUG_OBJECT_)
+		setDebugName("fire_engine::Octree");
+#endif
 		if (Mesh != nullptr)
 		{
 			Mesh->grab();
@@ -42,17 +86,13 @@ public:
 		}
 	}
 
-	Array<const IMeshBuffer*> getVisibleNodes(const aabbox<T>& box) const
+	void getVisibleNodes(const aabbox<T>& box, Array<MeshBufferChunk>& visibleNodes) const
 	{
-		Array<const IMeshBuffer*> visibleNodes;
-		return visibleNodes;
 	}
 
-	Array<const IMeshBuffer*> getVisibleNodes(const ViewFrustum& frustum) const
+	void getVisibleNodes(const ViewFrustum& frustum, Array<MeshBufferChunk>& visibleNodes) const
 	{
-		Array<const IMeshBuffer*> visibleNodes;
 		TreeRoot->addVisibleNodes(visibleNodes, frustum);
-		return visibleNodes;
 	}
 
 	/** Sets the Mesh to use when constructing the Octree.
@@ -70,32 +110,17 @@ public:
 		}
 	}
 
-private:
+protected:
 	void buildTree()
 	{
-		TreeRoot = new OctreeNode(this, 0, MaxPolyCount, nullptr, true);
+		TreeRoot = new Node(this, 0, MaxPolyCount, nullptr, true);
 	}
 
-	/** A piece of a Mesh Buffer stored in a leaf node of the Octree.
-	class _FIRE_ENGINE_API_ OctreeMeshBufferChunk : public CMeshBuffer
-	{
-	public:
-		OctreeMeshBufferChunk(Vertex3 * vertices, s32 vertexCount, 
-			Array<u32> * indices, EPOLYGON_TYPE polygonType, Material mat)
-			: CMeshBuffer(vertices, vertexCount, indices, polygonType, mat)
-		{
-		}
-
-		virtual ~OctreeMeshBufferChunk()
-		{
-		}
-	}; */
-
 	/** A node in the Octree. */
-    class _FIRE_ENGINE_API_ OctreeNode
+    class _FIRE_ENGINE_API_ Node
     {
     public:
-        OctreeNode(Octree * tree, u32 depth, u32 maxPolyCount, Array<u32> ** indices, bool shareVertices)
+        Node(Octree * tree, u32 depth, u32 maxPolyCount, Array<u32> ** indices, bool shareVertices)
 			: Depth(depth)
         {
 			/*if (ShareVertices && Depth = 0)
@@ -110,7 +135,7 @@ private:
 			buildNode(tree, maxPolyCount, nullptr);
         }
 
-		void addVisibleNodes(Array<const IMeshBuffer*>& nodeArray, const ViewFrustum& frustum)
+		void addVisibleNodes(Array<MeshBufferChunk>& nodeArray, const ViewFrustum& frustum)
 		{
 			if (!IsLeaf)
 			{
@@ -130,7 +155,7 @@ private:
 			}
 		}
 
-        virtual ~OctreeNode()
+        virtual ~Node()
         {
             if (IsLeaf)
             {
@@ -150,12 +175,13 @@ private:
         }
 
     private:
-		u32                     Depth;
-		bool                    IsLeaf;
-		IMesh *                 OriginalMesh;
-		Octree *                Tree;
-        OctreeNode *            Children[8];
-        aabbox<T>               Box;
+		u32                    Depth;
+		bool                   IsLeaf;
+		IMesh *                OriginalMesh;
+		Octree *               Tree;
+        Node *                 Children[8];
+        aabbox<T>              Box;
+		Array<MeshBufferChunk> Buffers;  
 
 		void buildNode(Octree * tree, u32 maxPolyCount, Array<u32> ** indices)
 		{
@@ -271,7 +297,7 @@ private:
 
 					if (childContainsVertices)
 					{
-						Children[i] = new OctreeNode(tree, Depth+1, maxPolyCount, newIndices, true);
+						Children[i] = new Node(tree, Depth+1, maxPolyCount, newIndices, true);
 						if (!Children[i]->isLeaf())
 						{
 							// If it's not a leaf we can safely delete the indices as they will have been re-partitioned
@@ -295,6 +321,26 @@ private:
 			else
 			{
 				IsLeaf = true;
+				if (indices == nullptr)
+				{
+					for (s32 i = 0; i < meshBufferCount; i++)
+					{
+						IMeshBuffer * mb = Tree->Mesh->getMeshBuffer(i);
+						mb->grab();
+						Buffers.push_back(MeshBufferChunk(mb, nullptr));
+					}
+				}
+				else
+				{
+					for (s32 i = 0; i < meshBufferCount; i++)
+					{
+						if (indices[i] != nullptr)
+						{
+							IMeshBuffer * mb = Tree->Mesh->getMeshBuffer(i);
+							Buffers.push_back(MeshBufferChunk(mb, indices[i]));
+						}
+					}
+				}
 			}
 		}
 
@@ -330,7 +376,7 @@ private:
 
     };
 
-	OctreeNode * TreeRoot;
+	Node * TreeRoot;
 	IMesh * Mesh;
 	int MaxPolyCount;
 };

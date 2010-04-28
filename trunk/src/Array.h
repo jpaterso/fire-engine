@@ -92,6 +92,12 @@ public:
 		return mArray[index];
 	}
 
+	/** Returns the current last element in the array. */
+	inline T& last()
+	{
+		return mArray[getCount()-1];
+	}
+
 	/** Removes a given element from the array.
 	 \return true if the element was correctly removed, false otherwise. */
 	bool removeElement(const T& elem)
@@ -185,7 +191,7 @@ public:
 
 	/** Set whether the elements should be freed when the Array is destroyed. Default is true.
 	 \param fwd Whether the elements should be freed when Array is destroyed. */
-	inline bool setFreeWhenDestroyed(bool fwd)
+	inline void setFreeWhenDestroyed(bool fwd)
 	{
 		mFreeWhenDestroyed = fwd;
 	}

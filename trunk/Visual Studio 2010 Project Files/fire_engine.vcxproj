@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>FireEngine</ProjectName>
+    <ProjectGuid>{382A9950-0640-4443-98D6-7217331BA8E3}</ProjectGuid>
+    <RootNamespace>fire_engine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</GenerateManifest>
+    <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EmbedManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</GenerateManifest>
+    <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</EmbedManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;__FIRE_ENGINE_BUILDING_LIB__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>NotSet</ShowProgress>
+      <OutputFile>$(ProjectDir)bin\$(ProjectName).dll</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;__FIRE_ENGINE_BUILDING_LIB__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>NotSet</ShowProgress>
+      <OutputFile>$(ProjectDir)bin\$(ProjectName).dll</OutputFile>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\aabbox.h" />
+    <ClInclude Include="..\src\AnimatedMeshMD2.h" />
+    <ClInclude Include="..\src\AnimatedMeshMD2Loader.h" />
+    <ClInclude Include="..\src\AnimatedMeshMD3.h" />
+    <ClInclude Include="..\src\AnimatedMeshMD3Loader.h" />
+    <ClInclude Include="..\src\AnimatedModel.h" />
+    <ClInclude Include="..\src\AnimatedModelMD3.h" />
+    <ClInclude Include="..\src\Array.h" />
+    <ClInclude Include="..\src\Bezier.h" />
+    <ClInclude Include="..\src\ByteConverter.h" />
+    <ClInclude Include="..\src\Camera.h" />
+    <ClInclude Include="..\src\CameraFPS.h" />
+    <ClInclude Include="..\src\CMeshBuffer.h" />
+    <ClInclude Include="..\src\Color.h" />
+    <ClInclude Include="..\src\ColorConverter.h" />
+    <ClInclude Include="..\src\CompileConfig.h" />
+    <ClInclude Include="..\src\Counter.h" />
+    <ClInclude Include="..\src\Device.h" />
+    <ClInclude Include="..\src\dimension2.h" />
+    <ClInclude Include="..\src\DirectoryFileProvider.h" />
+    <ClInclude Include="..\src\File.h" />
+    <ClInclude Include="..\src\FileSystem.h" />
+    <ClInclude Include="..\src\FileUtils.h" />
+    <ClInclude Include="..\src\FireEngine.h" />
+    <ClInclude Include="..\src\FPSCalculator.h" />
+    <ClInclude Include="..\src\HashTable.h" />
+    <ClInclude Include="..\src\HighResolutionTimer.h" />
+    <ClInclude Include="..\src\IAnimatedMesh.h" />
+    <ClInclude Include="..\src\IEventReceiver.h" />
+    <ClInclude Include="..\src\IFile.h" />
+    <ClInclude Include="..\src\IFileProvider.h" />
+    <ClInclude Include="..\src\ILoader.h" />
+    <ClInclude Include="..\src\Image.h" />
+    <ClInclude Include="..\src\ImageLoaderBMP.h" />
+    <ClInclude Include="..\src\ImageLoaderPCX.h" />
+    <ClInclude Include="..\src\ImageLoaderTGA.h" />
+    <ClInclude Include="..\src\IMap.h" />
+    <ClInclude Include="..\src\IMesh.h" />
+    <ClInclude Include="..\src\IMeshBuffer.h" />
+    <ClInclude Include="..\src\IModel.h" />
+    <ClInclude Include="..\src\INode.h" />
+    <ClInclude Include="..\src\InputEvent.h" />
+    <ClInclude Include="..\src\IRenderable.h" />
+    <ClInclude Include="..\src\IRenderer.h" />
+    <ClInclude Include="..\src\IResizable.h" />
+    <ClInclude Include="..\src\ISpaceNode.h" />
+    <ClInclude Include="..\src\IStack.h" />
+    <ClInclude Include="..\src\Item.h" />
+    <ClInclude Include="..\src\ITexture.h" />
+    <ClInclude Include="..\src\IWindowManager.h" />
+    <ClInclude Include="..\src\IWriter.h" />
+    <ClInclude Include="..\src\KeyEvent.h" />
+    <ClInclude Include="..\src\Light.h" />
+    <ClInclude Include="..\src\LightSpaceNode.h" />
+    <ClInclude Include="..\src\line3.h" />
+    <ClInclude Include="..\src\List.h" />
+    <ClInclude Include="..\src\Logger.h" />
+    <ClInclude Include="..\src\Material.h" />
+    <ClInclude Include="..\src\Math.h" />
+    <ClInclude Include="..\src\matrix4.h" />
+    <ClInclude Include="..\src\MediaManager.h" />
+    <ClInclude Include="..\src\MemoryFile.h" />
+    <ClInclude Include="..\src\MemoryManager.h" />
+    <ClInclude Include="..\src\MeshModifier.h" />
+    <ClInclude Include="..\src\MouseEvent.h" />
+    <ClInclude Include="..\src\Object.h" />
+    <ClInclude Include="..\src\Octree.h" />
+    <ClInclude Include="..\src\OctreeSceneNode.h" />
+    <ClInclude Include="..\src\OpenGLRenderer.h" />
+    <ClInclude Include="..\src\OpenGLTexture.h" />
+    <ClInclude Include="..\src\plane3.h" />
+    <ClInclude Include="..\src\Q3Map.h" />
+    <ClInclude Include="..\src\Q3MapLoader.h" />
+    <ClInclude Include="..\src\quake3.h" />
+    <ClInclude Include="..\src\quaternion.h" />
+    <ClInclude Include="..\src\SceneManager.h" />
+    <ClInclude Include="..\src\SkyBox.h" />
+    <ClInclude Include="..\src\Stack.h" />
+    <ClInclude Include="..\src\String.h" />
+    <ClInclude Include="..\src\Timer.h" />
+    <ClInclude Include="..\src\triangle3.h" />
+    <ClInclude Include="..\src\Types.h" />
+    <ClInclude Include="..\src\vector2.h" />
+    <ClInclude Include="..\src\vector3.h" />
+    <ClInclude Include="..\src\Vertex3.h" />
+    <ClInclude Include="..\src\ViewFrustum.h" />
+    <ClInclude Include="..\src\WindowManagerWin32.h" />
+    <ClInclude Include="..\src\ZipFileReader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\AnimatedMeshMD2.cpp" />
+    <ClCompile Include="..\src\AnimatedMeshMD2Loader.cpp" />
+    <ClCompile Include="..\src\AnimatedMeshMD3.cpp" />
+    <ClCompile Include="..\src\AnimatedMeshMD3Loader.cpp" />
+    <ClCompile Include="..\src\AnimatedModel.cpp" />
+    <ClCompile Include="..\src\AnimatedModelMD3.cpp" />
+    <ClCompile Include="..\src\ByteConverter.cpp" />
+    <ClCompile Include="..\src\Camera.cpp" />
+    <ClCompile Include="..\src\CameraFPS.cpp" />
+    <ClCompile Include="..\src\Color.cpp" />
+    <ClCompile Include="..\src\ColorConverter.cpp" />
+    <ClCompile Include="..\src\Device.cpp" />
+    <ClCompile Include="..\src\DirectoryFileProvider.cpp" />
+    <ClCompile Include="..\src\File.cpp" />
+    <ClCompile Include="..\src\FileSystem.cpp" />
+    <ClCompile Include="..\src\FileUtils.cpp" />
+    <ClCompile Include="..\src\FPSCalculator.cpp" />
+    <ClCompile Include="..\src\Hash.cpp" />
+    <ClCompile Include="..\src\HighResolutionTimer.cpp" />
+    <ClCompile Include="..\src\IAnimatedMesh.cpp" />
+    <ClCompile Include="..\src\Image.cpp" />
+    <ClCompile Include="..\src\ImageLoaderBMP.cpp" />
+    <ClCompile Include="..\src\ImageLoaderPCX.cpp" />
+    <ClCompile Include="..\src\ImageLoaderTGA.cpp" />
+    <ClCompile Include="..\src\IMeshBuffer.cpp" />
+    <ClCompile Include="..\src\INode.cpp" />
+    <ClCompile Include="..\src\InputEvent.cpp" />
+    <ClCompile Include="..\src\IRenderer.cpp" />
+    <ClCompile Include="..\src\ISpaceNode.cpp" />
+    <ClCompile Include="..\src\IWindowManager.cpp" />
+    <ClCompile Include="..\src\KeyEvent.cpp" />
+    <ClCompile Include="..\src\Light.cpp" />
+    <ClCompile Include="..\src\LightSpaceNode.cpp" />
+    <ClCompile Include="..\src\Logger.cpp" />
+    <ClCompile Include="..\src\Material.cpp" />
+    <ClCompile Include="..\src\Math.cpp" />
+    <ClCompile Include="..\src\matrix4.cpp" />
+    <ClCompile Include="..\src\MediaManager.cpp" />
+    <ClCompile Include="..\src\MemoryFile.cpp" />
+    <ClCompile Include="..\src\MemoryManager.cpp" />
+    <ClCompile Include="..\src\MeshModifier.cpp" />
+    <ClCompile Include="..\src\MouseEvent.cpp" />
+    <ClCompile Include="..\src\OctreeSceneNode.cpp" />
+    <ClCompile Include="..\src\OpenGLRenderer.cpp" />
+    <ClCompile Include="..\src\OpenGLTexture.cpp" />
+    <ClCompile Include="..\src\Q3Map.cpp" />
+    <ClCompile Include="..\src\Q3MapLoader.cpp" />
+    <ClCompile Include="..\src\quaternion.cpp" />
+    <ClCompile Include="..\src\SceneManager.cpp" />
+    <ClCompile Include="..\src\SkyBox.cpp" />
+    <ClCompile Include="..\src\String.cpp" />
+    <ClCompile Include="..\src\Timer.cpp" />
+    <ClCompile Include="..\src\ViewFrustum.cpp" />
+    <ClCompile Include="..\src\WindowManagerWin32.cpp" />
+    <ClCompile Include="..\src\ZipFileReader.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
