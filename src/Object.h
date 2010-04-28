@@ -34,8 +34,8 @@ public:
 	/** Constructor: initialize the reference count, and set the debug name if
 	 appropriate */
 	Object()
-#if defined(_FIRE_ENGINE_DEBUG_OBJECT)
-		, m_debug_name("")
+#if defined(_FIRE_ENGINE_DEBUG_OBJECT_)
+		: m_debug_name("")
 #endif
 	{
 		this->incrementCount();

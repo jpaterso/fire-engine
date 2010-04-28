@@ -1,4 +1,7 @@
 
+#ifndef CMESHBUFFER_H_INCLUDED
+#define CMESHBUFFER_H_INCLUDED
+
 #include "Types.h"
 #include "CompileConfig.h"
 #include "IMeshBuffer.h"
@@ -13,16 +16,19 @@ class _FIRE_ENGINE_API_ CMeshBuffer : public virtual IMeshBuffer
 {
 public:
 	CMeshBuffer(Vertex3 * vertices, s32 vertexCount, u32 * indices, s32 indexCount, 
-		EPOLYGON_TYPE polygonType, Material mat, bool sharedVertexData)
+		EPOLYGON_TYPE polygonType, Material mat, bool sharedVertexData, bool sharedIndexData)
 		: Vertices(vertices, vertexCount), 
 		  Indices(indices, indexCount), 
 		  PolygonType(polygonType),
-		  Mat(mat), 
-		  SharedVertexData(sharedVertexData)
+		  Mat(mat)
 	{
-		if (SharedVertexData)
+		if (sharedVertexData)
 		{
 			Vertices.setFreeWhenDestroyed(false);
+		}
+		if (sharedIndexData)
+		{
+			Indices.setFreeWhenDestroyed(false);
 		}
 	}
 
@@ -30,7 +36,7 @@ public:
 	{
 	}
 
-	virtual EPOLYGON_TYPE getPolygonType()
+	virtual EPOLYGON_TYPE getPolygonType() const
 	{
 		return PolygonType;
 	}
@@ -76,9 +82,8 @@ protected:
 	EPOLYGON_TYPE  PolygonType;
 	Material       Mat;
 	aabboxf        BoundingBox;
-	bool           SharedVertexData;
 };
 
-
-
 }
+
+#endif // CMESHBUFFER_H_INCLUDED
