@@ -1,0 +1,1 @@
+The FireEngine project is meant as a learning experience for an avid programming to learn how to build a 3D Graphics engine from the ground up.
